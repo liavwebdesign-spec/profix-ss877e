@@ -1,8 +1,4 @@
-/* PROFIX home sketch: engine behaviours + 4 approved moves
-   M1 signature: the P assembles from four exploded system blocks (hero)
-   M2 word fade (G4 level b) on three key headings
-   M3 batch reveal (G13) on the service rows
-   M4 process line drawn by scroll, steps light up
+/* PROFIX home sketch: engine behaviours + 8 scroll moves (see GSAP layer)
 */
 (function () {
   'use strict';
@@ -62,15 +58,14 @@
     document.querySelectorAll('main .btn-primary, .hero').forEach(function (el) { ctaIo.observe(el); });
   }
 
-  /* ---------- logo marquee: fill any screen width, then duplicate once for a seamless -50% loop ---------- */
+  /* ---------- logo band: repeat the marks until the track covers the screen plus the scroll travel ---------- */
   var track = document.getElementById('marquee-track');
   if (track) {
     var originals = Array.prototype.slice.call(track.children);
     var guard = 0;
-    while (track.scrollWidth < window.innerWidth * 1.1 && guard++ < 12) {
+    while (track.scrollWidth < window.innerWidth * 1.9 && guard++ < 16) {
       originals.forEach(function (el) { var c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); track.appendChild(c); });
     }
-    Array.prototype.slice.call(track.children).forEach(function (el) { var c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); track.appendChild(c); });
   }
 
   /* ---------- quotes carousel ---------- */
@@ -141,81 +136,200 @@
     return out;
   }
 
-  /* ---------- GSAP layer ---------- */
+  /* ---------- GSAP layer ----------
+     Built in DOM order (engine QA 13d): every trigger below a pin is created after it.
+     S1 hero: signature P assembled by scroll, short pin (G18-based)
+     S2 h2 word fade (G4 level b)
+     S3 logo conveyor driven by scroll (G123)
+     S4 services: sticky stage swaps per row (G05)
+     S5 why: hub wires drawn by scroll, nodes light up (G22-based, no pin)
+     S6 process: pinned, line fills and stations light (G20 station logic) / mobile vertical rail (B35)
+     S7 projects: scattered tiles converge (G54)
+     S8 about: statement coloured word by word (G48) */
   if (!hasGsap) return;
   gsap.registerPlugin(ScrollTrigger);
   history.scrollRestoration = 'manual';
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 
+  var headerH = function () { return header.offsetHeight; };
   var sig = document.getElementById('p-sig');
-  var pieces = sig ? Array.prototype.slice.call(sig.querySelectorAll('.piece')) : [];
-  var labels = sig ? Array.prototype.slice.call(sig.querySelectorAll('.lbl-group')) : [];
+  var pieces = sig ? gsap.utils.toArray(sig.querySelectorAll('.piece')) : [];
+  var labels = sig ? gsap.utils.toArray(sig.querySelectorAll('.lbl')) : [];
+  var hl = document.querySelector('.hero .hl');
+  var svcRows = gsap.utils.toArray('.svc-row');
+  var svcArts = gsap.utils.toArray('.svc-art');
+  var capNum = document.querySelector('.svc-cap-num');
+  var capTitle = document.querySelector('.svc-cap-title');
+  var capGroup = document.querySelector('.svc-cap-group');
+  var steps = gsap.utils.toArray('.step');
+  var fill = document.getElementById('process-fill');
+  var vtFill = document.getElementById('vt-fill');
+  var tiles = gsap.utils.toArray('.tile');
+  var statement = document.getElementById('about-statement');
+  var mq = document.querySelector('.marquee');
 
-  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', function () {
-    html.classList.add('gsap-live');
-
-    /* M1: signature */
-    if (sig) {
-      pieces.forEach(function (p) {
-        gsap.set(p, { x: +p.dataset.dx, y: +p.dataset.dy, rotation: +p.dataset.rot, transformOrigin: '50% 50%' });
-      });
-      gsap.set(labels, { opacity: 1 });
-      var hl = document.querySelector('.hero .hl');
-      /* the scroll drift is created only after the assembly, otherwise its recorded start values are the exploded ones */
-      function armDrift() {
-        pieces.forEach(function (p) {
-          gsap.fromTo(p, { x: 0, y: 0, rotation: 0 }, {
-            x: +p.dataset.dx * 0.35, y: +p.dataset.dy * 0.35, rotation: +p.dataset.rot * 0.4, ease: 'none', immediateRender: false,
-            scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 }
-          });
-        });
-      }
-      var tl = gsap.timeline({ delay: 0.5, defaults: { ease: 'power3.inOut' }, onComplete: armDrift });
-      tl.to(labels, { opacity: 0, duration: 0.5, stagger: 0.06 }, 0)
-        .to(pieces, { x: 0, y: 0, rotation: 0, duration: 1.2, stagger: 0.12 }, 0.2)
-        .from(hl, { color: '#F4F2EE', duration: 0.6, ease: 'power2.out' }, '-=0.35');
-    }
-
-    /* M2: word fade on three key headings (G4 level b), hero H1 excluded: it enters with the signature */
-    document.querySelectorAll('h2[data-split]').forEach(function (h) {
-      var words = splitWords(h);
-      gsap.fromTo(words, { opacity: 0.22 }, {
-        opacity: 1, stagger: 0.08, ease: 'none',
-        scrollTrigger: { trigger: h, start: 'top 85%', end: 'top 45%', scrub: 0.8 }
+  /* S4 state change (not motion): which service the stage shows. Runs in every motion mode. */
+  function showService(i) {
+    svcRows.forEach(function (r, k) { r.classList.toggle('is-active', k === i); });
+    svcArts.forEach(function (a, k) { a.classList.toggle('is-on', k === i); });
+    var a = svcArts[i];
+    if (a && capTitle) { capNum.textContent = String(i + 1).padStart(2, '0'); capTitle.textContent = a.dataset.title; capGroup.textContent = a.dataset.group; }
+  }
+  function buildServiceSync() {
+    return svcRows.map(function (row, i) {
+      return ScrollTrigger.create({
+        trigger: row, start: 'top 58%', end: 'bottom 58%',
+        onToggle: function (self) { if (self.isActive) showService(i); }
       });
     });
-    var h1 = document.querySelector('.hero h1[data-split]');
-    if (h1) {
-      var w = splitWords(h1);
-      gsap.set(w, { opacity: 1 });
-      gsap.from(w, { opacity: 0, y: 14, duration: 0.6, stagger: 0.05, ease: 'power2.out', delay: 0.15 });
+  }
+
+  /* split a paragraph into word spans; keywords get a marker behind them (G48) */
+  function splitStatement(p, marks) {
+    if (p.querySelector('.w')) return { words: gsap.utils.toArray(p.querySelectorAll('.w')), marks: gsap.utils.toArray(p.querySelectorAll('.mk')) };
+    var bare = function (w) { return w.replace(/[.,:;!?"'׳״]/g, ''); };
+    var words = p.textContent.trim().split(/\s+/);
+    p.textContent = '';
+    var spans = [], mks = [];
+    words.forEach(function (w, i) {
+      var s = document.createElement('span'); s.className = 'w';
+      var core = bare(w);
+      if (marks.indexOf(core) > -1) {
+        var mk = document.createElement('span'); mk.className = 'mk'; mk.textContent = core;
+        s.appendChild(mk); s.appendChild(document.createTextNode(w.slice(core.length))); mks.push(mk);
+      } else s.textContent = w;
+      p.appendChild(s); if (i < words.length - 1) p.appendChild(document.createTextNode(' '));
+      spans.push(s);
+    });
+    return { words: spans, marks: mks };
+  }
+
+  var mm = gsap.matchMedia();
+  mm.add({
+    desk: '(min-width: 1024px)',
+    mob: '(max-width: 1023px)',
+    move: '(prefers-reduced-motion: no-preference)'
+  }, function (ctx) {
+    var c = ctx.conditions;
+    var cleanups = [];
+
+    if (!c.move) {
+      /* S4 runs on desktop in both motion modes (it is a content swap, not an animation); no pins here, so order is free */
+      if (c.desk) cleanups = cleanups.concat(buildServiceSync());
+      gsap.set(labels, { opacity: 0 });
+      steps.forEach(function (s) { s.classList.add('is-lit'); });
+      if (fill) gsap.set(fill, { scaleX: 1 });
+      if (vtFill) gsap.set(vtFill, { height: '100%' });
+      return function () { cleanups.forEach(function (t) { t.kill(); }); };
+    }
+    html.classList.add('gsap-live');
+
+    /* S1 hero signature: exploded systems assemble into one P as you scroll */
+    if (sig) {
+      pieces.forEach(function (p) { gsap.set(p, { x: +p.dataset.dx, y: +p.dataset.dy, rotation: +p.dataset.rot, transformOrigin: '50% 50%' }); });
+      gsap.set(labels, { opacity: 1 });
+      gsap.set(hl, { color: '#F4F2EE' });
+      var htl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: c.desk
+          ? { trigger: '.hero', start: function () { return 'top ' + headerH(); }, end: '+=70%', pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true }
+          : { trigger: '.hero-visual', start: 'top 85%', end: 'center 40%', scrub: 0.6 }
+      });
+      htl.to(labels, { opacity: 0, duration: 0.3, stagger: 0.05 }, 0)
+        .to(pieces, { x: 0, y: 0, rotation: 0, duration: 1, stagger: 0.12, ease: 'power2.inOut' }, 0.05)
+        .to(hl, { color: '#F27A2B', duration: 0.35 }, '-=0.3');
+      var h1 = document.querySelector('.hero h1[data-split]');
+      if (h1) { var hw = splitWords(h1); gsap.set(hw, { opacity: 1 }); gsap.from(hw, { opacity: 0, y: 14, duration: 0.6, stagger: 0.05, ease: 'power2.out', delay: 0.15 }); }
     }
 
-    /* M3: batch reveal for the service rows (G13) */
-    var cards = document.querySelectorAll('.batch-card');
-    if (cards.length) {
-      gsap.set(cards, { y: 24, opacity: 0 });
-      ScrollTrigger.batch(cards, {
-        start: 'top 88%', once: true,
-        onEnter: function (batch) { gsap.to(batch, { y: 0, opacity: 1, stagger: 0.08, duration: 0.5, ease: 'power2.out' }); }
+    /* S2 word fade on the doors heading (first h2 in the page, the rest are created in place below) */
+    function fadeHeading(h) {
+      gsap.fromTo(splitWords(h), { opacity: 0.22 }, { opacity: 1, stagger: 0.08, ease: 'none', scrollTrigger: { trigger: h, start: 'top 85%', end: 'top 45%', scrub: 0.8 } });
+    }
+    var h2s = gsap.utils.toArray('h2[data-split]');
+    if (h2s[0]) fadeHeading(h2s[0]);
+
+    /* S3 logo conveyor: position is a function of the band's progress through the viewport */
+    if (mq) {
+      var D = function () { return innerWidth * (c.mob ? 0.4 : 0.3); };
+      gsap.fromTo('#marquee-track', { x: function () { return -D(); } }, { x: function () { return D(); }, ease: 'none',
+        scrollTrigger: { trigger: '.logos', start: 'top bottom', end: 'bottom top', scrub: 0.4, invalidateOnRefresh: true } });
+    }
+
+    /* S4 services sync, created after the hero pin so its positions include the pin spacing */
+    if (c.desk) cleanups = cleanups.concat(buildServiceSync());
+
+    /* S5 why: hub first, then wires draw outward one by one, each node lights when its wire lands */
+    if (h2s[1]) fadeHeading(h2s[1]);
+    var wires = gsap.utils.toArray('.why-diagram .wire-hot');
+    var nodes = gsap.utils.toArray('.why-diagram .hub-node');
+    if (wires.length) {
+      gsap.set(wires, { strokeDasharray: 1, strokeDashoffset: 1 });
+      gsap.set(nodes, { opacity: 0.28 });
+      gsap.set('.why-diagram .hub-core', { scale: 0.82, transformOrigin: '50% 50%' });
+      var wtl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '.why-diagram', start: 'top 80%', end: 'bottom 45%', scrub: 0.6 } });
+      wtl.to('.why-diagram .hub-core', { scale: 1, duration: 0.4, ease: 'power2.out' }, 0);
+      wires.forEach(function (w, i) {
+        var at = 0.3 + i * 0.45;
+        wtl.to(w, { strokeDashoffset: 0, duration: 0.45 }, at)
+           .to(nodes[i], { opacity: 1, duration: 0.15, onStart: function () { nodes[i].classList.add('is-lit'); }, onReverseComplete: function () { nodes[i].classList.remove('is-lit'); } }, at + 0.35);
       });
     }
 
-    /* M4: process line drawn by scroll + steps light up */
-    var fill = document.getElementById('process-fill');
-    var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
-    if (fill && steps.length) {
-      gsap.to(fill, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.process-track', start: 'top 75%', end: 'bottom 55%', scrub: 0.6,
-        onUpdate: function (st) { var n = Math.min(steps.length, Math.floor(st.progress * steps.length + 0.15) + (st.progress > 0.02 ? 1 : 0)); steps.forEach(function (s, i) { s.classList.toggle('is-lit', i < n); }); } } });
+    /* S6 process */
+    if (h2s[2]) fadeHeading(h2s[2]);
+    if (steps.length) {
+      var dim = function (s) { return [s.querySelector('h3'), s.querySelector('p')]; };
+      if (c.desk && fill) {
+        gsap.set(fill, { scaleX: 0 });
+        steps.forEach(function (s, i) { if (i) gsap.set(dim(s), { opacity: 0.22, y: 12 }); });
+        steps[0].classList.add('is-lit');
+        var ptl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
+          trigger: '#process', start: function () { var hh = headerH(); return 'center ' + Math.round(hh + (innerHeight - hh) / 2); }, end: '+=120%', pin: true, scrub: 0.5, anticipatePin: 1, invalidateOnRefresh: true } });
+        ptl.to(fill, { scaleX: 1, duration: 1 }, 0);
+        steps.forEach(function (s, i) {
+          if (!i) return;
+          var at = i / steps.length;
+          ptl.to(dim(s), { opacity: 1, y: 0, duration: 0.12, onStart: function () { s.classList.add('is-lit'); }, onReverseComplete: function () { s.classList.remove('is-lit'); } }, at);
+        });
+      } else if (vtFill) {
+        gsap.to(vtFill, { height: '100%', ease: 'none', scrollTrigger: { trigger: '.steps', start: 'top 62%', end: 'bottom 72%', scrub: 0.6 } });
+        steps.forEach(function (s) {
+          ScrollTrigger.create({ trigger: s, start: 'top 66%', onEnter: function () { s.classList.add('is-lit'); }, onLeaveBack: function () { s.classList.remove('is-lit'); } });
+        });
+      }
     }
 
-    return function () { html.classList.remove('gsap-live'); };
-  });
+    /* S7 projects: each tile arrives from the side of the grid it belongs to */
+    if (tiles.length) {
+      var grid = document.querySelector('.projects-grid');
+      var g = grid.getBoundingClientRect();
+      var cx = g.left + g.width / 2, cy = g.top + g.height / 2;
+      var ttl = gsap.timeline({ scrollTrigger: { trigger: grid, start: 'top 92%', end: 'top 30%', scrub: 0.8 } });
+      tiles.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        var dx = (r.left + r.width / 2 - cx) / g.width, dy = (r.top + r.height / 2 - cy) / g.height;
+        ttl.fromTo(el, { xPercent: dx * 120, yPercent: dy * 110, scale: 0.6, rotate: dx * 14, rotateY: dx * -20, opacity: 0 },
+          { xPercent: 0, yPercent: 0, scale: 1, rotate: 0, rotateY: 0, opacity: 1, duration: 1, ease: 'power2.out' }, 0);
+      });
+    }
 
-  /* reduced motion: static end states */
-  if (rm) {
-    gsap.set(labels, { opacity: 0 });
-    document.querySelectorAll('.step').forEach(function (s) { s.classList.add('is-lit'); });
-    var f = document.getElementById('process-fill'); if (f) f.style.transform = 'scaleX(1)';
-  }
+    /* S8 about statement: coloured word by word, the key phrase gets the orange marker */
+    if (statement) {
+      var sp = splitStatement(statement, ['מעטפת', 'שירותים', 'מלאה']);
+      gsap.set(sp.words, { color: '#B4B7BD' });
+      gsap.set(sp.marks, { '--fill': 0 });
+      var stl = gsap.timeline({ scrollTrigger: { trigger: statement, start: 'top 80%', end: 'bottom 55%', scrub: 0.4 } });
+      stl.to(sp.words, { color: '#111214', duration: 0.4, stagger: 0.35, ease: 'none' }, 0);
+      sp.marks.forEach(function (mk) {
+        var i = sp.words.indexOf(mk.parentNode);
+        stl.to(mk, { '--fill': 1, duration: 0.4, ease: 'power2.out' }, i * 0.35);
+      });
+    }
+
+    return function () {
+      html.classList.remove('gsap-live');
+      cleanups.forEach(function (t) { t.kill(); });
+    };
+  });
 })();
