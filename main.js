@@ -403,6 +403,16 @@
       paint();
     }
 
+    /* S10 heading marks: the four modules of the P assemble above each heading, the hero's move at small scale */
+    var SCATTER = { a: [-60, -80, -12], b: [90, -40, 10], c: [80, 90, 8], d: [-90, 60, -9] };
+    gsap.utils.toArray('.p-echo').forEach(function (mark) {
+      var tl = gsap.timeline({ scrollTrigger: { trigger: mark, start: 'top 94%', end: 'top 66%', scrub: 0.6 } });
+      mark.querySelectorAll('rect').forEach(function (r) {
+        var o = SCATTER[r.getAttribute('data-p')];
+        tl.fromTo(r, { x: o[0], y: o[1], rotate: o[2], opacity: 0 }, { x: 0, y: 0, rotate: 0, opacity: 1, ease: 'power2.out', duration: 1 }, 0);
+      });
+    });
+
     return function () {
       html.classList.remove('gsap-live');
       cleanups.forEach(function (t) { t.kill(); });
