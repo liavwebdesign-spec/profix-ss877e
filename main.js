@@ -7,9 +7,24 @@
   var hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
 
   /* ---------- header ---------- */
+  /* floating pill (MV:hd3) with headroom: leaves on scroll down, returns on the first scroll up, always visible
+     at the top, while the mega menu or the drawer is open, and while keyboard focus is inside it */
   var header = document.querySelector('.header');
-  function onScroll() { header.classList.toggle('is-scrolled', window.scrollY > 8); }
-  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  var hdLast = window.scrollY, hdRaf = 0;
+  function hdUpdate() {
+    hdRaf = 0;
+    var y = window.scrollY, d = y - hdLast;
+    header.classList.toggle('is-scrolled', y > 8);
+    var hold = !!header.querySelector('.is-open') || !!header.querySelector(':focus-visible') ||
+      document.documentElement.classList.contains('menu-lock');
+    if (y <= header.offsetHeight + 24 || hold) { header.classList.remove('is-hidden'); hdLast = y; return; }
+    if (Math.abs(d) < 6) return;
+    header.classList.toggle('is-hidden', d > 0);
+    hdLast = y;
+  }
+  window.addEventListener('scroll', function () { if (!hdRaf) hdRaf = requestAnimationFrame(hdUpdate); }, { passive: true });
+  header.addEventListener('focusin', hdUpdate);
+  hdUpdate();
 
   /* mega menu (MV:b65): hover intent, click, ArrowDown opens and focuses, Escape returns focus, leaving focus closes */
   var megaLi = document.querySelector('.nav .has-mega');
@@ -53,7 +68,7 @@
       md.classList.toggle('open', open); mdPanel.inert = !open;
       burger.setAttribute('aria-expanded', String(open));
       var sb = window.innerWidth - document.documentElement.clientWidth;
-      document.body.style.overflow = open ? 'hidden' : '';
+      document.body.style.overflow = open ? 'hidden' : ''; document.documentElement.classList.toggle('menu-lock', open);
       document.body.style.paddingInlineEnd = open && sb > 0 ? sb + 'px' : '';
       if (open) { mdLast = document.activeElement; setTimeout(function () { mdClose.focus(); }, 180); }
       else { md.querySelectorAll('.md-sub.open').forEach(function (sub) { toggleSub(sub.previousElementSibling, false); }); if (mdLast) mdLast.focus(); }
@@ -180,7 +195,7 @@
   history.scrollRestoration = 'manual';
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 
-  var headerH = function () { return header.offsetHeight; };
+  var headerH = function () { return 0; };   // the pill floats over the content and hides on scroll down
   var sig = document.getElementById('p-sig');
   var pieces = sig ? gsap.utils.toArray(sig.querySelectorAll('.piece')) : [];
   var labels = sig ? gsap.utils.toArray(sig.querySelectorAll('.lbl')) : [];
