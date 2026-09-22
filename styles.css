@@ -47,6 +47,11 @@
 
   /* shape */
   --r-control: 12px;
+  /* ---- the P language: the logo's four rounded modules, reused as one motif ----
+     --p-mark is the letterform as a mask, so any element can wear it in any colour.
+     --r-bowl is the P's bowl radius: every piece of media carries it on its start-top corner. */
+  --p-mark: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 336"><rect width="256" height="72" rx="20"/><rect x="184" width="72" height="200" rx="20"/><rect y="128" width="256" height="72" rx="20"/><rect width="72" height="336" rx="20"/></svg>');
+  --r-bowl: clamp(28px, 3.2vw, 64px);
   --r-card: 16px;
   --r-shot: 16px;
   --shadow-soft: 0 6px 20px rgba(17, 18, 20, .08);
@@ -111,6 +116,10 @@ strong, b { font-weight: 600; }
 .lead { font-size: var(--t-lead); line-height: var(--lh-lead); color: var(--muted); max-width: var(--measure); }
 .meta { font-size: var(--t-meta); line-height: var(--lh-meta); font-weight: 500; color: var(--muted); }
 .micro { font-size: var(--t-micro); line-height: 1.6; color: var(--muted); }
+.p-mark { display: inline-block; aspect-ratio: 256 / 336; background: currentColor;
+  -webkit-mask: var(--p-mark) center / contain no-repeat; mask: var(--p-mark) center / contain no-repeat; }
+.eyebrow::before { content: ""; width: .82em; aspect-ratio: 256 / 336; background: currentColor; flex: none;
+  -webkit-mask: var(--p-mark) center / contain no-repeat; mask: var(--p-mark) center / contain no-repeat; }
 .eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
   font-size: var(--t-meta); font-weight: 500; color: var(--accent-text); letter-spacing: 0.02em; margin-bottom: 16px;
@@ -372,7 +381,7 @@ strong, b { font-weight: 600; }
 .svc-stage { position: sticky; top: 10vh; }
 .svc-panel {
   position: relative; aspect-ratio: 4 / 4.4; max-height: calc(88vh - 96px); margin-inline: auto; width: 100%;
-  border-radius: var(--r-shot); overflow: hidden; background: var(--bg-dark); color: var(--ink-dark);
+  border-radius: var(--r-shot); border-start-start-radius: var(--r-bowl); overflow: hidden; background: var(--bg-dark); color: var(--ink-dark);
 }
 .svc-panel::before {
   content: ""; position: absolute; inset: 0; opacity: .5;
@@ -436,6 +445,7 @@ strong, b { font-weight: 600; }
 .why-diagram svg { width: 100%; height: auto; }
 .why-diagram .node { fill: var(--surface-dark); stroke: none; }
 .why-diagram .node-main { fill: var(--accent); stroke: none; }
+.why-diagram .core-mark rect { fill: var(--bg-dark); }
 .why-diagram .wire { stroke: var(--line-dark-strong); stroke-width: 1.5; fill: none; }
 .why-diagram .wire-hot { stroke: var(--accent); stroke-width: 2.5; fill: none; stroke-linecap: round; }
 .why-diagram .hub-node { transition: opacity .35s var(--ease); }
@@ -487,7 +497,9 @@ strong, b { font-weight: 600; }
 /* ---------- projects teaser ---------- */
 .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-m); }
 .tile {
-  position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r-shot);
+  position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r-shot); border-start-start-radius: var(--r-bowl);
+  /* clip-path as well: a big radius on a 3D-transformed tile leaves a seam in Chrome. Physical order, bowl on the start (right) corner. */
+  clip-path: inset(0 round var(--r-shot) var(--r-bowl) var(--r-shot) var(--r-shot));
   background: var(--surface-dark); color: var(--ink-dark);
   transition: box-shadow .3s var(--ease);
 }
@@ -524,10 +536,10 @@ strong, b { font-weight: 600; }
 .about-copy .link-arrow { margin-top: 24px; }
 .about-visual { position: relative; padding: 0 0 20px 20px; }
 .about-visual::before {
-  content: ""; position: absolute; inset: 20px 20px 0 0; background: color-mix(in srgb, var(--accent) 14%, var(--surface)); border-radius: var(--r-shot); z-index: 0;
+  content: ""; position: absolute; inset: 20px 20px 0 0; background: color-mix(in srgb, var(--accent) 14%, var(--surface)); border-radius: var(--r-shot); border-start-start-radius: var(--r-bowl); z-index: 0;
 }
 .portrait {
-  position: relative; z-index: 1; aspect-ratio: 4 / 5; border-radius: var(--r-shot); overflow: hidden;
+  position: relative; z-index: 1; aspect-ratio: 4 / 5; border-radius: var(--r-shot); border-start-start-radius: var(--r-bowl); overflow: hidden;
   background: var(--surface-muted); display: grid; place-items: center;
 }
 .portrait svg { width: 60%; height: auto; opacity: .18; }
@@ -615,7 +627,15 @@ strong, b { font-weight: 600; }
 @media (max-width: 767px) { .form-grid { grid-template-columns: 1fr; } }
 
 /* ---------- footer ---------- */
-.footer { padding-block: clamp(64px, 5vw, 120px) 32px; }
+.footer { position: relative; overflow: hidden; padding-block: clamp(64px, 5vw, 120px) 32px; }
+.footer::after {
+  content: ""; position: absolute; bottom: clamp(76px, 7vw, 132px); inset-inline-end: clamp(24px, 4vw, 96px);
+  width: clamp(96px, 9.5vw, 150px); aspect-ratio: 256 / 336;
+  background: var(--ink-dark); opacity: .07; pointer-events: none;
+  -webkit-mask: var(--p-mark) center / contain no-repeat; mask: var(--p-mark) center / contain no-repeat;
+}
+.footer .container { position: relative; z-index: 1; }
+@media (max-width: 767px) { .footer::after { display: none; } }   /* a long stacked footer under a sticky bar: no room for the mark */
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr .8fr; gap: var(--gap-l); }
 .footer .logo { width: clamp(160px, 11vw, 240px); margin-bottom: 16px; }
 .footer p { font-size: var(--t-meta); color: var(--muted-dark); max-width: 30ch; }
@@ -691,3 +711,4 @@ html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animati
   .js.gsap-live .split-word { opacity: 1; }
   .md, .md *, .mega, .mega *, .sticky-bar, .svc-art { transition: none !important; }
 }
+[dir="ltr"] .tile { clip-path: inset(0 round var(--r-bowl) var(--r-shot) var(--r-shot) var(--r-shot)); }
