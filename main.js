@@ -68,17 +68,6 @@
     }
   }
 
-  /* ---------- quotes carousel ---------- */
-  var quotes = document.getElementById('quotes');
-  document.querySelectorAll('[data-quotes]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var card = quotes.querySelector('.quote');
-      var step = card.getBoundingClientRect().width + 24;
-      var dir = b.dataset.quotes === 'next' ? -1 : 1; /* RTL: next moves left */
-      quotes.scrollBy({ left: dir * step, behavior: rm ? 'auto' : 'smooth' });
-    });
-  });
-
   /* ---------- lead form (sketch: no backend yet) ---------- */
   var form = document.getElementById('lead-form');
   if (form) {
@@ -145,7 +134,8 @@
      S5 why: hub wires drawn by scroll, nodes light up (G22-based, no pin)
      S6 process: pinned, line fills and stations light (G20 station logic) / mobile vertical rail (B35)
      S7 projects: scattered tiles converge (G54)
-     S8 about: statement coloured word by word (G48) */
+     S8 about: statement coloured word by word (G48)
+     S9 testimonials: sideways band in a sticky stage, centre card grows (G65) */
   if (!hasGsap) return;
   gsap.registerPlugin(ScrollTrigger);
   history.scrollRestoration = 'manual';
@@ -325,6 +315,38 @@
         var i = sp.words.indexOf(mk.parentNode);
         stl.to(mk, { '--fill': 1, duration: 0.4, ease: 'power2.out' }, i * 0.35);
       });
+    }
+
+    /* S9 testimonials: the band moves sideways inside a sticky stage; the card nearest the centre grows (G65).
+       No blur: blurred text cannot be read and the filter is expensive while scrolling. */
+    var ctr = document.querySelector('.ctr');
+    if (ctr) {
+      var ctrTrack = ctr.querySelector('.ctr-track'), ctrView = ctr.querySelector('.ctr-view');
+      var cards = gsap.utils.toArray('.ctr .quote');
+      html.style.setProperty('--header-h', headerH() + 'px');
+      var dist = function () { return Math.max(0, ctrTrack.scrollWidth - ctrView.clientWidth); };
+      var fitHeight = function () { ctr.style.height = (innerHeight - headerH() + dist() * 1.1) + 'px'; };
+      fitHeight();
+      ScrollTrigger.addEventListener('refreshInit', fitHeight);
+      gsap.fromTo(ctrTrack, { x: function () { return -dist(); } }, { x: 0, ease: 'none',
+        scrollTrigger: { trigger: ctr, start: function () { return 'top ' + headerH(); }, end: 'bottom bottom', scrub: 0.5, invalidateOnRefresh: true } });
+      var paint = function () {
+        var mid = innerWidth / 2;
+        var unit = cards.length > 1 ? Math.abs(cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left) : 400;
+        cards.forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          var d = Math.min(1, Math.abs(r.left + r.width / 2 - mid) / (unit * 1.6));
+          var f = 1 - d * d;
+          gsap.set(el, { scale: 0.86 + f * 0.14, opacity: 0.42 + f * 0.58, zIndex: Math.round(f * 10) });
+          el.classList.toggle('is-center', f > 0.85);
+        });
+      };
+      var running = false;
+      var startLoop = function () { if (!running) { running = true; gsap.ticker.add(paint); } };
+      var stopLoop = function () { if (running) { running = false; gsap.ticker.remove(paint); } };
+      cleanups.push(ScrollTrigger.create({ trigger: ctr, start: 'top bottom', end: 'bottom top', onToggle: function (self) { self.isActive ? startLoop() : stopLoop(); } }));
+      cleanups.push({ kill: function () { stopLoop(); ScrollTrigger.removeEventListener('refreshInit', fitHeight); ctr.style.height = ''; gsap.set(cards, { clearProps: 'all' }); cards.forEach(function (el) { el.classList.remove('is-center'); }); } });
+      paint();
     }
 
     return function () {
