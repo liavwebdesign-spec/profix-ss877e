@@ -353,11 +353,12 @@
         defaults: { ease: 'none' },
         scrollTrigger: c.desk
           ? { trigger: '#atmos', start: 'top top', end: '+=80%', pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true }
-          : { trigger: '.atmos-visual', start: 'top 85%', end: 'center 40%', scrub: 0.6 }
+          : { trigger: '.atmos-visual', start: 'top 80%', end: 'bottom 55%', scrub: 0.6 }
       });
-      atl.to(labels, { opacity: 0, duration: 0.3, stagger: 0.05 }, 0.1)
-        .to(pieces, { x: 0, y: 0, rotation: 0, duration: 1, stagger: 0.12, ease: 'power2.inOut' }, 0.15)
-        .to(hl, { color: '#F27A2B', duration: 0.35 }, '-=0.3');
+      // labels stay readable while the systems travel, and leave only as the P closes (they vanished too early on phones)
+      atl.to(pieces, { x: 0, y: 0, rotation: 0, duration: 1, stagger: 0.12, ease: 'power2.inOut' }, 0)
+        .to(labels, { opacity: 0, duration: 0.25, stagger: 0.04 }, 1.05)
+        .to(hl, { color: '#F27A2B', duration: 0.35 }, 1.05);
     }
 
     /* S7 projects: each tile arrives from the side of the grid it belongs to */
@@ -398,18 +399,23 @@
       var fitHeight = function () { ctr.style.height = (innerHeight - headerH() + dist() * 1.1) + 'px'; };
       fitHeight();
       ScrollTrigger.addEventListener('refreshInit', fitHeight);
+      var ctrNow = ctr.querySelector('.ctr-now'), ctrBar = ctr.querySelector('.ctr-rail i'), lastIdx = -1;
       gsap.fromTo(ctrTrack, { x: function () { return -dist(); } }, { x: 0, ease: 'none',
-        scrollTrigger: { trigger: ctr, start: function () { return 'top ' + headerH(); }, end: 'bottom bottom', scrub: 0.5, invalidateOnRefresh: true } });
+        scrollTrigger: { trigger: ctr, start: function () { return 'top ' + headerH(); }, end: 'bottom bottom', scrub: 0.5, invalidateOnRefresh: true,
+          onUpdate: function (self) { if (ctrBar) ctrBar.style.transform = 'scaleX(' + self.progress.toFixed(3) + ')'; } } });
       var paint = function () {
         var mid = innerWidth / 2;
         var unit = cards.length > 1 ? Math.abs(cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left) : 400;
-        cards.forEach(function (el) {
+        var best = -1, bestIdx = 0;
+        cards.forEach(function (el, i) {
           var r = el.getBoundingClientRect();
           var d = Math.min(1, Math.abs(r.left + r.width / 2 - mid) / (unit * 1.6));
           var f = 1 - d * d;
           gsap.set(el, { scale: 0.86 + f * 0.14, opacity: 0.42 + f * 0.58, zIndex: Math.round(f * 10) });
           el.classList.toggle('is-center', f > 0.85);
+          if (f > best) { best = f; bestIdx = i; }
         });
+        if (ctrNow && bestIdx !== lastIdx) { lastIdx = bestIdx; ctrNow.textContent = String(bestIdx + 1).padStart(2, '0'); }
       };
       var running = false;
       var startLoop = function () { if (!running) { running = true; gsap.ticker.add(paint); } };

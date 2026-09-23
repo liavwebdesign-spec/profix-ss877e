@@ -196,18 +196,18 @@ strong, b { font-weight: 600; }
 .header {
   position: fixed; top: var(--pill-top); inset-inline: 0; margin-inline: auto; z-index: 50;
   width: min(1320px, calc(100% - 2 * var(--gutter))); height: var(--pill-h);
-  color: var(--ink-dark); border-radius: 999px; isolation: isolate;
+  color: var(--ink); border-radius: 999px; isolation: isolate;
   --hy: 0px; --hs: 1; transform: translateY(var(--hy)) scale(var(--hs)); transition: transform .45s var(--ease);
 }
 .header::before {
   content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
-  background: color-mix(in srgb, var(--surface-dark) 76%, transparent);
+  background: color-mix(in srgb, #fff 92%, transparent);
   -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, .28);
+  box-shadow: 0 10px 30px rgba(17, 18, 20, .16);
   transition: background .3s var(--ease), box-shadow .3s var(--ease);
 }
 .header.is-scrolled { --hs: .97; }
-.header.is-scrolled::before { background: color-mix(in srgb, var(--surface-dark) 94%, transparent); box-shadow: 0 18px 44px rgba(0, 0, 0, .42); }
+.header.is-scrolled::before { background: color-mix(in srgb, #fff 97%, transparent); box-shadow: 0 16px 40px rgba(17, 18, 20, .2); }
 .header.is-hidden { --hy: calc(-100% - var(--pill-top) - 24px); }
 .header .container { height: 100%; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 24px; padding-inline: clamp(24px, 1.8vw, 36px) 8px; }
 .header .btn { border-radius: 999px; }
@@ -215,15 +215,15 @@ strong, b { font-weight: 600; }
 .logo img { width: 100%; height: auto; }
 .nav { display: flex; justify-content: center; align-items: center; gap: clamp(24px, 2vw, 48px); font-size: var(--t-meta); font-weight: 500; }
 .nav > li { position: relative; }
-.nav > li > a, .nav > li > button { display: inline-flex; align-items: center; gap: 6px; color: var(--muted-dark); padding: 14px 0; transition: color .15s var(--ease); }
+.nav > li > a, .nav > li > button { display: inline-flex; align-items: center; gap: 6px; color: var(--muted-strong); padding: 14px 0; transition: color .15s var(--ease); }
 .nav svg { width: 14px; height: 14px; transition: transform .2s var(--ease); }
-.nav li.is-open > button { color: var(--ink-dark); }
+.nav li.is-open > button { color: var(--ink); }
 .nav li.is-open > button svg { transform: rotate(180deg); }
 .header-actions { display: flex; align-items: center; gap: 16px; }
-.lang { font-size: 13px; font-weight: 500; color: var(--muted-dark); padding: 8px 6px; transition: color .15s var(--ease); }
-.burger { display: none; width: 44px; height: 44px; background: color-mix(in srgb, var(--ink-dark) 8%, transparent); border-radius: var(--r-control); }
+.lang { font-size: 13px; font-weight: 500; color: var(--muted-strong); padding: 8px 6px; transition: color .15s var(--ease); }
+.burger { display: none; width: 44px; height: 44px; background: color-mix(in srgb, var(--ink) 7%, transparent); border-radius: var(--r-control); }
 @media (hover: hover) and (pointer: fine) {
-  .nav > li > a:hover, .nav > li > button:hover, .lang:hover { color: var(--ink-dark); }
+  .nav > li > a:hover, .nav > li > button:hover, .lang:hover { color: var(--ink); }
 }
 
 /* mega menu (MV:b65): hangs from the whole header, clip reveal from the top, links staggered, fast exit without stagger */
@@ -236,28 +236,28 @@ strong, b { font-weight: 600; }
 .mega::before { content: ""; position: absolute; inset-inline: 0; top: 0; height: 12px; }
 .mega-card {
   display: grid; grid-template-columns: 1fr 1fr minmax(240px, .7fr); gap: var(--gap-l);
-  background: var(--surface-dark); color: var(--ink-dark); border-radius: var(--r-card);
-  padding: clamp(24px, 2vw, 40px); box-shadow: 0 24px 64px rgba(0, 0, 0, .45);
+  background: var(--surface); color: var(--ink); border-radius: var(--r-card);
+  padding: clamp(24px, 2vw, 40px); box-shadow: 0 24px 64px rgba(17, 18, 20, .18);
   opacity: 0; transform: translateY(-8px); clip-path: inset(0 0 100% 0 round var(--r-card));
   transition: opacity .22s var(--ease), transform .24s var(--ease), clip-path .24s var(--ease);
 }
 .nav li.is-open > .mega { visibility: visible; pointer-events: auto; transition-delay: 0s; }
 .nav li.is-open > .mega .mega-card { opacity: 1; transform: none; clip-path: inset(0 0 0 0 round var(--r-card)); transition-duration: .3s, .42s, .42s; }
-.mega-col h4 { margin: 0 0 12px; font-size: var(--t-meta); font-weight: 500; color: var(--accent-light); letter-spacing: .02em; display: flex; align-items: center; gap: 10px; }
+.mega-col h4 { margin: 0 0 12px; font-size: var(--t-meta); font-weight: 500; color: var(--accent-text); letter-spacing: .02em; display: flex; align-items: center; gap: 10px; }
 .nav .mega-col a {
   position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 10px 12px; margin-inline: -12px; border-radius: 10px; color: var(--ink-dark-soft); font-size: var(--t-meta); font-weight: 400;
+  padding: 10px 12px; margin-inline: -12px; border-radius: 10px; color: var(--muted-strong); font-size: var(--t-meta); font-weight: 400;
   opacity: 0; transform: translateY(6px);
   transition: opacity .2s var(--ease), transform .2s var(--ease), background .18s var(--ease), color .15s var(--ease);
 }
 .nav li.is-open .mega-col a { opacity: 1; transform: none; transition-delay: calc(.08s + var(--i) * 28ms), calc(.08s + var(--i) * 28ms), 0s, 0s; }
 .nav .mega-col a svg { width: 16px; height: 16px; flex: none; opacity: 0; transform: translateX(6px); transition: opacity .18s var(--ease), transform .18s var(--ease); }
-.mega-cta { align-self: start; border-radius: var(--r-control); background: color-mix(in srgb, var(--accent) 10%, var(--bg-dark)); padding: clamp(20px, 1.6vw, 32px); display: flex; flex-direction: column; gap: 24px; opacity: 0; transition: opacity .3s var(--ease); }
+.mega-cta { align-self: start; border-radius: var(--r-control); background: color-mix(in srgb, var(--accent) 9%, #fff); padding: clamp(20px, 1.6vw, 32px); display: flex; flex-direction: column; gap: 24px; opacity: 0; transition: opacity .3s var(--ease); }
 .nav li.is-open .mega-cta { opacity: 1; transition-delay: .2s; }
-.mega-cta p { font-size: var(--t-meta); color: var(--ink-dark-soft); }
+.mega-cta p { font-size: var(--t-meta); color: var(--muted-strong); }
 .nav .mega-cta .btn { align-self: flex-start; color: var(--ink); padding: 10px 18px; }
 @media (hover: hover) and (pointer: fine) {
-  .nav .mega-col a:hover { background: rgba(244, 242, 238, .06); color: var(--accent-light); }
+  .nav .mega-col a:hover { background: var(--tint-4); color: var(--accent-text); }
   .nav .mega-col a:hover svg { opacity: 1; transform: none; }
 }
 
@@ -294,7 +294,7 @@ strong, b { font-weight: 600; }
 .md-sub > div > :last-child { margin-bottom: 12px; }
 .md-cta { margin-top: 24px; opacity: 0; transform: translateY(12px); transition: opacity .18s var(--ease), transform .18s var(--ease); }
 .md.open .md-cta { opacity: 1; transform: none; transition: opacity .4s var(--ease) .42s, transform .4s var(--ease) .42s; }
-.burger i { display: block; width: 18px; height: 2px; background: var(--ink-dark); border-radius: 2px; transition: transform .36s var(--ease-inout), opacity .2s var(--ease); }
+.burger i { display: block; width: 18px; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .36s var(--ease-inout), opacity .2s var(--ease); }
 .burger { gap: 4px; place-content: center; }
 .burger[aria-expanded="true"] i:nth-child(1) { transform: translateY(6px) rotate(45deg); }
 .burger[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
@@ -755,3 +755,47 @@ html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animati
 .tile-cap { padding-top: 72px; background: linear-gradient(to top, rgba(17, 18, 20, .95), rgba(17, 18, 20, 0)); }
 .tile-cap .micro { color: var(--ink-dark-soft); }
 .portrait img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- round 4 (23.9.2026, Liav) ---------- */
+/* why, desktop: two columns so the diagram fills the upper start side instead of leaving it empty */
+@media (min-width: 1024px) {
+  #why .container { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: var(--gap-l); align-items: start; }
+  #why .section-head { grid-column: 1; grid-row: 1; }
+  #why .why-hero { display: contents; }
+  #why .why-hero > div:first-child { grid-column: 1; grid-row: 2; margin-top: clamp(32px, 3vw, 64px); }
+  #why .why-diagram { grid-column: 2; grid-row: 1 / 3; align-self: center; max-width: none; width: 100%; }
+  #why .why-grid { grid-column: 1 / -1; grid-row: 3; }
+}
+
+/* atmosphere labels: SVG units shrink with the drawing, so small screens get bigger units (read at about 15px) */
+@media (max-width: 1023px) { .atmos-visual .lbl { font-size: 24px; } }
+@media (max-width: 767px) { .atmos-visual .lbl { font-size: 30px; } }
+
+/* the logo's P as a quiet background layer: always whole, never cut by an edge (a cut P reads as blobs) */
+.p-bg { position: absolute; z-index: 0; pointer-events: none; aspect-ratio: 125.52 / 108.09; background: currentColor;
+  -webkit-mask: var(--p-mark) center / contain no-repeat; mask: var(--p-mark) center / contain no-repeat; }
+.process, #contact { position: relative; overflow: hidden; }
+.process > .container, #contact > .container { position: relative; z-index: 1; }
+.process .p-bg { width: min(46vw, 760px); inset-inline-end: 4vw; top: 50%; translate: 0 -50%; color: var(--ink); opacity: .035; }
+#contact .p-bg { width: min(34vw, 520px); inset-inline-start: 3vw; bottom: clamp(32px, 5vw, 96px); color: var(--accent); opacity: .07; }
+.testimonials .p-bg { width: min(52vw, 860px); left: 50%; top: 50%; translate: -50% -46%; color: var(--ink-dark); opacity: .045; }
+.testimonials .ctr-stage { position: relative; }
+.testimonials .ctr-stage > *:not(.p-bg) { position: relative; z-index: 1; }
+@media (max-width: 767px) {
+  .process .p-bg { width: 78vw; inset-inline-end: 11vw; }
+  #contact .p-bg { width: 62vw; inset-inline-start: auto; inset-inline-end: 19vw; bottom: 24px; }
+  .testimonials .p-bg { width: 84vw; }
+}
+
+/* testimonials: a counter and a progress rail that follow the band, and a warmer centre card */
+.ctr-head { display: flex; align-items: end; justify-content: space-between; gap: var(--gap-m); flex-wrap: wrap; }
+.ctr-meta { display: none; align-items: center; gap: 16px; color: var(--muted-dark); font-size: var(--t-meta); }
+.gsap-live .ctr-meta { display: flex; }
+.ctr-count { direction: ltr; unicode-bidi: isolate; font-family: var(--f-text); font-weight: 500; font-size: clamp(28px, 2.2vw, 44px); line-height: 1; color: var(--ink-dark); font-variant-numeric: tabular-nums; }
+.ctr-count .ctr-now { color: var(--accent); }
+.ctr-rail { width: clamp(120px, 12vw, 220px); height: 3px; border-radius: 3px; background: color-mix(in srgb, var(--ink-dark) 16%, transparent); overflow: hidden; }
+.ctr-rail i { display: block; height: 100%; background: var(--accent); transform-origin: right center; transform: scaleX(0); }
+.quote { position: relative; overflow: hidden; }
+.gsap-live .quote.is-center { box-shadow: 0 30px 80px rgba(242, 122, 43, .14); }
+.gsap-live .quote.is-center .qmark { color: var(--accent-light); }
+.quote .qmark { font-size: 72px; }
