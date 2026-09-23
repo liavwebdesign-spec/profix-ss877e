@@ -330,48 +330,41 @@ strong, b { font-weight: 600; }
 .atmos-visual .lbl { font-family: var(--f-text); font-size: 17px; font-weight: 500; fill: var(--muted-dark); }
 @media (max-width: 1023px) { .atmos-stage { grid-template-columns: 1fr; min-height: 0; } .atmos-visual { max-width: 520px; width: 100%; margin-inline: auto; } }
 
-.hero { position: relative; overflow: hidden; }
+/* hero: exactly one screen, whole, on every common viewport (Liav, 23.9.2026: "the hero texts are huge and the hero
+   does not fit the viewport; this must never happen again"). Sizes answer to width AND height, min(vw, vh), so a short
+   laptop screen shrinks the type instead of cutting the hero. Gate: tools/site-qa/hero-fit.mjs. */
+.hero { position: relative; overflow: hidden; height: 100svh; min-height: 560px; }
 .hero .container {
-  display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gap-l); align-items: center;
-  min-height: 92vh; padding-block: calc(var(--pill-top) + var(--pill-h) + clamp(48px, 4vw, 96px)) clamp(72px, 6vw, 136px);
+  display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; height: 100%;
+  padding-block: calc(var(--pill-top) + var(--pill-h) + clamp(12px, 3vh, 48px)) clamp(20px, 5vh, 64px);
 }
 .hero-copy { position: relative; z-index: 1; }
-.hero h1 { max-width: 100%; }
-.hero .lead { margin-top: clamp(24px, 2vw, 40px); max-width: var(--measure); }
-.hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
-.hero-sub { margin-top: 14px; font-size: var(--t-meta); color: var(--muted-dark); max-width: calc(var(--measure) * .8); }
+.hero .eyebrow { margin-bottom: clamp(8px, 1.6vh, 20px); }
+.hero h1 { max-width: 100%; font-size: clamp(30px, min(3.4vw, 6.2vh) + 0.5rem, 104px); line-height: 1.0; }
+.hero .lead { margin-top: clamp(12px, 2.4vh, 32px); max-width: min(100%, 62ch); font-size: clamp(16px, min(0.95vw, 1.9vh) + 0.45rem, 24px); line-height: 1.5; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(16px, 3.2vh, 40px); }
+.hero-sub { margin-top: clamp(6px, 1.2vh, 14px); font-size: var(--t-meta); color: var(--muted-dark); max-width: min(100%, 62ch); }
 /* routing in the first screen (spec, 9.9: "the routing must be immediate and clear in the opening screen") */
-.hero-route { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: clamp(40px, 3vw, 72px); font-size: var(--t-meta); color: var(--muted-dark); }
+.hero-route { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: clamp(14px, 3.4vh, 48px); font-size: var(--t-meta); color: var(--muted-dark); }
 .hero-route a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border-radius: 999px; font-weight: 500; color: var(--ink-dark);
   background: color-mix(in srgb, var(--ink-dark) 9%, transparent); transition: background .18s var(--ease), color .18s var(--ease); }
 @media (hover: hover) and (pointer: fine) { .hero-route a:hover { background: var(--accent); color: var(--ink); } }
 /* inner pages have no hero: the floating pill would sit on their first line */
 body:not(:has(.hero)) main { padding-top: calc(var(--pill-top) + var(--pill-h)); }
 body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' footer is one short row: the mark would be cut */
-.trust-line { display: flex; flex-wrap: wrap; gap: 0 16px; margin-top: clamp(40px, 3vw, 72px); font-size: var(--t-meta); color: var(--muted-dark); }
-.trust-line li { display: flex; align-items: center; gap: 16px; }
-.trust-line li + li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: .7; }
-.hero-visual { position: relative; }
-.hero-visual svg { width: 100%; height: auto; }
-.hero-visual .lbl { font-family: var(--f-text); font-size: 15px; font-weight: 500; fill: var(--muted-dark); }
-.hero-visual .lbl-line { stroke: var(--line-dark-strong); stroke-width: 1.5; }
-.hero-grid {
-  position: absolute; inset: 0; pointer-events: none; opacity: .5;
-  background-image: linear-gradient(var(--line-dark) 1px, transparent 1px), linear-gradient(90deg, var(--line-dark) 1px, transparent 1px);
-  background-size: 64px 64px; background-position: center;
-  mask-image: radial-gradient(ellipse 60% 70% at 30% 50%, #000 0%, transparent 70%);
-}
-@media (max-width: 1023px) {
-  .hero .container { grid-template-columns: 1fr; min-height: 0; gap: 40px; }
-  .hero-visual { max-width: 440px; margin-inline: auto; }
-}
 @media (max-width: 767px) {
   .btn { white-space: normal; text-align: center; line-height: 1.3; }
   .svc-cta .btn, .process-cta .btn, .projects-more .btn { width: 100%; }
-  .hero .container { padding-block: calc(var(--pill-top) + var(--pill-h) + 32px) 56px; }
-  .hero-ctas .btn { width: 100%; }
-  .hero-visual { max-width: 320px; }
-  .hero-grid { mask-image: radial-gradient(ellipse 80% 50% at 50% 70%, #000 0%, transparent 70%); }
+  .hero { min-height: 0; }
+  .hero .container { padding-block: calc(var(--pill-top) + var(--pill-h) + clamp(8px, 2vh, 24px)) clamp(16px, 3vh, 32px); }
+  .hero .eyebrow { font-size: 13px; }
+  .hero h1 { font-size: clamp(28px, min(9vw, 5.2vh), 40px); line-height: 1.02; }
+  .hero .lead { font-size: 16px; }
+  .hero .lead-more { display: none; }   /* the third sentence waits for the next screen on phones */
+  .hero-ctas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hero-ctas .btn { width: 100%; min-height: 48px; padding: 10px 12px; font-size: 15px; }
+  .hero-sub { font-size: 13px; }
+  .hero-route a { min-height: 40px; padding: 0 18px; }
 }
 
 /* ---------- two doors (C16) ---------- */
