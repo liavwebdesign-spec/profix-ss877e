@@ -7,7 +7,7 @@
 <title>פרופיקס | פתרונות מחשוב, תקשורת ומתח נמוך במקום אחד</title>
 <meta name="description" content="פרופיקס מספקת מחשוב ו-IT לעסקים, ותקשורת ומתח נמוך לעסקים ולבתים: תשתיות רשת, מצלמות, אינטרקום, בית חכם וסאונד. תכנון, התקנה ותמיכה, כתובת אחת.">
 <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css?v=16">
+<link rel="stylesheet" href="styles.css?v=18">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -94,7 +94,9 @@
 
 <!-- ============ 01 HERO ============ -->
 <section class="hero dark">
-  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-media" aria-hidden="true">
+    <video class="hero-video" muted loop playsinline preload="metadata" poster="video/hero-poster.jpg" data-src-desk="video/hero-1080.mp4" data-src-mob="video/hero-720.mp4"></video>
+  </div>
   <div class="container">
     <div class="hero-copy">
       <p class="eyebrow">פרופיקס | פתרונות מחשוב ותקשורת | פתח תקווה</p>
@@ -112,31 +114,7 @@
       </nav>
     </div>
 
-    <div class="hero-visual" aria-hidden="true">
-      <!-- signature: the four blocks of the P, exploded into systems, converging into one P -->
-      <svg id="p-sig" viewBox="60 40 400 460" fill="none" style="overflow:visible">
-        <defs>
-          <linearGradient id="og" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#FC922C"/><stop offset="1" stop-color="#E66136"/>
-          </linearGradient>
-          <linearGradient id="og2" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#F27A2B"/><stop offset="1" stop-color="#D8582E"/>
-          </linearGradient>
-        </defs>
-        <g class="piece" data-piece="a" data-dx="-70" data-dy="-96" data-rot="-9">
-          <rect x="120" y="96" width="256" height="72" rx="20" fill="url(#og)"/><text class="lbl" x="248" y="74" text-anchor="middle">רשת ו-Wi-Fi</text>
-        </g>
-        <g class="piece" data-piece="b" data-dx="118" data-dy="-44" data-rot="7">
-          <rect x="304" y="96" width="72" height="200" rx="20" fill="url(#og)"/><text class="lbl" x="436" y="200" text-anchor="middle">מצלמות</text>
-        </g>
-        <g class="piece" data-piece="c" data-dx="96" data-dy="118" data-rot="5">
-          <rect x="120" y="224" width="256" height="72" rx="20" fill="url(#og)"/><text class="lbl" x="248" y="326" text-anchor="middle">סאונד</text>
-        </g>
-        <g class="piece" data-piece="d" data-dx="-116" data-dy="70" data-rot="-6">
-          <rect x="120" y="96" width="72" height="336" rx="20" fill="url(#og2)"/><text class="lbl" x="156" y="462" text-anchor="middle">מחשוב</text>
-        </g>
-      </svg>
-    </div>
+
   </div>
 </section>
 
@@ -144,15 +122,13 @@
 <section class="section muted-band" id="doors">
   <div class="container">
     <div class="section-head centered reveal">
-      <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 256 336"><rect data-p="a" width="256" height="72" rx="20"/><rect data-p="b" x="184" width="72" height="200" rx="20"/><rect data-p="c" y="128" width="256" height="72" rx="20"/><rect data-p="d" width="72" height="336" rx="20"/></svg></span>
+      <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 125.52 108.09"><path data-p="a" d="M0.0 0.0C0.0 17.54 8.26 26.31 24.78 26.31H94.95 125.52C125.52 4.46 104.74 0.0 94.95 0.0Z"/><path data-p="b" d="M99.21 26.31V45.34 75.92C122.16 75.92 125.52 55.13 125.52 45.34V26.31Z"/><path data-p="c" d="M30.58 49.6C11.52 49.6 0.0 57.94 0.0 75.92H30.58 99.21V49.6Z"/><path data-p="d" d="M0.0 108.09H26.21V75.92H0.0Z"/></svg></span>
       <h2 data-split>תגידו לנו לאן הגעתם, ונראה לכם רק מה שרלוונטי</h2>
       <p class="lead">יש לקוחות שצריכים מאיתנו את כל המעטפת, ויש כאלה שצריכים רק את התשתיות. שני המסלולים מתחילים כאן.</p>
     </div>
     <div class="doors-grid">
       <article class="door reveal" id="door-biz">
-        <div class="door-visual">
-          <svg viewBox="0 0 72 72"><rect x="10" y="14" width="52" height="34" rx="4"/><path d="M24 58h24M36 48v10M18 24h16M18 32h24M50 22h4M50 30h4"/></svg>
-        </div>
+        <figure class="door-photo"><img src="images/stock/door-business.webp" alt="משרד עם עמדות עבודה ורשת מסודרת" loading="lazy" decoding="async"></figure>
         <p class="eyebrow">משרדים, חברות, עסקים בהקמה</p>
         <h3>פותחים משרד, או שכבר יש לכם אחד שמתקלקל יותר מדי?</h3>
         <p>מחשבים לעובדים, ענן וגיבוי, רשת יציבה, מצלמות ובקרת כניסה, ומישהו שעונה כשמשהו נופל באמצע יום עבודה. אצלנו זה איש קשר אחד לכל המערכות, לא כמה ספקים שמפנים אחד לשני.</p>
@@ -162,9 +138,7 @@
         <a class="btn btn-primary" href="#services">לפתרונות לעסק</a>
       </article>
       <article class="door reveal" id="door-home">
-        <div class="door-visual">
-          <svg viewBox="0 0 72 72"><path d="M12 34 36 14l24 20"/><path d="M18 30v28h36V30"/><path d="M30 58V42h12v16"/><path d="M40 24a6 6 0 0 1 8 0M37 20a10 10 0 0 1 14 0"/></svg>
-        </div>
+        <figure class="door-photo"><img src="images/stock/door-home.webp" alt="בית מודרני עם תשתיות מתוכננות" loading="lazy" decoding="async"></figure>
         <p class="eyebrow">בנייה חדשה, שיפוץ, בית קיים</p>
         <h3>בונים או משפצים? זה הרגע לתכנן את התשתיות.</h3>
         <p>בבית פרטי, בדירה או בפנטהאוז: נקודות רשת בכל חדר, פריסת Wi-Fi מלאה, אינטרקום ומצלמות, אזעקה, בית חכם וסאונד בסלון, במרפסת ובבריכה. הכל מתוכנן על התוכניות שלכם, לפני שהקירות נסגרים, ולא בעזרת קידוחים אחרי האכלוס.</p>
@@ -199,7 +173,7 @@
 <section class="section" id="services">
   <div class="container">
     <div class="section-head centered reveal">
-      <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 256 336"><rect data-p="a" width="256" height="72" rx="20"/><rect data-p="b" x="184" width="72" height="200" rx="20"/><rect data-p="c" y="128" width="256" height="72" rx="20"/><rect data-p="d" width="72" height="336" rx="20"/></svg></span>
+      <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 125.52 108.09"><path data-p="a" d="M0.0 0.0C0.0 17.54 8.26 26.31 24.78 26.31H94.95 125.52C125.52 4.46 104.74 0.0 94.95 0.0Z"/><path data-p="b" d="M99.21 26.31V45.34 75.92C122.16 75.92 125.52 55.13 125.52 45.34V26.31Z"/><path data-p="c" d="M30.58 49.6C11.52 49.6 0.0 57.94 0.0 75.92H30.58 99.21V49.6Z"/><path data-p="d" d="M0.0 108.09H26.21V75.92H0.0Z"/></svg></span>
       <h2>מה אנחנו עושים</h2>
       <p class="lead">כל שירות מקבל אצלנו עמוד משלו, שמסביר לא רק מה אנחנו מתקינים, אלא למה זה חשוב לכם. כאן הרשימה המלאה.</p>
     </div>
@@ -222,18 +196,18 @@
       </div>
       <div class="svc-stage" aria-hidden="true">
         <div class="svc-panel">
-            <div class="svc-art is-on" data-i="0" data-title="תמיכת IT שוטפת" data-group="מחשוב ו-IT לעסקים"><svg viewBox="0 0 120 120"><path d="M30 70V58a30 30 0 0 1 60 0v12"/><rect x="24" y="66" width="14" height="24" rx="5"/><rect x="82" y="66" width="14" height="24" rx="5"/><path d="M89 90c0 10-10 16-22 16h-7"/><rect x="50" y="100" width="12" height="8" rx="3"/></svg></div>
-            <div class="svc-art" data-i="1" data-title="ענן, Microsoft 365 ו-Google Workspace" data-group="מחשוב ו-IT לעסקים"><svg viewBox="0 0 120 120"><path d="M36 84h52a18 18 0 0 0 0-36 26 26 0 0 0-50-6 20 20 0 0 0-2 42z"/><path d="M60 94V64M50 74l10-10 10 10"/></svg></div>
-            <div class="svc-art" data-i="2" data-title="אבטחת מידע, גיבוי ושחזור" data-group="מחשוב ו-IT לעסקים"><svg viewBox="0 0 120 120"><path d="M60 14 94 26v28c0 24-15 42-34 50-19-8-34-26-34-50V26z"/><rect x="46" y="54" width="28" height="22" rx="4"/><path d="M52 54v-6a8 8 0 0 1 16 0v6"/><circle cx="60" cy="65" r="2"/></svg></div>
-            <div class="svc-art" data-i="3" data-title="אספקת ציוד מחשוב ותקשורת" data-group="מחשוב ו-IT לעסקים"><svg viewBox="0 0 120 120"><rect x="16" y="24" width="60" height="40" rx="4"/><path d="M36 76h20M46 64v12"/><rect x="62" y="58" width="44" height="28" rx="3"/><path d="M56 92h56"/></svg></div>
-            <div class="svc-art" data-i="4" data-title="נקודות רשת" data-group="תקשורת ומתח נמוך"><svg viewBox="0 0 120 120"><rect x="28" y="30" width="64" height="60" rx="8"/><path d="M44 50h32v22H44z"/><path d="M50 72v8M58 72v8M66 72v8M70 72v8"/><path d="M60 90v18"/></svg></div>
-            <div class="svc-art" data-i="5" data-title="פריסת Wi-Fi" data-group="תקשורת ומתח נמוך"><svg viewBox="0 0 120 120"><path d="M24 50a52 52 0 0 1 72 0M36 62a34 34 0 0 1 48 0M48 74a16 16 0 0 1 24 0"/><circle cx="60" cy="84" r="3"/><rect x="30" y="94" width="60" height="14" rx="3"/><path d="M40 101h4M52 101h4M64 101h4M76 101h4"/></svg></div>
-            <div class="svc-art" data-i="6" data-title="מצלמות אבטחה ומערכות אזעקה" data-group="תקשורת ומתח נמוך"><svg viewBox="0 0 120 120"><rect x="20" y="40" width="60" height="30" rx="8"/><path d="M80 48l24-10v34l-24-10"/><circle cx="44" cy="55" r="8"/><path d="M40 70v20h20"/></svg></div>
-            <div class="svc-art" data-i="7" data-title="אינטרקום ובקרת כניסה" data-group="תקשורת ומתח נמוך"><svg viewBox="0 0 120 120"><rect x="36" y="12" width="48" height="96" rx="8"/><rect x="44" y="22" width="32" height="24" rx="3"/><circle cx="60" cy="60" r="3"/><path d="M48 76h24M48 84h24M48 92h24"/></svg></div>
-            <div class="svc-art" data-i="8" data-title="בית חכם" data-group="תקשורת ומתח נמוך"><svg viewBox="0 0 120 120"><path d="M16 60 60 22l44 38"/><path d="M28 52v46h64V52"/><circle cx="60" cy="74" r="12"/><path d="M60 66v8l5 4M44 96h32"/></svg></div>
-            <div class="svc-art" data-i="9" data-title="סאונד ומולטימדיה" data-group="תקשורת ומתח נמוך"><svg viewBox="0 0 120 120"><rect x="34" y="18" width="52" height="84" rx="8"/><circle cx="60" cy="72" r="16"/><circle cx="60" cy="72" r="5"/><circle cx="60" cy="38" r="8"/><path d="M14 40c-8 12-8 28 0 40M106 40c8 12 8 28 0 40"/></svg></div>
-            <div class="svc-art" data-i="10" data-title="ארונות תקשורת" data-group="תקשורת ומתח נמוך"><svg viewBox="0 0 120 120"><rect x="24" y="10" width="72" height="100" rx="6"/><path d="M32 26h56M32 42h56M32 58h56M32 74h56M32 90h56"/><circle cx="40" cy="34" r="2"/><circle cx="40" cy="50" r="2"/><circle cx="40" cy="66" r="2"/><circle cx="40" cy="82" r="2"/></svg></div>
-            <div class="svc-art" data-i="11" data-title="גנרטור ביתי" data-group="תקשורת ומתח נמוך"><svg viewBox="0 0 120 120"><rect x="18" y="38" width="84" height="54" rx="8"/><path d="M32 92v10M88 92v10M34 54h24M34 66h24"/><path d="M78 50l-8 14h10l-8 14"/><circle cx="84" cy="30" r="4"/><path d="M84 34v4"/></svg></div>
+            <div class="svc-art is-on" data-i="0" data-title="תמיכת IT שוטפת" data-group="מחשוב ו-IT לעסקים"><img src="images/stock/svc-it-support.webp" alt="" loading="eager" decoding="async"></div>
+            <div class="svc-art" data-i="1" data-title="ענן, Microsoft 365 ו-Google Workspace" data-group="מחשוב ו-IT לעסקים"><img src="images/stock/svc-cloud.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="svc-art" data-i="2" data-title="אבטחת מידע, גיבוי ושחזור" data-group="מחשוב ו-IT לעסקים"><img src="images/stock/svc-security-backup.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="svc-art" data-i="3" data-title="אספקת ציוד מחשוב ותקשורת" data-group="מחשוב ו-IT לעסקים"><img src="images/stock/svc-equipment.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="svc-art" data-i="4" data-title="נקודות רשת" data-group="תקשורת ומתח נמוך"><img src="images/stock/svc-network-points.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="svc-art" data-i="5" data-title="פריסת Wi-Fi" data-group="תקשורת ומתח נמוך"><img src="images/stock/svc-wifi.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="svc-art" data-i="6" data-title="מצלמות אבטחה ומערכות אזעקה" data-group="תקשורת ומתח נמוך"><img src="images/stock/svc-cameras.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="svc-art" data-i="7" data-title="אינטרקום ובקרת כניסה" data-group="תקשורת ומתח נמוך"><img src="images/stock/svc-intercom.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="svc-art" data-i="8" data-title="בית חכם" data-group="תקשורת ומתח נמוך"><img src="images/stock/svc-smart-home.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="svc-art" data-i="9" data-title="סאונד ומולטימדיה" data-group="תקשורת ומתח נמוך"><img src="images/stock/svc-sound.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="svc-art" data-i="10" data-title="ארונות תקשורת" data-group="תקשורת ומתח נמוך"><img src="images/stock/svc-comm-cabinet.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="svc-art" data-i="11" data-title="גנרטור ביתי" data-group="תקשורת ומתח נמוך"><img src="images/stock/svc-generator.webp" alt="" loading="lazy" decoding="async"></div>
           <div class="svc-caption"><span class="svc-cap-num">01</span><span class="svc-cap-text"><span class="svc-cap-group">מחשוב ו-IT לעסקים</span><span class="svc-cap-title">תמיכת IT שוטפת</span></span></div>
         </div>
       </div>
@@ -249,7 +223,7 @@
 <section class="section dark" id="why">
   <div class="container">
     <div class="section-head reveal">
-      <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 256 336"><rect data-p="a" width="256" height="72" rx="20"/><rect data-p="b" x="184" width="72" height="200" rx="20"/><rect data-p="c" y="128" width="256" height="72" rx="20"/><rect data-p="d" width="72" height="336" rx="20"/></svg></span>
+      <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 125.52 108.09"><path data-p="a" d="M0.0 0.0C0.0 17.54 8.26 26.31 24.78 26.31H94.95 125.52C125.52 4.46 104.74 0.0 94.95 0.0Z"/><path data-p="b" d="M99.21 26.31V45.34 75.92C122.16 75.92 125.52 55.13 125.52 45.34V26.31Z"/><path data-p="c" d="M30.58 49.6C11.52 49.6 0.0 57.94 0.0 75.92H30.58 99.21V49.6Z"/><path data-p="d" d="M0.0 108.09H26.21V75.92H0.0Z"/></svg></span>
       <p class="eyebrow">למה פרופיקס</p>
       <h2 data-split>למה עסקים ומשפחות בוחרים בפרופיקס</h2>
       <p class="lead">מקום לבידול במילים של עוז. עד שיגיע, ארבע הנקודות כאן נגזרו מפגישות האפיון ומהטקסט שכתב על החברה.</p>
@@ -274,7 +248,7 @@
           <g class="hub-node" data-n="3"><rect class="node" x="210" y="260" width="100" height="40" rx="10"/><text class="tag" x="260" y="285" text-anchor="middle">סאונד</text></g>
           <g class="hub-node" data-n="4"><rect class="node" x="60" y="220" width="100" height="40" rx="10"/><text class="tag" x="110" y="245" text-anchor="middle">רשת ו-Wi-Fi</text></g>
           <g class="hub-node" data-n="5"><rect class="node" x="60" y="50" width="100" height="40" rx="10"/><text class="tag" x="110" y="75" text-anchor="middle">מחשוב</text></g>
-          <g class="hub-core"><rect class="node-main" x="196" y="122" width="128" height="76" rx="16"/><g class="core-mark" transform="translate(246 138) scale(0.137)"><rect width="256" height="72" rx="20"/><rect x="184" width="72" height="200" rx="20"/><rect y="128" width="256" height="72" rx="20"/><rect width="72" height="336" rx="20"/></g></g>
+          <g class="hub-core"><rect class="node-main" x="196" y="122" width="128" height="76" rx="16"/><g class="core-mark" transform="translate(232 139) scale(0.44)"><path d="M0.0 0.0C0.0 17.54 8.26 26.31 24.78 26.31H94.95 125.52C125.52 4.46 104.74 0.0 94.95 0.0Z"/><path d="M99.21 26.31V45.34 75.92C122.16 75.92 125.52 55.13 125.52 45.34V26.31Z"/><path d="M30.58 49.6C11.52 49.6 0.0 57.94 0.0 75.92H30.58 99.21V49.6Z"/><path d="M0.0 108.09H26.21V75.92H0.0Z"/></g></g>
         </svg>
       </div>
     </div>
@@ -290,7 +264,7 @@
 <section class="section process" id="process">
   <div class="container">
     <div class="section-head centered reveal">
-      <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 256 336"><rect data-p="a" width="256" height="72" rx="20"/><rect data-p="b" x="184" width="72" height="200" rx="20"/><rect data-p="c" y="128" width="256" height="72" rx="20"/><rect data-p="d" width="72" height="336" rx="20"/></svg></span>
+      <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 125.52 108.09"><path data-p="a" d="M0.0 0.0C0.0 17.54 8.26 26.31 24.78 26.31H94.95 125.52C125.52 4.46 104.74 0.0 94.95 0.0Z"/><path data-p="b" d="M99.21 26.31V45.34 75.92C122.16 75.92 125.52 55.13 125.52 45.34V26.31Z"/><path data-p="c" d="M30.58 49.6C11.52 49.6 0.0 57.94 0.0 75.92H30.58 99.21V49.6Z"/><path data-p="d" d="M0.0 108.09H26.21V75.92H0.0Z"/></svg></span>
       <h2 data-split>מהפנייה הראשונה ועד שהכל עובד</h2>
     </div>
     <div class="process-track">
@@ -308,20 +282,39 @@
 </section>
 
 <!-- ============ 07 PROJECTS ============ -->
+<section class="atmos dark" id="atmos" aria-labelledby="atmos-title">
+  <div class="atmos-stage">
+    <div class="atmos-copy">
+      <h2 id="atmos-title">פתרון אחד.<br><em class="hl">כתובת אחת.</em></h2>
+      <p class="lead">מחשוב, רשת, מצלמות וסאונד, מתוכננים יחד ומתוחזקים מאותו מקום.</p>
+    </div>
+    <div class="atmos-visual" aria-hidden="true">
+      <!-- the logo's own P (four paths lifted from images/logo.svg, not redrawn), exploded into systems and assembled by scroll -->
+      <svg id="p-sig" viewBox="-150 -130 677 604" fill="none" style="overflow:visible">
+        <defs><linearGradient id="og" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="377" y2="324"><stop offset="0" stop-color="#FC922C"/><stop offset="1" stop-color="#E66136"/></linearGradient></defs>
+        <g class="piece" data-piece="a" data-dx="-70" data-dy="-90" data-rot="-8"><path d="M0.0 0.0C0.0 52.62 24.78 78.93 74.34 78.93H284.85 376.56C376.56 13.38 314.22 0.0 284.85 0.0Z" fill="url(#og)"/><text class="lbl" x="158" y="-26" text-anchor="middle">רשת ו-Wi-Fi</text></g>
+        <g class="piece" data-piece="b" data-dx="120" data-dy="-36" data-rot="9"><path d="M297.63 78.93V136.02 227.76C366.48 227.76 376.56 165.39 376.56 136.02V78.93Z" fill="url(#og)"/><text class="lbl" x="423" y="123" text-anchor="middle">מצלמות</text></g>
+        <g class="piece" data-piece="c" data-dx="96" data-dy="104" data-rot="6"><path d="M91.74 148.8C34.56 148.8 0.0 173.82 0.0 227.76H91.74 297.63V148.8Z" fill="url(#og)"/><text class="lbl" x="151" y="273" text-anchor="middle">סאונד</text></g>
+        <g class="piece" data-piece="d" data-dx="-110" data-dy="70" data-rot="-10"><path d="M0.0 324.27H78.63V227.76H0.0Z" fill="url(#og)"/><text class="lbl" x="40" y="358" text-anchor="middle">מחשוב</text></g>
+      </svg>
+    </div>
+  </div>
+</section>
+
 <section class="section muted-band" id="projects">
   <div class="container">
     <div class="section-head reveal">
-      <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 256 336"><rect data-p="a" width="256" height="72" rx="20"/><rect data-p="b" x="184" width="72" height="200" rx="20"/><rect data-p="c" y="128" width="256" height="72" rx="20"/><rect data-p="d" width="72" height="336" rx="20"/></svg></span>
+      <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 125.52 108.09"><path data-p="a" d="M0.0 0.0C0.0 17.54 8.26 26.31 24.78 26.31H94.95 125.52C125.52 4.46 104.74 0.0 94.95 0.0Z"/><path data-p="b" d="M99.21 26.31V45.34 75.92C122.16 75.92 125.52 55.13 125.52 45.34V26.31Z"/><path data-p="c" d="M30.58 49.6C11.52 49.6 0.0 57.94 0.0 75.92H30.58 99.21V49.6Z"/><path data-p="d" d="M0.0 108.09H26.21V75.92H0.0Z"/></svg></span>
       <h2>מה אנחנו מתקינים בשטח</h2>
       <p class="lead">תמונה אחת לכל סוג פרויקט. בהמשך, כל סוג ייפתח לגלריה של עבודות דומות.</p>
     </div>
     <div class="projects-grid">
-      <a class="tile" href="#projects"><div class="tile-art"><svg viewBox="0 0 120 120"><rect x="24" y="10" width="72" height="100" rx="6"/><path d="M32 26h56M32 42h56M32 58h56M32 74h56M32 90h56"/><circle cx="40" cy="34" r="2"/><circle cx="40" cy="50" r="2"/><circle cx="40" cy="66" r="2"/><circle cx="40" cy="82" r="2"/></svg></div><div class="tile-cap"><h3>ארון תקשורת</h3><span class="micro">תמונה בהמתנה</span></div></a>
-      <a class="tile" href="#projects"><div class="tile-art"><svg viewBox="0 0 120 120"><rect x="14" y="30" width="92" height="60" rx="6"/><path d="M14 50h92M40 30v60M72 30v60M50 100h20M60 90v10"/></svg></div><div class="tile-cap"><h3>הקמת משרד מאפס</h3><span class="micro">תמונה בהמתנה</span></div></a>
-      <a class="tile" href="#projects"><div class="tile-art"><svg viewBox="0 0 120 120"><path d="M16 60 60 22l44 38"/><path d="M28 52v46h64V52"/><path d="M50 98V70h20v28M40 62h8M72 62h8"/><circle cx="60" cy="46" r="3"/></svg></div><div class="tile-cap"><h3>תשתיות לבית בבנייה</h3><span class="micro">תמונה בהמתנה</span></div></a>
-      <a class="tile" href="#projects"><div class="tile-art"><svg viewBox="0 0 120 120"><rect x="20" y="40" width="60" height="30" rx="8"/><path d="M80 48l24-10v34l-24-10"/><circle cx="44" cy="55" r="8"/><path d="M40 70v20h20"/></svg></div><div class="tile-cap"><h3>מערכת מצלמות</h3><span class="micro">תמונה בהמתנה</span></div></a>
-      <a class="tile" href="#projects"><div class="tile-art"><svg viewBox="0 0 120 120"><path d="M16 60 60 22l44 38"/><path d="M28 52v46h64V52"/><circle cx="60" cy="74" r="12"/><path d="M60 66v8l5 4M44 96h32"/></svg></div><div class="tile-cap"><h3>בית חכם</h3><span class="micro">תמונה בהמתנה</span></div></a>
-      <a class="tile" href="#projects"><div class="tile-art"><svg viewBox="0 0 120 120"><rect x="34" y="18" width="52" height="84" rx="8"/><circle cx="60" cy="72" r="16"/><circle cx="60" cy="72" r="5"/><circle cx="60" cy="38" r="8"/><path d="M14 40c-8 12-8 28 0 40M106 40c8 12 8 28 0 40"/></svg></div><div class="tile-cap"><h3>סאונד לחצר ולבריכה</h3><span class="micro">תמונה בהמתנה</span></div></a>
+      <a class="tile" href="#projects"><div class="tile-art"><img src="images/stock/proj-comm-cabinet.webp" alt="ארון תקשורת" loading="lazy" decoding="async"></div><div class="tile-cap"><h3>ארון תקשורת</h3><span class="micro">רשת · ארון תקשורת · Wi-Fi</span></div></a>
+      <a class="tile" href="#projects"><div class="tile-art"><img src="images/stock/proj-office-setup.webp" alt="הקמת משרד מאפס" loading="lazy" decoding="async"></div><div class="tile-cap"><h3>הקמת משרד מאפס</h3><span class="micro">מחשוב · רשת · מצלמות</span></div></a>
+      <a class="tile" href="#projects"><div class="tile-art"><img src="images/stock/proj-home-construction.webp" alt="תשתיות לבית בבנייה" loading="lazy" decoding="async"></div><div class="tile-cap"><h3>תשתיות לבית בבנייה</h3><span class="micro">נקודות רשת · Wi-Fi · אינטרקום</span></div></a>
+      <a class="tile" href="#projects"><div class="tile-art"><img src="images/stock/proj-camera-system.webp" alt="מערכת מצלמות" loading="lazy" decoding="async"></div><div class="tile-cap"><h3>מערכת מצלמות</h3><span class="micro">מצלמות · אזעקה</span></div></a>
+      <a class="tile" href="#projects"><div class="tile-art"><img src="images/stock/proj-smart-home.webp" alt="בית חכם" loading="lazy" decoding="async"></div><div class="tile-cap"><h3>בית חכם</h3><span class="micro">בית חכם · רשת · סאונד</span></div></a>
+      <a class="tile" href="#projects"><div class="tile-art"><img src="images/stock/proj-sound-pool.webp" alt="סאונד לחצר ולבריכה" loading="lazy" decoding="async"></div><div class="tile-cap"><h3>סאונד לחצר ולבריכה</h3><span class="micro">סאונד בחצר · סאונד בבית</span></div></a>
     </div>
     <div class="projects-more reveal"><a class="btn btn-secondary" href="#projects">לכל הפרויקטים</a></div>
   </div>
@@ -332,7 +325,7 @@
   <div class="container">
     <div class="about-grid">
       <div class="about-copy reveal">
-        <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 256 336"><rect data-p="a" width="256" height="72" rx="20"/><rect data-p="b" x="184" width="72" height="200" rx="20"/><rect data-p="c" y="128" width="256" height="72" rx="20"/><rect data-p="d" width="72" height="336" rx="20"/></svg></span>
+        <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 125.52 108.09"><path data-p="a" d="M0.0 0.0C0.0 17.54 8.26 26.31 24.78 26.31H94.95 125.52C125.52 4.46 104.74 0.0 94.95 0.0Z"/><path data-p="b" d="M99.21 26.31V45.34 75.92C122.16 75.92 125.52 55.13 125.52 45.34V26.31Z"/><path data-p="c" d="M30.58 49.6C11.52 49.6 0.0 57.94 0.0 75.92H30.58 99.21V49.6Z"/><path data-p="d" d="M0.0 108.09H26.21V75.92H0.0Z"/></svg></span>
         <p class="eyebrow">מי אנחנו</p>
         <h2>מעטפת טכנולוגית מלאה. שותף אחד לאורך הדרך.</h2>
         <p class="about-statement" id="about-statement">פרופיקס מספקת מעטפת שירותים מלאה בתחומי המחשוב, ה-IT, התקשורת והמתח הנמוך, לעסקים וללקוחות פרטיים. אנחנו מלווים משלב הייעוץ ואפיון הצרכים, דרך התכנון וההקמה, ועד לניהול, לתחזוקה ולתמיכה השוטפת.</p>
@@ -341,10 +334,7 @@
         <a class="link-arrow" href="#about">לסיפור המלא <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m7-7-7 7 7 7"/></svg></a>
       </div>
       <div class="about-visual reveal">
-        <div class="portrait">
-          <img src="images/logo.svg" alt="" aria-hidden="true" style="width:60%;opacity:.16">
-          <span class="micro">תמונת תדמית אחת של עוז, במשרד או בשטח. בהמתנה.</span>
-        </div>
+        <div class="portrait"><img src="images/stock/about-office.webp" alt="סביבת העבודה של פרופיקס" loading="lazy" decoding="async"></div>
       </div>
     </div>
   </div>
@@ -356,7 +346,7 @@
     <div class="ctr-stage">
       <div class="container">
         <div class="section-head">
-          <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 256 336"><rect data-p="a" width="256" height="72" rx="20"/><rect data-p="b" x="184" width="72" height="200" rx="20"/><rect data-p="c" y="128" width="256" height="72" rx="20"/><rect data-p="d" width="72" height="336" rx="20"/></svg></span>
+          <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 125.52 108.09"><path data-p="a" d="M0.0 0.0C0.0 17.54 8.26 26.31 24.78 26.31H94.95 125.52C125.52 4.46 104.74 0.0 94.95 0.0Z"/><path data-p="b" d="M99.21 26.31V45.34 75.92C122.16 75.92 125.52 55.13 125.52 45.34V26.31Z"/><path data-p="c" d="M30.58 49.6C11.52 49.6 0.0 57.94 0.0 75.92H30.58 99.21V49.6Z"/><path data-p="d" d="M0.0 108.09H26.21V75.92H0.0Z"/></svg></span>
           <h2>מה אומרים לקוחות שכבר עובדים איתנו</h2>
         </div>
       </div>
@@ -379,7 +369,7 @@
   <div class="container">
     <div class="contact-grid">
       <div class="reveal">
-        <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 256 336"><rect data-p="a" width="256" height="72" rx="20"/><rect data-p="b" x="184" width="72" height="200" rx="20"/><rect data-p="c" y="128" width="256" height="72" rx="20"/><rect data-p="d" width="72" height="336" rx="20"/></svg></span>
+        <span class="p-echo" aria-hidden="true"><svg viewBox="0 0 125.52 108.09"><path data-p="a" d="M0.0 0.0C0.0 17.54 8.26 26.31 24.78 26.31H94.95 125.52C125.52 4.46 104.74 0.0 94.95 0.0Z"/><path data-p="b" d="M99.21 26.31V45.34 75.92C122.16 75.92 125.52 55.13 125.52 45.34V26.31Z"/><path data-p="c" d="M30.58 49.6C11.52 49.6 0.0 57.94 0.0 75.92H30.58 99.21V49.6Z"/><path data-p="d" d="M0.0 108.09H26.21V75.92H0.0Z"/></svg></span>
         <p class="eyebrow">יצירת קשר</p>
         <h2>בואו נדבר על מה שאתם צריכים</h2>
         <p class="lead" style="margin-top:16px">משאירים פרטים ואנחנו חוזרים אליכם. ואם מתאים לכם יותר, וואטסאפ וטלפון פתוחים גם לשיחת ייעוץ.</p>
@@ -475,6 +465,6 @@
 
 <script src="vendor/gsap.min.js"></script>
 <script src="vendor/ScrollTrigger.min.js"></script>
-<script src="main.js?v=12"></script>
+<script src="main.js?v=13"></script>
 </body>
 </html>

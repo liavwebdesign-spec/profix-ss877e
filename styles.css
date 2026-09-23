@@ -5,17 +5,19 @@
    2. Visitor arrives stressed and a bit skeptical; must feel order + a door of his own in 10s.
    3. Scroll = a corridor with two gates, then the systems labelled one by one, then a talk.
    4. Signature: the four blocks of the logo P split into systems and converge back into one P.
-   5. Charcoal + off-white surfaces, logo orange as the single accent. Alon (display) + Begin (text).
+   5. Charcoal + off-white surfaces, logo orange as the single accent. Discovery (display) + Talent (text), Fontshuk.
    6. No invented numbers, no library icons, no gradient headings, no marquee except logos, no face up front.
    Skin: editorial minimalism (storeos-quiet) recoloured; frame: FLUID (full-bleed, clamp-vw, text bounded by measure).
    ============================================================ */
 
 /* ---------- fonts (FontUp, paid: subset before publishing) ---------- */
-@font-face { font-family: "Alon"; src: url("fonts/Alon-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
-@font-face { font-family: "Alon"; src: url("fonts/Alon-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
-@font-face { font-family: "Begin"; src: url("fonts/Begin-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Begin"; src: url("fonts/Begin-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
-@font-face { font-family: "Begin"; src: url("fonts/Begin-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+/* Fontshuk (Liav, 23.9.2026): Discovery for headings, Talent for text.
+   Talent Light carries the ink density of Heebo Regular, so it is registered as the body weight (400). */
+@font-face { font-family: "Discovery"; src: url("fonts/Discovery_Fs-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Discovery"; src: url("fonts/Discovery_Fs-Bold.woff2") format("woff2"); font-weight: 600 700; font-display: swap; }
+@font-face { font-family: "Talent"; src: url("fonts/TalentFS-Light.woff2") format("woff2"); font-weight: 300 400; font-display: swap; }
+@font-face { font-family: "Talent"; src: url("fonts/TalentFS-Medium.woff2") format("woff2"); font-weight: 500 600; font-display: swap; }
+@font-face { font-family: "Talent"; src: url("fonts/TalentFS-Black.woff2") format("woff2"); font-weight: 800 900; font-display: swap; }
 
 /* ---------- tokens ---------- */
 :root {
@@ -47,10 +49,10 @@
 
   /* shape */
   --r-control: 12px;
-  /* ---- the P language: the logo's four rounded modules, reused as one motif ----
+  /* ---- the P language: the logo's own P (four paths lifted from images/logo.svg, 23.9.2026: never redraw it) ----
      --p-mark is the letterform as a mask, so any element can wear it in any colour.
      --r-bowl is the P's bowl radius: every piece of media carries it on its start-top corner. */
-  --p-mark: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 336"><rect width="256" height="72" rx="20"/><rect x="184" width="72" height="200" rx="20"/><rect y="128" width="256" height="72" rx="20"/><rect width="72" height="336" rx="20"/></svg>');
+  --p-mark: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 125.52 108.09"><path d="M0.0 0.0C0.0 17.54 8.26 26.31 24.78 26.31H94.95 125.52C125.52 4.46 104.74 0.0 94.95 0.0Z"/><path d="M99.21 26.31V45.34 75.92C122.16 75.92 125.52 55.13 125.52 45.34V26.31Z"/><path d="M30.58 49.6C11.52 49.6 0.0 57.94 0.0 75.92H30.58 99.21V49.6Z"/><path d="M0.0 108.09H26.21V75.92H0.0Z"/></svg>');
   --r-bowl: clamp(44px, 4.6vw, 104px);
   --r-card: 16px;
   --r-shot: 16px;
@@ -72,23 +74,24 @@
   --pad-card: clamp(24px, 2.4vw, 48px);
   --gm: var(--gutter);
 
-  /* type, fluid and calibrated: Alon 600 factor .90 / lambda 1.03 (h1, h2), Begin factor .86 / lambda 1.14 (all the rest).
+  /* type, fluid and calibrated (engine/font-calibration.md): Discovery 700 factor 1.205 / lambda .80 (h1, h2, h3),
+     Talent Light factor 1.04 / lambda .92 (all the rest). Line heights are clamped to the engine ranges (tokens.json).
      formula: clamp(min*F, slope*F vw + rem, max*F); spaces around + are mandatory */
-  --f-display: "Alon", "Begin", "Heebo", Arial, sans-serif;
-  --f-text: "Begin", "Heebo", Arial, sans-serif;
-  --t-h1: clamp(40px, 4.5vw + 0.45rem, 106px);  --lh-h1: 1.14;
-  --t-h2: clamp(29px, 2.34vw + 0.36rem, 65px);  --lh-h2: 1.22;
-  --t-h3: clamp(18px, 1.03vw + 0.43rem, 29px);  --lh-h3: 1.45;
-  --t-lead: clamp(17px, 0.86vw + 0.47rem, 26px); --lh-lead: 1.75;
-  --t-body: clamp(15px, 0.47vw + 0.56rem, 19px); --lh-body: 1.85;
-  --t-meta: clamp(13px, 0.47vw + 0.39rem, 16px); --lh-meta: 1.7;
-  --t-micro: clamp(12px, 0.3vw + 0.5rem, 14px);
-  --t-btn: clamp(15px, 0.35vw + 0.65rem, 18px);
-  --t-num: clamp(64px, 6vw + 0.5rem, 150px);
+  --f-display: "Discovery", "Talent", "Heebo", Arial, sans-serif;
+  --f-text: "Talent", "Heebo", Arial, sans-serif;
+  --t-h1: clamp(54px, 6.03vw + 0.6rem, 142px);  --lh-h1: 0.95;
+  --t-h2: clamp(39px, 3.13vw + 0.48rem, 87px);  --lh-h2: 1.0;
+  --t-h3: clamp(24px, 1.38vw + 0.58rem, 39px);  --lh-h3: 1.15;
+  --t-lead: clamp(20px, 1.04vw + 0.57rem, 31px); --lh-lead: 1.45;
+  --t-body: clamp(18px, 0.57vw + 0.68rem, 23px); --lh-body: 1.5;
+  --t-meta: clamp(15px, 0.57vw + 0.47rem, 19px); --lh-meta: 1.5;
+  --t-micro: clamp(14px, 0.36vw + 0.6rem, 17px);
+  --t-btn: clamp(17px, 0.4vw + 0.74rem, 20px);
+  --t-num: clamp(77px, 7.26vw + 0.6rem, 181px);
   --measure: clamp(560px, 36vw, 880px);
   --head-w: clamp(760px, 52vw, 1240px);
 }
-@media (max-width: 767px)  { :root { --gutter: 20px; --sec: 64px; --sec-air: 56px; --t-h1: 40px; --lh-h1: 1.22; --t-h2: 24px; --lh-h2: 1.28; --t-h3: 18px; --t-lead: 17px; --t-body: 15px; --t-meta: 13px; --t-num: 64px; --measure: 100%; --head-w: 100%; } }
+@media (max-width: 767px)  { :root { --gutter: 20px; --sec: 64px; --sec-air: 56px; --t-h1: 44px; --lh-h1: 1.0; --t-h2: 32px; --lh-h2: 1.02; --t-h3: 22px; --t-lead: 20px; --t-body: 18px; --t-meta: 15px; --t-num: 72px; --measure: 100%; --head-w: 100%; } }
 
 /* ---------- reset + base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -109,29 +112,29 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 h1, h2 { font-family: var(--f-display); font-weight: 600; margin: 0; color: inherit; text-wrap: balance; }
 h1 { font-size: var(--t-h1); line-height: var(--lh-h1); letter-spacing: -0.01em; }
 h2 { font-size: var(--t-h2); line-height: var(--lh-h2); letter-spacing: 0; }
-h3 { font-family: var(--f-text); font-weight: 600; font-size: var(--t-h3); line-height: var(--lh-h3); margin: 0; }
+h3 { font-family: var(--f-display); font-weight: 500; font-size: var(--t-h3); line-height: var(--lh-h3); margin: 0; }
 p { margin: 0; max-width: var(--measure); }
 p + p { margin-top: 16px; }
 strong, b { font-weight: 600; }
 .lead { font-size: var(--t-lead); line-height: var(--lh-lead); color: var(--muted); max-width: var(--measure); }
 .meta { font-size: var(--t-meta); line-height: var(--lh-meta); font-weight: 500; color: var(--muted); }
 .micro { font-size: var(--t-micro); line-height: 1.6; color: var(--muted); }
-.p-mark { display: inline-block; aspect-ratio: 256 / 336; background: currentColor;
+.p-mark { display: inline-block; aspect-ratio: 125.52 / 108.09; background: currentColor;
   -webkit-mask: var(--p-mark) center / contain no-repeat; mask: var(--p-mark) center / contain no-repeat; }
 /* the heading mark: the logo's P, built from its four modules, above every section heading.
    Big enough to read at a glance (a 10px glyph in the label went unnoticed). With motion the modules
    assemble on scroll, like the hero at small scale; without it the P simply sits there. */
-.p-echo { display: block; width: clamp(30px, 2.5vw, 46px); margin-bottom: clamp(16px, 1.4vw, 28px); }
+.p-echo { display: block; width: clamp(40px, 3.2vw, 60px); margin-bottom: clamp(16px, 1.4vw, 28px); }
 .p-echo svg { display: block; width: 100%; height: auto; overflow: visible; }
-.p-echo rect { fill: var(--accent); transform-box: fill-box; transform-origin: center; }
-.p-echo rect[data-p="d"] { fill: color-mix(in srgb, var(--accent) 82%, #B9500F); }
+.p-echo path { fill: var(--accent); transform-box: fill-box; transform-origin: center; }
+.p-echo path[data-p="b"], .p-echo path[data-p="d"] { fill: var(--accent-deep); }
 .section-head.centered .p-echo, .centered > .p-echo { margin-inline: auto; }
 .eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
   font-size: var(--t-meta); font-weight: 500; color: var(--accent-text); letter-spacing: 0.02em; margin-bottom: 16px;
 }
 .hl { color: var(--accent); font-style: normal; }
-/* numerals: Begin, because the Alon zero reads as an eight */
+/* numerals in the text face (Talent), steadier at display sizes */
 .num, .step-dot, .qmark { font-family: var(--f-text) !important; }
 
 .container { padding-inline: var(--gutter); }
@@ -308,9 +311,28 @@ strong, b { font-weight: 600; }
 }
 
 /* ---------- hero ---------- */
+/* hero: brand video behind the copy (Liav + Oz, 23.9.2026: the P moved to its own atmosphere section) */
+.hero-media { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: var(--bg-dark) url("video/hero-poster.jpg") center / cover no-repeat; }
+.hero-video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-media::after { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to left, rgba(17, 18, 20, .92) 0%, rgba(17, 18, 20, .78) 45%, rgba(17, 18, 20, .35) 100%),
+              linear-gradient(to top, var(--bg-dark) 0%, rgba(17, 18, 20, 0) 30%); }
+.hero .container { position: relative; z-index: 1; grid-template-columns: minmax(0, 1fr); }
+.hero-copy { max-width: min(100%, 1180px); }
+@media (max-width: 767px) { .hero-media::after { background: linear-gradient(to top, var(--bg-dark) 0%, rgba(17, 18, 20, .82) 55%, rgba(17, 18, 20, .6) 100%); } }
+
+/* atmosphere: the logo's P assembles from four systems (the move that used to be in the hero) */
+.atmos { position: relative; overflow: hidden; }
+.atmos-stage { min-height: 100svh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: var(--gap-l); padding: var(--sec) var(--gutter); }
+.atmos-copy h2 { font-size: calc(var(--t-h2) * 1.35); }
+.atmos-copy .lead { margin-top: clamp(20px, 1.6vw, 36px); max-width: var(--measure); color: var(--ink-dark-soft); }
+.atmos-visual svg { width: 100%; height: auto; max-height: 72svh; }
+.atmos-visual .lbl { font-family: var(--f-text); font-size: 17px; font-weight: 500; fill: var(--muted-dark); }
+@media (max-width: 1023px) { .atmos-stage { grid-template-columns: 1fr; min-height: 0; } .atmos-visual { max-width: 520px; width: 100%; margin-inline: auto; } }
+
 .hero { position: relative; overflow: hidden; }
 .hero .container {
-  display: grid; grid-template-columns: 1.45fr .55fr; gap: var(--gap-l); align-items: center;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gap-l); align-items: center;
   min-height: 92vh; padding-block: calc(var(--pill-top) + var(--pill-h) + clamp(48px, 4vw, 96px)) clamp(72px, 6vw, 136px);
 }
 .hero-copy { position: relative; z-index: 1; }
@@ -459,7 +481,7 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 .why-diagram svg { width: 100%; height: auto; }
 .why-diagram .node { fill: var(--surface-dark); stroke: none; }
 .why-diagram .node-main { fill: var(--accent); stroke: none; }
-.why-diagram .core-mark rect { fill: var(--bg-dark); }
+.why-diagram .core-mark path { fill: var(--bg-dark); }
 .why-diagram .wire { stroke: var(--line-dark-strong); stroke-width: 1.5; fill: none; }
 .why-diagram .wire-hot { stroke: var(--accent); stroke-width: 2.5; fill: none; stroke-linecap: round; }
 .why-diagram .hub-node { transition: opacity .35s var(--ease); }
@@ -644,7 +666,7 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 .footer { position: relative; overflow: hidden; padding-block: clamp(64px, 5vw, 120px) 32px; }
 .footer::after {
   content: ""; position: absolute; bottom: clamp(76px, 7vw, 132px); inset-inline-end: clamp(24px, 4vw, 96px);
-  width: clamp(120px, 11vw, 190px); aspect-ratio: 256 / 336;
+  width: clamp(120px, 11vw, 190px); aspect-ratio: 125.52 / 108.09;
   background: var(--ink-dark); opacity: .1; pointer-events: none;
   -webkit-mask: var(--p-mark) center / contain no-repeat; mask: var(--p-mark) center / contain no-repeat;
 }
@@ -726,3 +748,17 @@ html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animati
   .md, .md *, .mega, .mega *, .sticky-bar, .svc-art { transition: none !important; }
 }
 [dir="ltr"] .tile { clip-path: inset(0 round var(--r-bowl) var(--r-shot) var(--r-shot) var(--r-shot)); }
+
+/* photos (23.9.2026): Magnific stock until Oz's own photos arrive. Every photo is a dark card; text sits on a scrim. */
+.svc-art:has(img) { inset: 0; }
+.svc-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.svc-panel:has(.svc-art img)::before { display: none; }
+.svc-caption { z-index: 2; background: linear-gradient(to top, rgba(17, 18, 20, .94) 20%, rgba(17, 18, 20, 0)); padding-top: clamp(64px, 6vw, 120px); }
+.door-photo { margin: 0 0 8px; aspect-ratio: 3 / 2; overflow: hidden; border-radius: var(--r-shot); border-start-start-radius: var(--r-bowl); background: var(--bg-dark); }
+.door-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease); }
+@media (hover: hover) and (pointer: fine) { .door:hover .door-photo img { transform: scale(1.03); } }
+.tile-art:has(img)::before { display: none; }
+.tile-art img { width: 100%; height: 100%; object-fit: cover; }
+.tile-cap { padding-top: 72px; background: linear-gradient(to top, rgba(17, 18, 20, .95), rgba(17, 18, 20, 0)); }
+.tile-cap .micro { color: var(--ink-dark-soft); }
+.portrait img { width: 100%; height: 100%; object-fit: cover; }

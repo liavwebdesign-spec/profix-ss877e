@@ -26,6 +26,19 @@
   header.addEventListener('focusin', hdUpdate);
   hdUpdate();
 
+  /* hero video: 720p on phones, 1080p elsewhere; the poster stands in for reduced motion; paused when the hero is off screen */
+  var hv = document.querySelector('.hero-video');
+  if (hv) {
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!still) {
+      hv.src = window.matchMedia('(max-width: 767px)').matches ? hv.dataset.srcMob : hv.dataset.srcDesk;
+      var playHv = function () { var pr = hv.play(); if (pr && pr.catch) pr.catch(function () {}); };
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) { es.forEach(function (e) { e.isIntersecting ? playHv() : hv.pause(); }); }).observe(hv);
+      } else playHv();
+    }
+  }
+
   /* mega menu (MV:b65): hover intent, click, ArrowDown opens and focuses, Escape returns focus, leaving focus closes */
   var megaLi = document.querySelector('.nav .has-mega');
   if (megaLi) {
@@ -181,7 +194,7 @@
 
   /* ---------- GSAP layer ----------
      Built in DOM order (engine QA 13d): every trigger below a pin is created after it.
-     S1 hero: signature P assembled by scroll, short pin (G18-based)
+     S1 hero: headline words over the brand video; S11 atmosphere: the logo P assembled by scroll, pinned on desktop (G18-based)
      S2 h2 word fade (G4 level b)
      S3 logo conveyor driven by scroll (G123)
      S4 services: sticky stage swaps per row (G05)
@@ -199,7 +212,7 @@
   var sig = document.getElementById('p-sig');
   var pieces = sig ? gsap.utils.toArray(sig.querySelectorAll('.piece')) : [];
   var labels = sig ? gsap.utils.toArray(sig.querySelectorAll('.lbl')) : [];
-  var hl = document.querySelector('.hero .hl');
+  var hl = document.querySelector('#atmos .hl');
   var svcRows = gsap.utils.toArray('.svc-row');
   var svcArts = gsap.utils.toArray('.svc-art');
   var capNum = document.querySelector('.svc-cap-num');
@@ -268,23 +281,9 @@
     }
     html.classList.add('gsap-live');
 
-    /* S1 hero signature: exploded systems assemble into one P as you scroll */
-    if (sig) {
-      pieces.forEach(function (p) { gsap.set(p, { x: +p.dataset.dx, y: +p.dataset.dy, rotation: +p.dataset.rot, transformOrigin: '50% 50%' }); });
-      gsap.set(labels, { opacity: 1 });
-      gsap.set(hl, { color: '#F4F2EE' });
-      var htl = gsap.timeline({
-        defaults: { ease: 'none' },
-        scrollTrigger: c.desk
-          ? { trigger: '.hero', start: function () { return 'top ' + headerH(); }, end: '+=70%', pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true }
-          : { trigger: '.hero-visual', start: 'top 85%', end: 'center 40%', scrub: 0.6 }
-      });
-      htl.to(labels, { opacity: 0, duration: 0.3, stagger: 0.05 }, 0)
-        .to(pieces, { x: 0, y: 0, rotation: 0, duration: 1, stagger: 0.12, ease: 'power2.inOut' }, 0.05)
-        .to(hl, { color: '#F27A2B', duration: 0.35 }, '-=0.3');
-      var h1 = document.querySelector('.hero h1[data-split]');
-      if (h1) { var hw = splitWords(h1); gsap.set(hw, { opacity: 1 }); gsap.from(hw, { opacity: 0, y: 14, duration: 0.6, stagger: 0.05, ease: 'power2.out', delay: 0.15 }); }
-    }
+    /* S1 hero: the headline arrives word by word over the brand video */
+    var h1 = document.querySelector('.hero h1[data-split]');
+    if (h1) { var hw = splitWords(h1); gsap.set(hw, { opacity: 1 }); gsap.from(hw, { opacity: 0, y: 14, duration: 0.6, stagger: 0.05, ease: 'power2.out', delay: 0.15 }); }
 
     /* S2 word fade on the doors heading (first h2 in the page, the rest are created in place below) */
     function fadeHeading(h) {
@@ -342,6 +341,23 @@
           ScrollTrigger.create({ trigger: s, start: 'top 66%', onEnter: function () { s.classList.add('is-lit'); }, onLeaveBack: function () { s.classList.remove('is-lit'); } });
         });
       }
+    }
+
+    /* S11 atmosphere: the logo's own P, exploded into four systems, assembles as you scroll (the move that used to open the hero).
+       Created here, after the process pin and before the projects, so every trigger below measures the pin spacing above it. */
+    if (sig) {
+      pieces.forEach(function (p) { gsap.set(p, { x: +p.dataset.dx, y: +p.dataset.dy, rotation: +p.dataset.rot, transformOrigin: '50% 50%' }); });
+      gsap.set(labels, { opacity: 1 });
+      gsap.set(hl, { color: '#F4F2EE' });
+      var atl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: c.desk
+          ? { trigger: '#atmos', start: 'top top', end: '+=80%', pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true }
+          : { trigger: '.atmos-visual', start: 'top 85%', end: 'center 40%', scrub: 0.6 }
+      });
+      atl.to(labels, { opacity: 0, duration: 0.3, stagger: 0.05 }, 0.1)
+        .to(pieces, { x: 0, y: 0, rotation: 0, duration: 1, stagger: 0.12, ease: 'power2.inOut' }, 0.15)
+        .to(hl, { color: '#F27A2B', duration: 0.35 }, '-=0.3');
     }
 
     /* S7 projects: each tile arrives from the side of the grid it belongs to */
@@ -404,10 +420,10 @@
     }
 
     /* S10 heading marks: the four modules of the P assemble above each heading, the hero's move at small scale */
-    var SCATTER = { a: [-60, -80, -12], b: [90, -40, 10], c: [80, 90, 8], d: [-90, 60, -9] };
+    var SCATTER = { a: [-30, -34, -12], b: [44, -18, 10], c: [38, 38, 8], d: [-40, 30, -9] };   // in the logo P's own units (125 x 108)
     gsap.utils.toArray('.p-echo').forEach(function (mark) {
       var tl = gsap.timeline({ scrollTrigger: { trigger: mark, start: 'top 94%', end: 'top 66%', scrub: 0.6 } });
-      mark.querySelectorAll('rect').forEach(function (r) {
+      mark.querySelectorAll('path').forEach(function (r) {
         var o = SCATTER[r.getAttribute('data-p')];
         tl.fromTo(r, { x: o[0], y: o[1], rotate: o[2], opacity: 0 }, { x: 0, y: 0, rotate: 0, opacity: 1, ease: 'power2.out', duration: 1 }, 0);
       });
