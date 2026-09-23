@@ -26,6 +26,23 @@
   header.addEventListener('focusin', hdUpdate);
   hdUpdate();
 
+  /* in-page anchors glide here and not through CSS scroll-behavior, which breaks every ScrollTrigger refresh made mid-page */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href*="#"]');
+    if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var u = new URL(a.href, location.href);
+    var page = function (p) { return p.replace(/index\.html$/, ''); };
+    if (page(u.pathname) !== page(location.pathname) || !u.hash || u.hash === '#') return;
+    var t = document.getElementById(decodeURIComponent(u.hash.slice(1)));
+    if (!t) return;
+    e.preventDefault();
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY, behavior: still ? 'auto' : 'smooth' });
+    history.pushState(null, '', u.hash);
+    if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+    t.focus({ preventScroll: true });
+  });
+
   /* hero video: 720p on phones, 1080p elsewhere; the poster stands in for reduced motion; paused when the hero is off screen */
   var hv = document.querySelector('.hero-video');
   if (hv) {
@@ -434,7 +451,9 @@
     /* S10 heading marks: the four modules of the P assemble above each heading, the hero's move at small scale */
     var SCATTER = { a: [-30, -34, -12], b: [44, -18, 10], c: [38, 38, 8], d: [-40, 30, -9] };   // in the logo P's own units (125 x 108)
     gsap.utils.toArray('.p-echo').forEach(function (mark) {
-      var tl = gsap.timeline({ scrollTrigger: { trigger: mark, start: 'top 94%', end: 'top 66%', scrub: 0.6 } });
+      // a mark inside a pinned section is measured against that pin, or a refresh made past it adds the pin's travel
+      var pinned = mark.closest('.pin-spacer > *');
+      var tl = gsap.timeline({ scrollTrigger: { trigger: mark, start: 'top 94%', end: 'top 66%', scrub: 0.6, pinnedContainer: pinned || undefined } });
       mark.querySelectorAll('path').forEach(function (r) {
         var o = SCATTER[r.getAttribute('data-p')];
         tl.fromTo(r, { x: o[0], y: o[1], rotate: o[2], opacity: 0 }, { x: 0, y: 0, rotate: 0, opacity: 1, ease: 'power2.out', duration: 1 }, 0);

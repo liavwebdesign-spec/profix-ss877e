@@ -95,7 +95,10 @@
 
 /* ---------- reset + base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
-html { direction: rtl; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; }
+html { direction: rtl; -webkit-text-size-adjust: 100%; overflow-x: clip; }
+/* never smooth under ScrollTrigger: refresh measures by jumping the scroll, and a smooth jump shifts every trigger by scrollY
+   (the process pin started at -1008 and never pinned). With GSAP live, anchor links glide in main.js instead. */
+@media (prefers-reduced-motion: no-preference) { html:not(.gsap-live) { scroll-behavior: smooth; } }
 body {
   margin: 0; background: var(--surface); color: var(--ink); overflow-x: clip;
   font-family: var(--f-text); font-size: var(--t-body); line-height: var(--lh-body);
