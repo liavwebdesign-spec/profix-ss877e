@@ -397,10 +397,13 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 .logos .meta { text-align: center; letter-spacing: .04em; margin-bottom: 24px; }
 .marquee { overflow: hidden; direction: ltr; display: flex; justify-content: center; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
 .marquee-track { display: flex; gap: clamp(56px, 5vw, 112px); width: max-content; flex: none; will-change: transform; }
-.mark { width: 128px; height: 40px; flex: none; opacity: .55; transition: opacity .3s var(--ease), filter .3s var(--ease); filter: grayscale(1); }
-.mark svg { width: 100%; height: 100%; }
-.mark text { font-family: var(--f-text); font-weight: 600; fill: var(--muted); }
-@media (hover: hover) and (pointer: fine) { .mark:hover { opacity: 1; filter: none; } }
+/* client logos (23.9.2026, from the clients' own sites): one quiet silhouette tone so seven brands read as one strip.
+   Square marks get more height than wide wordmarks, so they carry the same visual weight. */
+.mark { flex: none; display: grid; place-items: center; height: clamp(56px, 4.4vw, 76px); }
+.mark img { display: block; width: auto; height: clamp(30px, 2.3vw, 40px); max-width: clamp(140px, 11vw, 200px); object-fit: contain;
+  filter: grayscale(1) brightness(0); opacity: .5; transition: opacity .3s var(--ease); }
+.mark-square img { height: clamp(46px, 3.6vw, 64px); }
+@media (hover: hover) and (pointer: fine) { .mark:hover img { opacity: .85; } }
 
 /* ---------- services (hairline rows) ---------- */
 .svc-split { display: grid; grid-template-columns: 1.1fr .9fr; gap: var(--gap-l); align-items: start; }

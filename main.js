@@ -129,10 +129,16 @@
   var track = document.getElementById('marquee-track');
   if (track) {
     var originals = Array.prototype.slice.call(track.children);
-    var guard = 0;
-    while (track.scrollWidth < window.innerWidth * 1.9 && guard++ < 16) {
-      originals.forEach(function (el) { var c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); track.appendChild(c); });
-    }
+    var fillBand = function () {
+      var guard = 0;
+      while (track.scrollWidth < window.innerWidth * 1.9 && guard++ < 16) {
+        originals.forEach(function (el) { var c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); var im = c.querySelector('img'); if (im) im.alt = ''; track.appendChild(c); });
+      }
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
+    };
+    // measure only after the logos have a width: an image that has not loaded is 0px wide and would be cloned dozens of times
+    var imgs = Array.prototype.slice.call(track.querySelectorAll('img'));
+    Promise.all(imgs.map(function (im) { return im.decode ? im.decode().catch(function () {}) : Promise.resolve(); })).then(fillBand);
   }
 
   /* ---------- lead form (sketch: no backend yet) ---------- */
