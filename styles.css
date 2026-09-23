@@ -318,6 +318,14 @@ strong, b { font-weight: 600; }
 .hero .lead { margin-top: clamp(24px, 2vw, 40px); max-width: var(--measure); }
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
 .hero-sub { margin-top: 14px; font-size: var(--t-meta); color: var(--muted-dark); max-width: calc(var(--measure) * .8); }
+/* routing in the first screen (spec, 9.9: "the routing must be immediate and clear in the opening screen") */
+.hero-route { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: clamp(40px, 3vw, 72px); font-size: var(--t-meta); color: var(--muted-dark); }
+.hero-route a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border-radius: 999px; font-weight: 500; color: var(--ink-dark);
+  background: color-mix(in srgb, var(--ink-dark) 9%, transparent); transition: background .18s var(--ease), color .18s var(--ease); }
+@media (hover: hover) and (pointer: fine) { .hero-route a:hover { background: var(--accent); color: var(--ink); } }
+/* inner pages have no hero: the floating pill would sit on their first line */
+body:not(:has(.hero)) main { padding-top: calc(var(--pill-top) + var(--pill-h)); }
+body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' footer is one short row: the mark would be cut */
 .trust-line { display: flex; flex-wrap: wrap; gap: 0 16px; margin-top: clamp(40px, 3vw, 72px); font-size: var(--t-meta); color: var(--muted-dark); }
 .trust-line li { display: flex; align-items: center; gap: 16px; }
 .trust-line li + li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: .7; }
