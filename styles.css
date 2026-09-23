@@ -778,8 +778,8 @@ html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animati
 .process > .container, #contact > .container { position: relative; z-index: 1; }
 .process .p-bg { width: min(46vw, 760px); inset-inline-end: 4vw; top: 50%; translate: 0 -50%; color: var(--ink); opacity: .035; }
 #contact .p-bg { width: min(34vw, 520px); inset-inline-start: 3vw; bottom: clamp(32px, 5vw, 96px); color: var(--accent); opacity: .07; }
-.testimonials .p-bg { width: min(52vw, 860px); left: 50%; top: 50%; translate: -50% -46%; color: var(--ink-dark); opacity: .045; }
-.testimonials .ctr-stage { position: relative; }
+.testimonials .p-bg { width: min(52vw, 860px); left: 50%; top: 50%; translate: -50% -46%; color: var(--ink-dark); opacity: .028; }
+html:not(.gsap-live) .testimonials .ctr-stage { position: relative; }   /* the sticky stage (.gsap-live) is already a containing block; relative here would override the sticky and break the band */
 .testimonials .ctr-stage > *:not(.p-bg) { position: relative; z-index: 1; }
 @media (max-width: 767px) {
   .process .p-bg { width: 78vw; inset-inline-end: 11vw; }
@@ -799,3 +799,27 @@ html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animati
 .gsap-live .quote.is-center { box-shadow: 0 30px 80px rgba(242, 122, 43, .14); }
 .gsap-live .quote.is-center .qmark { color: var(--accent-light); }
 .quote .qmark { font-size: 72px; }
+
+/* ---------- header: clear over the hero, white once you scroll (Liav, 23.9.2026) ----------
+   At the top the pill has no fill: light logo and links over the video. The first scroll paints it white and flips
+   the ink. It is white from the start whenever there is nothing dark under it: inner pages without a hero, and
+   while the mega menu is open (a clear strip above a white card looks broken). */
+.header .logo { display: grid; }
+.header .logo img { grid-area: 1 / 1; transition: opacity .3s var(--ease); }
+.header .logo-on-light { opacity: 0; }
+.header::before { transition: background .35s var(--ease), box-shadow .35s var(--ease), -webkit-backdrop-filter .35s var(--ease), backdrop-filter .35s var(--ease); }
+body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) { color: var(--ink-dark); }
+body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open))::before { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .nav > li > a,
+body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .nav > li > button,
+body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .lang { color: var(--ink-dark-soft); }
+body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .burger { background: color-mix(in srgb, var(--ink-dark) 12%, transparent); }
+body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .burger i { background: var(--ink-dark); }
+@media (hover: hover) and (pointer: fine) {
+  body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .nav > li > a:hover,
+  body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .nav > li > button:hover,
+  body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .lang:hover { color: var(--ink-dark); }
+}
+.header.is-scrolled .logo-on-dark, .header:has(.is-open) .logo-on-dark { opacity: 0; }
+.header.is-scrolled .logo-on-light, .header:has(.is-open) .logo-on-light { opacity: 1; }
+.nav > li > a, .nav > li > button, .lang, .burger, .burger i { transition: color .3s var(--ease), background .3s var(--ease), transform .36s var(--ease-inout), opacity .2s var(--ease); }
