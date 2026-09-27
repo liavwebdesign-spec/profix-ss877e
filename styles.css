@@ -165,12 +165,16 @@ strong, b { font-weight: 600; }
   padding: 14px 24px; min-height: 48px; border: 1px solid transparent; white-space: nowrap;
   transition: background .18s var(--ease), border-color .18s var(--ease), color .18s var(--ease), transform .12s var(--ease), box-shadow .18s var(--ease);
 }
-.btn svg { width: 18px; height: 18px; flex: none; }
+.btn svg { width: var(--icon-s); height: var(--icon-s); flex: none; }
 .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent), 0 0 0 5px var(--surface); }
 .dark .btn:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 55%, transparent); }
-/* one icon family: line icons, 1.7 stroke everywhere */
-.btn svg, .link-arrow svg, .nav svg, .md-close svg, .a11y-btn svg,
-.door-visual svg, .contact-list svg, .tile-art svg, .form-success .ok svg { stroke-width: 1.7; }
+/* one icon family: Uicons Regular Rounded (Liav, 27.9.2026), inlined by tools/icons.mjs from images/icons.
+   The line weight is drawn into the shapes, so it is the same everywhere; colour comes from currentColor.
+   Two sizes only: --icon-s beside text and in controls, --icon-m for standalone icons. */
+:root { --icon-s: 20px; --icon-m: 24px; }
+.icon { display: block; flex: none; fill: currentColor; stroke: none; }
+.icon-s { width: var(--icon-s); height: var(--icon-s); }
+.icon-m { width: var(--icon-m); height: var(--icon-m); }
 .btn-primary { background: var(--accent); color: var(--ink); }
 .btn-primary:active { transform: scale(.98); }
 .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--border-2); }
@@ -182,7 +186,7 @@ strong, b { font-weight: 600; }
   display: inline-flex; align-items: center; gap: 8px; font-weight: 500; color: var(--accent-text); min-height: 44px;
   transition: color .15s var(--ease), gap .18s var(--ease);
 }
-.link-arrow svg { width: 18px; height: 18px; transition: transform .18s var(--ease); }
+.link-arrow svg { transition: transform .18s var(--ease); }
 .dark .link-arrow { color: var(--accent-light); }
 @media (hover: hover) and (pointer: fine) {
   .btn-primary:hover { background: var(--accent-light); box-shadow: var(--shadow-cta); transform: translateY(-1px); }
@@ -220,7 +224,7 @@ strong, b { font-weight: 600; }
 .nav { display: flex; justify-content: center; align-items: center; gap: clamp(24px, 2vw, 48px); font-size: var(--t-meta); font-weight: 500; }
 .nav > li { position: relative; }
 .nav > li > a, .nav > li > button { display: inline-flex; align-items: center; gap: 6px; color: var(--muted-strong); padding: 14px 0; transition: color .15s var(--ease); }
-.nav svg { width: 14px; height: 14px; transition: transform .2s var(--ease); }
+.nav svg { transition: transform .2s var(--ease); }
 .nav li.is-open > button { color: var(--ink); }
 .nav li.is-open > button svg { transform: rotate(180deg); }
 .header-actions { display: flex; align-items: center; gap: 16px; }
@@ -255,7 +259,7 @@ strong, b { font-weight: 600; }
   transition: opacity .2s var(--ease), transform .2s var(--ease), background .18s var(--ease), color .15s var(--ease);
 }
 .nav li.is-open .mega-col a { opacity: 1; transform: none; transition-delay: calc(.08s + var(--i) * 28ms), calc(.08s + var(--i) * 28ms), 0s, 0s; }
-.nav .mega-col a svg { width: 16px; height: 16px; flex: none; opacity: 0; transform: translateX(6px); transition: opacity .18s var(--ease), transform .18s var(--ease); }
+.nav .mega-col a svg { flex: none; opacity: 0; transform: translateX(6px); transition: opacity .18s var(--ease), transform .18s var(--ease); }
 .mega-cta { align-self: start; border-radius: var(--r-control); background: color-mix(in srgb, var(--accent) 9%, #fff); padding: clamp(20px, 1.6vw, 32px); display: flex; flex-direction: column; gap: 24px; opacity: 0; transition: opacity .3s var(--ease); }
 .nav li.is-open .mega-cta { opacity: 1; transition-delay: .2s; }
 .mega-cta p { font-size: var(--t-meta); color: var(--muted-strong); }
@@ -280,15 +284,14 @@ strong, b { font-weight: 600; }
 .md-top img { width: 140px; height: auto; }
 .md-close { width: 44px; height: 44px; background: color-mix(in srgb, var(--ink-dark) 8%, transparent); border-radius: var(--r-control); display: grid; place-items: center; transition: background .18s var(--ease), transform .44s var(--ease-inout); }
 .md.open .md-close { transform: rotate(90deg); }
-.md-close svg { width: 18px; height: 18px; }
 .md-list { padding-top: 8px; }
 .md-item { opacity: 0; transform: translateY(12px); transition: opacity .18s var(--ease), transform .18s var(--ease); }
 .md.open .md-item { opacity: 1; transform: none; transition-duration: .4s, .4s; transition-delay: calc(.14s + var(--i) * 45ms); }
 .md-link, .md-acc { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 56px; padding: 12px 0; font-size: 16px; font-weight: 500; text-align: start; color: var(--ink-dark); transition: color .15s var(--ease); }
 /* chevron: physical borders on purpose, a logical inline-end flips it sideways in RTL */
-.md-acc i { width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform .3s var(--ease); }
+.md-acc .icon { transition: transform .3s var(--ease); }
 .md-acc[aria-expanded="true"] { color: var(--accent-light); }
-.md-acc[aria-expanded="true"] i { transform: rotate(225deg) translateY(-2px); }
+.md-acc[aria-expanded="true"] .icon { transform: rotate(180deg); }
 .md-sub { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .32s var(--ease); }
 .md-sub.open { grid-template-rows: 1fr; }
 .md-sub > div { overflow: hidden; }
@@ -298,11 +301,7 @@ strong, b { font-weight: 600; }
 .md-sub > div > :last-child { margin-bottom: 12px; }
 .md-cta { margin-top: 24px; opacity: 0; transform: translateY(12px); transition: opacity .18s var(--ease), transform .18s var(--ease); }
 .md.open .md-cta { opacity: 1; transform: none; transition: opacity .4s var(--ease) .42s, transform .4s var(--ease) .42s; }
-.burger i { display: block; width: 18px; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .36s var(--ease-inout), opacity .2s var(--ease); }
-.burger { gap: 4px; place-content: center; }
-.burger[aria-expanded="true"] i:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-.burger[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
-.burger[aria-expanded="true"] i:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.burger { place-items: center; color: var(--ink); }
 @media (hover: hover) and (pointer: fine) { .md-link:hover, .md-acc:hover, .md-sub a:hover { color: var(--accent-light); } .md-close:hover { background: color-mix(in srgb, var(--ink-dark) 14%, transparent); } }
 
 @media (max-width: 1023px) {
@@ -323,7 +322,7 @@ strong, b { font-weight: 600; }
   display: grid; place-items: center; width: 48px; height: 48px; border: 0; border-radius: 50%; color: #fff; cursor: pointer;
   background: color-mix(in srgb, #000 36%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, #fff 30%, transparent);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background-color .2s var(--ease), transform .18s var(--ease); }
-.video-toggle svg { width: 20px; height: 20px; grid-area: 1 / 1; transition: opacity .18s var(--ease), transform .18s var(--ease); }
+.video-toggle svg { grid-area: 1 / 1; transition: opacity .18s var(--ease), transform .18s var(--ease); }
 .video-toggle .i-play { opacity: 0; transform: scale(.6); }
 .video-toggle[aria-pressed="true"] .i-pause { opacity: 0; transform: scale(.6); }
 .video-toggle[aria-pressed="true"] .i-play { opacity: 1; transform: none; }
@@ -634,7 +633,8 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-l); align-items: start; }
 .contact-list { display: grid; gap: 16px; margin-top: 40px; }
 .contact-list li { display: flex; align-items: center; gap: 14px; }
-.contact-list svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.contact-list svg { color: var(--accent); flex: none; }
+.contact-list .brand-wa { width: var(--icon-m); height: var(--icon-m); fill: currentColor; }
 .contact-list a, .contact-list span { transition: color .15s var(--ease); }
 .contact-list a { display: inline-block; padding: 8px 0; margin: -8px 0; }
 .about-copy .micro { max-width: 460px; }
@@ -668,7 +668,7 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 .form-foot { margin: 12px auto 0; font-size: 12px; color: var(--muted); text-align: center; max-width: 480px; }
 .form-success { display: none; text-align: center; padding: 24px 0; }
 .form-success .ok { width: 56px; height: 56px; border-radius: 50%; background: var(--tint-12); display: grid; place-items: center; margin: 0 auto 16px; }
-.form-success .ok svg { width: 26px; height: 26px; stroke: var(--accent-text); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.form-success .ok svg { color: var(--accent-text); }
 .form-success p { margin-inline: auto; }
 .form-card.is-sent form { display: none; }
 .form-card.is-sent .form-success { display: block; }
@@ -708,7 +708,7 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
   box-shadow: 0 8px 24px rgba(37, 211, 102, .35);
   transition: transform .18s var(--ease), box-shadow .18s var(--ease);
 }
-.wa-float svg { width: 22px; height: 22px; }
+.wa-float svg { width: var(--icon-s); height: var(--icon-s); }
 .wa-float span { max-width: 0; overflow: hidden; white-space: nowrap; transition: max-width .3s var(--ease); }
 @media (hover: hover) and (pointer: fine) {
   .wa-float:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(37, 211, 102, .45); }
@@ -722,9 +722,9 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 }
 .sticky-bar.is-shown { transform: none; }
 .sticky-bar .wa { display: grid; place-items: center; background: #25D366; border-radius: var(--r-control); }
-.sticky-bar .wa svg { width: 24px; height: 24px; }
+.sticky-bar .wa svg { width: var(--icon-m); height: var(--icon-m); }
 /* phones: the room for the bottom bar and the accessibility button lives inside the footer, not as a strip under it */
-@media (max-width: 767px) { .sticky-bar { display: grid; } .wa-float { display: none; } .footer { padding-bottom: 156px; } }
+@media (max-width: 767px) { .sticky-bar { display: grid; } .wa-float { display: none; } .footer { padding-bottom: calc(var(--sec) * 2 + 24px); } }
 
 /* accessibility widget (IS 5568) */
 .a11y-btn {
@@ -733,7 +733,6 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
   box-shadow: inset 0 0 0 2px color-mix(in srgb, #fff 78%, transparent), var(--shadow-soft);   /* the ring keeps it visible on the dark hero and footer */
   transition: transform .18s var(--ease), background .18s var(--ease);
 }
-.a11y-btn svg { width: 24px; height: 24px; }
 .a11y-panel {
   position: fixed; bottom: 84px; inset-inline-start: 24px; z-index: 45; width: 260px; background: var(--surface); color: var(--ink);
   border-radius: var(--r-card); padding: 16px; box-shadow: var(--shadow-shot); display: none;
@@ -747,7 +746,9 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 @media (max-width: 767px) { .a11y-btn { bottom: 84px; inset-inline-start: auto; inset-inline-end: 16px; } .a11y-panel { bottom: 144px; inset-inline-start: auto; inset-inline-end: 16px; } }
 html.a11y-big { font-size: 118%; }
 html.a11y-big body { font-size: calc(var(--t-body) * 1.18); }
-html.a11y-contrast body { filter: contrast(1.25); }
+/* the filter goes on each top-level element and never on body: a filter on body becomes the containing block of every
+   fixed element, and the header, the floats and this very toolbar slid to the end of the page (27.9.2026) */
+html.a11y-contrast :is(body > :not(main), main > :not(.pin-spacer), .pin-spacer > *) { filter: contrast(1.25); }   /* a GSAP pin is fixed inside main: the pinned section carries the filter itself */
 html.a11y-links a { text-decoration: underline; }
 html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animation: none !important; transition: none !important; }
 
@@ -839,7 +840,7 @@ body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .nav > li > a,
 body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .nav > li > button,
 body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .lang { color: var(--ink-dark-soft); }
 body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .burger { background: color-mix(in srgb, var(--ink-dark) 12%, transparent); }
-body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .burger i { background: var(--ink-dark); }
+body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .burger { color: var(--ink-dark); }
 @media (hover: hover) and (pointer: fine) {
   body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .nav > li > a:hover,
   body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .nav > li > button:hover,
@@ -849,4 +850,4 @@ body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .burger i { backgr
 .header.is-scrolled .logo-on-light, .header:has(.is-open) .logo-on-light { opacity: 1; }
 body:not(:has(.hero)) .header .logo-on-dark { opacity: 0; }
 body:not(:has(.hero)) .header .logo-on-light { opacity: 1; }
-.nav > li > a, .nav > li > button, .lang, .burger, .burger i { transition: color .3s var(--ease), background .3s var(--ease), transform .36s var(--ease-inout), opacity .2s var(--ease); }
+.nav > li > a, .nav > li > button, .lang, .burger { transition: color .3s var(--ease), background .3s var(--ease), transform .36s var(--ease-inout), opacity .2s var(--ease); }
