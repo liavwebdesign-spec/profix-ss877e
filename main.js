@@ -43,18 +43,30 @@
     t.focus({ preventScroll: true });
   });
 
-  /* hero video: 720p on phones, 1080p elsewhere; the poster stands in for reduced motion; paused when the hero is off screen */
-  var hv = document.querySelector('.hero-video');
+  /* hero video: 720p on phones, 1080p elsewhere; the poster stands in for reduced motion; rests off screen.
+     The pause button (WCAG 2.2.2) and the toolbar's "stop animations" both hold it, and scrolling back does not resume it. */
+  var hv = document.querySelector('.hero-video'), vt = document.querySelector('.video-toggle');
   if (hv) {
     var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!still) {
       hv.src = window.matchMedia('(max-width: 767px)').matches ? hv.dataset.srcMob : hv.dataset.srcDesk;
-      var playHv = function () { var pr = hv.play(); if (pr && pr.catch) pr.catch(function () {}); };
+      var userPaused = false, hvOn = true;
+      var playHv = function () { if (userPaused || !hvOn || html.classList.contains('a11y-still')) return; var pr = hv.play(); if (pr && pr.catch) pr.catch(function () {}); };
+      var setPaused = function (p) {
+        userPaused = p;
+        if (vt) { vt.setAttribute('aria-pressed', String(p)); vt.setAttribute('aria-label', p ? 'הפעלת הסרטון' : 'עצירת הסרטון'); }
+        p ? hv.pause() : playHv();
+      };
+      if (vt) vt.addEventListener('click', function () { setPaused(!userPaused); });
+      document.addEventListener('a11y:still', function (e) { e.detail ? hv.pause() : playHv(); });
       if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (es) { es.forEach(function (e) { e.isIntersecting ? playHv() : hv.pause(); }); }).observe(hv);
+        new IntersectionObserver(function (es) { es.forEach(function (e) { hvOn = e.isIntersecting; hvOn ? playHv() : hv.pause(); }); }).observe(hv);
       } else playHv();
     }
   }
+
+  /* footer year */
+  document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
   /* mega menu (MV:b65): hover intent, click, ArrowDown opens and focuses, Escape returns focus, leaving focus closes */
   var megaLi = document.querySelector('.nav .has-mega');
@@ -186,9 +198,10 @@
     a11yPanel.querySelectorAll('[data-a11y]').forEach(function (b) {
       b.addEventListener('click', function () {
         var k = b.dataset.a11y;
-        if (k === 'reset') { ['a11y-big', 'a11y-contrast', 'a11y-links', 'a11y-still'].forEach(function (c) { html.classList.remove(c); }); return; }
-        html.classList.toggle('a11y-' + k);
-        if (k === 'still' && hasGsap) { html.classList.contains('a11y-still') ? gsap.globalTimeline.pause() : gsap.globalTimeline.play(); }
+        if (k === 'reset') ['a11y-big', 'a11y-contrast', 'a11y-links', 'a11y-still'].forEach(function (c) { html.classList.remove(c); });
+        else html.classList.toggle('a11y-' + k);
+        if ((k === 'still' || k === 'reset') && hasGsap) { html.classList.contains('a11y-still') ? gsap.globalTimeline.pause() : gsap.globalTimeline.play(); }
+        if (k === 'still' || k === 'reset') document.dispatchEvent(new CustomEvent('a11y:still', { detail: html.classList.contains('a11y-still') }));
       });
     });
   }

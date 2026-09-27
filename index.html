@@ -7,7 +7,7 @@
 <title>פרופיקס | פתרונות מחשוב, תקשורת ומתח נמוך במקום אחד</title>
 <meta name="description" content="פרופיקס מספקת מחשוב ו-IT לעסקים, ותקשורת ומתח נמוך לעסקים ולבתים: תשתיות רשת, מצלמות, אינטרקום, בית חכם וסאונד. תכנון, התקנה ותמיכה, כתובת אחת.">
 <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css?v=26">
+<link rel="stylesheet" href="styles.css?v=28">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -113,9 +113,11 @@
         <a href="#door-home">לבית</a>
       </nav>
     </div>
-
-
   </div>
+  <button class="video-toggle" type="button" aria-pressed="false" aria-label="עצירת הסרטון">
+    <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="5" width="3.5" height="14" rx="1"/><rect x="13.5" y="5" width="3.5" height="14" rx="1"/></svg>
+    <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10-6.5a1 1 0 0 0 0-1.8l-10-6.5A1 1 0 0 0 8 5.5z"/></svg>
+  </button>
 </section>
 
 <!-- ============ 02 TWO DOORS ============ -->
@@ -425,7 +427,7 @@
       </div>
       <div>
         <h4>ניווט</h4>
-        <ul><li><a href="index.html">ראשי</a></li><li><a href="#services">פתרונות לעסק</a></li><li><a href="#services">פתרונות לבית</a></li><li><a href="#projects">פרויקטים</a></li><li><a href="#about">אודות</a></li><li><a href="articles.html">מאמרים וטיפים</a></li><li><a href="quote.html">לקבלת הצעת מחיר</a></li></ul>
+        <ul><li><a href="index.html">ראשי</a></li><li><a href="index.html#services">פתרונות לעסק</a></li><li><a href="index.html#services">פתרונות לבית</a></li><li><a href="index.html#projects">פרויקטים</a></li><li><a href="index.html#about">אודות</a></li><li><a href="articles.html">מאמרים וטיפים</a></li><li><a href="quote.html">לקבלת הצעת מחיר</a></li></ul>
       </div>
       <div>
         <h4>יצירת קשר</h4>
@@ -437,7 +439,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>כל הזכויות שמורות לפרופיקס פתרונות מחשוב ותקשורת</span>
+      <span>© <span data-year>2026</span> כל הזכויות שמורות לפרופיקס פתרונות מחשוב ותקשורת</span>
+      <span class="ft-credit"><a href="https://liavmatzri.co.il" target="_blank" rel="noopener">עוצב ופותח על ידי ליאב מצרי</a></span>
       <span>עברית | <a href="#" lang="en">English</a></span>
     </div>
   </div>
@@ -468,6 +471,6 @@
 
 <script src="vendor/gsap.min.js"></script>
 <script src="vendor/ScrollTrigger.min.js"></script>
-<script src="main.js?v=16"></script>
+<script src="main.js?v=17"></script>
 </body>
 </html>

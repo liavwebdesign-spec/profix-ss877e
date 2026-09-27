@@ -318,6 +318,19 @@ strong, b { font-weight: 600; }
 /* hero: brand video behind the copy (Liav + Oz, 23.9.2026: the P moved to its own atmosphere section) */
 .hero-media { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: var(--bg-dark) url("video/hero-poster.jpg") center / cover no-repeat; }
 .hero-video { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* pause button for the background video (WCAG 2.2.2): below the floating header, at the end side of the hero */
+.video-toggle { position: absolute; z-index: 2; inset-block-start: calc(var(--pill-top) + var(--pill-h) + 16px); inset-inline-end: var(--gutter);
+  display: grid; place-items: center; width: 48px; height: 48px; border: 0; border-radius: 50%; color: #fff; cursor: pointer;
+  background: color-mix(in srgb, #000 36%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, #fff 30%, transparent);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background-color .2s var(--ease), transform .18s var(--ease); }
+.video-toggle svg { width: 20px; height: 20px; grid-area: 1 / 1; transition: opacity .18s var(--ease), transform .18s var(--ease); }
+.video-toggle .i-play { opacity: 0; transform: scale(.6); }
+.video-toggle[aria-pressed="true"] .i-pause { opacity: 0; transform: scale(.6); }
+.video-toggle[aria-pressed="true"] .i-play { opacity: 1; transform: none; }
+.video-toggle:active { transform: scale(.94); }
+.video-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) { .video-toggle:hover { background: color-mix(in srgb, #000 56%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .video-toggle { display: none; } }
 .hero-media::after { content: ""; position: absolute; inset: 0;
   background: linear-gradient(to left, rgba(17, 18, 20, .92) 0%, rgba(17, 18, 20, .78) 45%, rgba(17, 18, 20, .35) 100%),
               linear-gradient(to top, var(--bg-dark) 0%, rgba(17, 18, 20, 0) 30%); }
@@ -681,6 +694,8 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 .footer li:not(:has(a)) { padding: 10px 0; }
 .footer-bottom { margin-top: 64px; padding-top: 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: var(--t-micro); color: var(--muted-dark); }
 .footer-bottom a { display: inline-block; padding: 12px 4px; margin: -12px 0; transition: color .15s var(--ease); }
+.ft-credit a { color: var(--ink-dark-soft); }
+@media (hover: hover) and (pointer: fine) { .ft-credit a:hover { color: var(--accent-light); } }
 @media (hover: hover) and (pointer: fine) { .footer li a:hover, .footer-bottom a:hover { color: var(--accent-light); } }
 @media (max-width: 1023px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 767px) { .footer-grid { grid-template-columns: 1fr; gap: 28px; } }
@@ -708,12 +723,14 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 .sticky-bar.is-shown { transform: none; }
 .sticky-bar .wa { display: grid; place-items: center; background: #25D366; border-radius: var(--r-control); }
 .sticky-bar .wa svg { width: 24px; height: 24px; }
-@media (max-width: 767px) { .sticky-bar { display: grid; } .wa-float { display: none; } body { padding-bottom: 72px; } }
+/* phones: the room for the bottom bar and the accessibility button lives inside the footer, not as a strip under it */
+@media (max-width: 767px) { .sticky-bar { display: grid; } .wa-float { display: none; } .footer { padding-bottom: 156px; } }
 
 /* accessibility widget (IS 5568) */
 .a11y-btn {
   position: fixed; bottom: 24px; inset-inline-start: 24px; z-index: 40; width: 48px; height: 48px; border-radius: 50%;
-  background: var(--ink); color: var(--ink-dark); display: grid; place-items: center; box-shadow: var(--shadow-soft);
+  background: var(--ink); color: var(--ink-dark); display: grid; place-items: center;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, #fff 78%, transparent), var(--shadow-soft);   /* the ring keeps it visible on the dark hero and footer */
   transition: transform .18s var(--ease), background .18s var(--ease);
 }
 .a11y-btn svg { width: 24px; height: 24px; }
@@ -726,7 +743,8 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 .a11y-panel button { display: block; width: 100%; text-align: start; padding: 10px 12px; border-radius: 8px; font-size: 13px; transition: background .15s var(--ease); }
 .a11y-panel a { display: block; margin-top: 8px; padding: 10px 12px; font-size: 12px; color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
 @media (hover: hover) and (pointer: fine) { .a11y-btn:hover { transform: translateY(-2px); } .a11y-panel button:hover { background: var(--surface-muted); } }
-@media (max-width: 767px) { .a11y-btn { bottom: 84px; inset-inline-start: 16px; } .a11y-panel { bottom: 144px; inset-inline-start: 16px; } }
+/* phones: on the end side (left in RTL), where lines end, not over their starts */
+@media (max-width: 767px) { .a11y-btn { bottom: 84px; inset-inline-start: auto; inset-inline-end: 16px; } .a11y-panel { bottom: 144px; inset-inline-start: auto; inset-inline-end: 16px; } }
 html.a11y-big { font-size: 118%; }
 html.a11y-big body { font-size: calc(var(--t-body) * 1.18); }
 html.a11y-contrast body { filter: contrast(1.25); }
@@ -829,4 +847,6 @@ body:has(.hero) .header:not(.is-scrolled):not(:has(.is-open)) .burger i { backgr
 }
 .header.is-scrolled .logo-on-dark, .header:has(.is-open) .logo-on-dark { opacity: 0; }
 .header.is-scrolled .logo-on-light, .header:has(.is-open) .logo-on-light { opacity: 1; }
+body:not(:has(.hero)) .header .logo-on-dark { opacity: 0; }
+body:not(:has(.hero)) .header .logo-on-light { opacity: 1; }
 .nav > li > a, .nav > li > button, .lang, .burger, .burger i { transition: color .3s var(--ease), background .3s var(--ease), transform .36s var(--ease-inout), opacity .2s var(--ease); }
