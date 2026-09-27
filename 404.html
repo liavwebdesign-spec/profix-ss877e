@@ -4,11 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>מאמרים וטיפים | פרופיקס</title>
+<title>העמוד לא נמצא | פרופיקס</title>
 <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css?v=32">
 <script>document.documentElement.classList.add('js');</script>
-<style>.legal{max-width:760px} .legal h1{font-size:var(--t-h2);line-height:var(--lh-h2)} .legal h2{font-family:var(--f-text);font-size:20px;line-height:1.4;margin-top:40px} .legal p{margin-top:16px} .legal .note{margin-top:24px;padding:16px 20px;background:var(--tint-4);border-radius:var(--r-control);font-size:14px;color:var(--muted-strong)}</style>
+<style>
+.nf-code{font-size:15px;color:var(--muted-strong)}
+.nf-hero h1{margin-top:8px;font-size:var(--t-h2);line-height:var(--lh-h2);max-width:16ch}
+.nf-hero .lead{margin-top:16px;color:var(--muted-strong);max-width:var(--measure)}
+.nf-links{margin-top:clamp(40px,3.6vw,72px);display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:640px}
+@media (max-width:640px){.nf-links{grid-template-columns:1fr}}
+.nf-links a{display:block;padding:16px 20px;border-radius:var(--r-control);background:var(--tint-4);color:var(--ink);font-weight:500;transition:background .18s var(--ease)}
+@media (hover:hover) and (pointer:fine){.nf-links a:hover{background:var(--tint-12)}}
+.nf-cta{margin-top:32px;display:flex;flex-wrap:wrap;gap:12px}
+</style>
 </head>
 <body>
 
@@ -90,12 +99,25 @@
   </nav>
 </div>
 
-<main id="main"><section class="section"><div class="container"><div class="legal">
-<p class="eyebrow">מאמרים וטיפים</p><h1>מאמרים וטיפים</h1>
-<p class="lead" style="margin-top:16px">כאן יעלו מאמרים קצרים על כל שירות: למה נקודת רשת עדיפה על Wi-Fi, למה גיבוי בענן חשוב לעסק, ומה כדאי לתכנן לפני שהקירות נסגרים.</p>
-<p class="note">המאמר הראשון בדרך. בעמוד הבית תופיע רצועת המאמרים ברגע שהוא יתפרסם.</p>
-<p style="margin-top:32px"><a class="btn btn-primary" href="quote.html">לקבלת הצעת מחיר</a></p>
-</div></div></section></main>
+<main id="main"><section class="section"><div class="container">
+<div class="nf-hero">
+<p class="nf-code">שגיאה 404</p>
+<h1>הכתובת הזו לא קיימת. בואו נמצא את מה שחיפשתם.</h1>
+<p class="lead">אולי הקישור השתנה, או שהוקלד לא נכון. הנה כמה כתובות שאולי חיפשתם:</p>
+</div>
+<nav class="nf-links" aria-label="קישורים מהירים">
+<a href="index.html">עמוד הבית</a>
+<a href="quote.html">לקבלת הצעת מחיר</a>
+<a href="index.html#services">פתרונות ושירותים</a>
+<a href="index.html#projects">פרויקטים</a>
+<a href="index.html#about">אודות</a>
+<a href="index.html#contact">צור קשר</a>
+</nav>
+<div class="nf-cta">
+<a class="btn btn-primary" href="index.html">לעמוד הבית</a>
+<a class="btn btn-secondary" href="https://wa.me/972546393242" target="_blank" rel="noopener">לשאול אותנו בוואטסאפ</a>
+</div>
+</div></section></main>
 
 <!-- ============ FOOTER ============ -->
 <footer class="footer dark">
