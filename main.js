@@ -154,20 +154,54 @@
     document.querySelectorAll('main .btn-primary, .hero').forEach(function (el) { ctaIo.observe(el); });
   }
 
-  /* ---------- logo band: repeat the marks until the track covers the screen plus the scroll travel ---------- */
-  var track = document.getElementById('marquee-track');
+  /* ---------- logo band: two rows (the second in reverse order), each repeated until it covers the screen plus the scroll travel ---------- */
+  var track = document.getElementById('marquee-track'), track2 = document.getElementById('marquee-track-2');
   if (track) {
     var originals = Array.prototype.slice.call(track.children);
-    var fillBand = function () {
+    var copyOf = function (el) { var c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); var im = c.querySelector('img'); if (im) im.alt = ''; return c; };
+    if (track2) originals.slice().reverse().forEach(function (el) { track2.appendChild(copyOf(el)); });
+    var fill = function (tr, set) {
       var guard = 0;
-      while (track.scrollWidth < window.innerWidth * 1.9 && guard++ < 16) {
-        originals.forEach(function (el) { var c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); var im = c.querySelector('img'); if (im) im.alt = ''; track.appendChild(c); });
-      }
+      while (tr.scrollWidth < window.innerWidth * 1.9 && guard++ < 16) set.forEach(function (el) { tr.appendChild(copyOf(el)); });
+    };
+    var fillBand = function () {
+      fill(track, originals);
+      if (track2) fill(track2, Array.prototype.slice.call(track2.children));
       if (window.ScrollTrigger) ScrollTrigger.refresh();
     };
     // measure only after the logos have a width: an image that has not loaded is 0px wide and would be cloned dozens of times
     var imgs = Array.prototype.slice.call(track.querySelectorAll('img'));
     Promise.all(imgs.map(function (im) { return im.decode ? im.decode().catch(function () {}) : Promise.resolve(); })).then(fillBand);
+  }
+
+  /* ---------- services: each row opens in place, one at a time, and closes once it has scrolled out of view (Oz, 28.9) ---------- */
+  var svcRowsAll = Array.prototype.slice.call(document.querySelectorAll('.svc-row'));
+  if (svcRowsAll.length) {
+    var refreshSoon = function () { if (window.ScrollTrigger) { clearTimeout(refreshSoon.t); refreshSoon.t = setTimeout(function () { ScrollTrigger.refresh(); }, 120); } };
+    // closing a row that is above the screen shrinks the page under the reader: keep whatever is on screen where it was
+    var keepPlace = function (change) {
+      var ref = document.elementFromPoint(innerWidth / 2, innerHeight * .4);   // below the floating header, which never moves
+      var before = ref ? ref.getBoundingClientRect().top : 0;
+      change();
+      if (ref) { var d = ref.getBoundingClientRect().top - before; if (Math.abs(d) > 1) window.scrollBy({ top: d, behavior: 'instant' }); }
+    };
+    var setRow = function (row, open) {
+      var btn = row.querySelector('.svc-toggle'), more = row.querySelector('.svc-more');
+      if (!btn || !more || row.classList.contains('is-open') === open) return;
+      row.classList.toggle('is-open', open); btn.setAttribute('aria-expanded', String(open)); more.hidden = !open;
+    };
+    var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (!e.isIntersecting && e.target.classList.contains('is-open')) { keepPlace(function () { setRow(e.target, false); }); refreshSoon(); } });
+    }) : null;
+    svcRowsAll.forEach(function (row) {
+      if (io) io.observe(row);
+      row.addEventListener('click', function (e) {
+        if (e.target.closest('.svc-more a')) return;
+        var open = !row.classList.contains('is-open');
+        keepPlace(function () { svcRowsAll.forEach(function (r) { if (r !== row) setRow(r, false); }); setRow(row, open); });
+        refreshSoon();
+      });
+    });
   }
 
   /* ---------- lead form (sketch: no backend yet) ---------- */
@@ -230,14 +264,13 @@
 
   /* ---------- GSAP layer ----------
      Built in DOM order (engine QA 13d): every trigger below a pin is created after it.
-     S1 hero: headline words over the brand video; S11 atmosphere: the logo P assembled by scroll, pinned on desktop (G18-based)
+     S1 hero: headline words over the brand video
      S2 h2 word fade (G4 level b)
      S3 logo conveyor driven by scroll (G123)
      S4 services: sticky stage swaps per row (G05)
      S5 why: hub wires drawn by scroll, nodes light up (G22-based, no pin)
      S6 process: pinned, line fills and stations light (G20 station logic) / mobile vertical rail (B35)
      S7 projects: scattered tiles converge (G54)
-     S8 about: statement coloured word by word (G48)
      S9 testimonials: sideways band in a sticky stage, centre card grows (G65) */
   if (!hasGsap) return;
   gsap.registerPlugin(ScrollTrigger);
@@ -245,10 +278,6 @@
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 
   var headerH = function () { return 0; };   // the pill floats over the content and hides on scroll down
-  var sig = document.getElementById('p-sig');
-  var pieces = sig ? gsap.utils.toArray(sig.querySelectorAll('.piece')) : [];
-  var labels = sig ? gsap.utils.toArray(sig.querySelectorAll('.lbl')) : [];
-  var hl = document.querySelector('#atmos .hl');
   var svcRows = gsap.utils.toArray('.svc-row');
   var svcArts = gsap.utils.toArray('.svc-art');
   var capNum = document.querySelector('.svc-cap-num');
@@ -258,7 +287,6 @@
   var fill = document.getElementById('process-fill');
   var vtFill = document.getElementById('vt-fill');
   var tiles = gsap.utils.toArray('.tile');
-  var statement = document.getElementById('about-statement');
   var mq = document.querySelector('.marquee');
 
   /* S4 state change (not motion): which service the stage shows. Runs in every motion mode. */
@@ -277,26 +305,6 @@
     });
   }
 
-  /* split a paragraph into word spans; keywords get a marker behind them (G48) */
-  function splitStatement(p, marks) {
-    if (p.querySelector('.w')) return { words: gsap.utils.toArray(p.querySelectorAll('.w')), marks: gsap.utils.toArray(p.querySelectorAll('.mk')) };
-    var bare = function (w) { return w.replace(/[.,:;!?"'׳״]/g, ''); };
-    var words = p.textContent.trim().split(/\s+/);
-    p.textContent = '';
-    var spans = [], mks = [];
-    words.forEach(function (w, i) {
-      var s = document.createElement('span'); s.className = 'w';
-      var core = bare(w);
-      if (marks.indexOf(core) > -1) {
-        var mk = document.createElement('span'); mk.className = 'mk'; mk.textContent = core;
-        s.appendChild(mk); s.appendChild(document.createTextNode(w.slice(core.length))); mks.push(mk);
-      } else s.textContent = w;
-      p.appendChild(s); if (i < words.length - 1) p.appendChild(document.createTextNode(' '));
-      spans.push(s);
-    });
-    return { words: spans, marks: mks };
-  }
-
   var mm = gsap.matchMedia();
   mm.add({
     desk: '(min-width: 1024px)',
@@ -309,7 +317,6 @@
     if (!c.move) {
       /* S4 runs on desktop in both motion modes (it is a content swap, not an animation); no pins here, so order is free */
       if (c.desk) cleanups = cleanups.concat(buildServiceSync());
-      gsap.set(labels, { opacity: 0 });
       steps.forEach(function (s) { s.classList.add('is-lit'); });
       if (fill) gsap.set(fill, { scaleX: 1 });
       if (vtFill) gsap.set(vtFill, { height: '100%' });
@@ -333,25 +340,36 @@
       var D = function () { return innerWidth * (c.mob ? 0.4 : 0.3); };
       gsap.fromTo('#marquee-track', { x: function () { return -D(); } }, { x: function () { return D(); }, ease: 'none',
         scrollTrigger: { trigger: '.logos', start: 'top bottom', end: 'bottom top', scrub: 0.4, invalidateOnRefresh: true } });
+      if (document.getElementById('marquee-track-2'))
+        gsap.fromTo('#marquee-track-2', { x: function () { return D(); } }, { x: function () { return -D(); }, ease: 'none',
+          scrollTrigger: { trigger: '.logos', start: 'top bottom', end: 'bottom top', scrub: 0.4, invalidateOnRefresh: true } });
     }
 
     /* S4 services sync, created after the hero pin so its positions include the pin spacing */
     if (c.desk) cleanups = cleanups.concat(buildServiceSync());
 
-    /* S5 why: hub first, then wires draw outward one by one, each node lights when its wire lands */
+    /* S5 why (28.9): the ring draws while the section passes (MV:g22 without the pin); each system lights as the ring
+       reaches it and its spoke runs to the P; once all six are on, light keeps flowing along the spokes (CSS) */
     if (h2s[1]) fadeHeading(h2s[1]);
-    var wires = gsap.utils.toArray('.why-diagram .wire-hot');
-    var nodes = gsap.utils.toArray('.why-diagram .hub-node');
-    if (wires.length) {
-      gsap.set(wires, { strokeDasharray: 1, strokeDashoffset: 1 });
-      gsap.set(nodes, { opacity: 0.28 });
-      gsap.set('.why-diagram .hub-core', { scale: 0.82, transformOrigin: '50% 50%' });
-      var wtl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '.why-diagram', start: 'top 80%', end: 'bottom 45%', scrub: 0.6 } });
-      wtl.to('.why-diagram .hub-core', { scale: 1, duration: 0.4, ease: 'power2.out' }, 0);
-      wires.forEach(function (w, i) {
-        var at = 0.3 + i * 0.45;
-        wtl.to(w, { strokeDashoffset: 0, duration: 0.45 }, at)
-           .to(nodes[i], { opacity: 1, duration: 0.15, onStart: function () { nodes[i].classList.add('is-lit'); }, onReverseComplete: function () { nodes[i].classList.remove('is-lit'); } }, at + 0.35);
+    var orbit = document.querySelector('.why-orbit');
+    if (orbit) {
+      var ring = orbit.querySelector('.orbit-draw');
+      var spokes = gsap.utils.toArray(orbit.querySelectorAll('.orbit-spoke'));
+      var stations = gsap.utils.toArray(orbit.querySelectorAll('.orbit-st'));
+      spokes.forEach(function (s, i) { s.style.setProperty('--n', i); });
+      gsap.set(ring, { strokeDashoffset: 1 });
+      gsap.set(spokes, { strokeDashoffset: 1 });
+      gsap.set(orbit.querySelectorAll('.orbit-p path'), { opacity: 0, scale: .6, transformOrigin: '50% 50%' });
+      var otl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
+        trigger: '.why-layout', start: 'top 75%', end: c.desk ? 'bottom 70%' : 'bottom 85%', scrub: 0.6,
+        onUpdate: function (self) { orbit.classList.toggle('is-live', self.progress > .98); } } });
+      otl.to(orbit.querySelectorAll('.orbit-p path'), { opacity: 1, scale: 1, duration: .5, stagger: .08, ease: 'power2.out' }, 0);
+      stations.forEach(function (st, i) {
+        var at = .4 + i;
+        otl.to(ring, { strokeDashoffset: 1 - (i + 1) / 6, duration: 1 }, at)
+           .to(spokes[i], { strokeDashoffset: 0, duration: .45 }, at + .1)
+           .call(function () { st.classList.add('is-lit'); }, null, at + .5)
+           .call(function () { st.classList.remove('is-lit'); }, null, at + .49);
       });
     }
 
@@ -379,24 +397,6 @@
       }
     }
 
-    /* S11 atmosphere: the logo's own P, exploded into four systems, assembles as you scroll (the move that used to open the hero).
-       Created here, after the process pin and before the projects, so every trigger below measures the pin spacing above it. */
-    if (sig) {
-      pieces.forEach(function (p) { gsap.set(p, { x: +p.dataset.dx, y: +p.dataset.dy, rotation: +p.dataset.rot, transformOrigin: '50% 50%' }); });
-      gsap.set(labels, { opacity: 1 });
-      gsap.set(hl, { color: '#F4F2EE' });
-      var atl = gsap.timeline({
-        defaults: { ease: 'none' },
-        scrollTrigger: c.desk
-          ? { trigger: '#atmos', start: 'top top', end: '+=80%', pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true }
-          : { trigger: '.atmos-visual', start: 'top 80%', end: 'bottom 55%', scrub: 0.6 }
-      });
-      // labels stay readable while the systems travel, and leave only as the P closes (they vanished too early on phones)
-      atl.to(pieces, { x: 0, y: 0, rotation: 0, duration: 1, stagger: 0.12, ease: 'power2.inOut' }, 0)
-        .to(labels, { opacity: 0, duration: 0.25, stagger: 0.04 }, 1.05)
-        .to(hl, { color: '#F27A2B', duration: 0.35 }, 1.05);
-    }
-
     /* S7 projects: each tile arrives from the side of the grid it belongs to */
     if (tiles.length) {
       var grid = document.querySelector('.projects-grid');
@@ -408,19 +408,6 @@
         var dx = (r.left + r.width / 2 - cx) / g.width, dy = (r.top + r.height / 2 - cy) / g.height;
         ttl.fromTo(el, { xPercent: dx * 120, yPercent: dy * 110, scale: 0.6, rotate: dx * 14, rotateY: dx * -20, opacity: 0 },
           { xPercent: 0, yPercent: 0, scale: 1, rotate: 0, rotateY: 0, opacity: 1, duration: 1, ease: 'power2.out' }, 0);
-      });
-    }
-
-    /* S8 about statement: coloured word by word, the key phrase gets the orange marker */
-    if (statement) {
-      var sp = splitStatement(statement, ['מעטפת', 'שירותים', 'מלאה']);
-      gsap.set(sp.words, { color: '#B4B7BD' });
-      gsap.set(sp.marks, { '--fill': 0 });
-      var stl = gsap.timeline({ scrollTrigger: { trigger: statement, start: 'top 80%', end: 'bottom 55%', scrub: 0.4 } });
-      stl.to(sp.words, { color: '#111214', duration: 0.4, stagger: 0.35, ease: 'none' }, 0);
-      sp.marks.forEach(function (mk) {
-        var i = sp.words.indexOf(mk.parentNode);
-        stl.to(mk, { '--fill': 1, duration: 0.4, ease: 'power2.out' }, i * 0.35);
       });
     }
 
@@ -466,7 +453,8 @@
     gsap.utils.toArray('.p-echo').forEach(function (mark) {
       // a mark inside a pinned section is measured against that pin, or a refresh made past it adds the pin's travel
       var pinned = mark.closest('.pin-spacer > *');
-      var tl = gsap.timeline({ scrollTrigger: { trigger: mark, start: 'top 94%', end: 'top 66%', scrub: 0.6, pinnedContainer: pinned || undefined } });
+      // plays once as it enters, early and whole: as a scrub it ran at the edge of the screen and nobody saw it (Oz, 28.9)
+      var tl = gsap.timeline({ scrollTrigger: { trigger: mark, start: 'top 88%', toggleActions: 'play none none none', pinnedContainer: pinned || undefined } });
       mark.querySelectorAll('path').forEach(function (r) {
         var o = SCATTER[r.getAttribute('data-p')];
         tl.fromTo(r, { x: o[0], y: o[1], rotate: o[2], opacity: 0 }, { x: 0, y: 0, rotate: 0, opacity: 1, ease: 'power2.out', duration: 1 }, 0);
