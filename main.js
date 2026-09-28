@@ -124,9 +124,7 @@
     var setDrawer = function (open) {
       md.classList.toggle('open', open); mdPanel.inert = !open;
       burger.setAttribute('aria-expanded', String(open));
-      var sb = window.innerWidth - document.documentElement.clientWidth;
-      document.body.style.overflow = open ? 'hidden' : ''; document.documentElement.classList.toggle('menu-lock', open);
-      document.body.style.paddingInlineEnd = open && sb > 0 ? sb + 'px' : '';
+      document.documentElement.classList.toggle('menu-lock', open);
       if (open) { mdLast = document.activeElement; setTimeout(function () { mdClose.focus(); }, 180); }
       else { md.querySelectorAll('.md-sub.open').forEach(function (sub) { toggleSub(sub.previousElementSibling, false); }); if (mdLast) mdLast.focus(); }
     };
@@ -158,15 +156,27 @@
     reveals.forEach(function (el) { el.classList.add('is-in'); });
   }
 
+  /* ---------- the floating WhatsApp button steps aside over the footer, which has the same link, so it never covers the footer's last lines ---------- */
+  var waFloat = document.querySelector('.wa-float'), footEl = document.querySelector('.footer');
+  if (waFloat && footEl && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { waFloat.classList.toggle('is-away', es[0].isIntersecting); }, { rootMargin: '0px 0px -120px 0px' }).observe(footEl);
+  }
+
   /* ---------- sticky mobile bar: only when no primary CTA is on screen ---------- */
   var bar = document.getElementById('sticky-bar');
   if (bar && 'IntersectionObserver' in window) {
+    // the bar steps aside while anything that already does its job is on screen (a primary button, the form,
+    // a WhatsApp or phone link, the footer), and while a field has focus, so it never sits over the keyboard
     var visible = new Set();
+    var isField = function (el) { return el && el.matches && el.matches('input, textarea, select'); };
+    var place = function () { bar.classList.toggle('is-shown', visible.size === 0 && !isField(document.activeElement)); };
     var ctaIo = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { en.isIntersecting ? visible.add(en.target) : visible.delete(en.target); });
-      bar.classList.toggle('is-shown', visible.size === 0);
+      place();
     }, { rootMargin: '-72px 0px -72px 0px' });
-    document.querySelectorAll('main .btn-primary, .hero').forEach(function (el) { ctaIo.observe(el); });
+    document.querySelectorAll('main .btn-primary, .hero, main form, .footer, main a[href*="wa.me"], main a[href^="tel:"]').forEach(function (el) { ctaIo.observe(el); });
+    document.addEventListener('focusin', place);
+    document.addEventListener('focusout', function () { setTimeout(place, 0); });
   }
 
   /* ---------- logo band: two rows (the second in reverse order), each repeated until it covers the screen plus the scroll travel ---------- */
