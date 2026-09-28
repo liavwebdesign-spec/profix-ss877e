@@ -640,7 +640,7 @@ html:not(.gsap-live) .orbit-st .orbit-dot, .orbit-st.is-lit .orbit-dot { backgro
   position: sticky; top: var(--header-h, 72px); height: calc(100vh - var(--header-h, 72px));
   display: grid; align-content: center; gap: clamp(32px, 3vw, 64px); overflow: hidden;
 }
-.gsap-live .ctr-view { overflow: hidden; }
+.gsap-live .ctr-view { overflow: hidden; padding-block: 120px; margin-block: -120px; }   /* room for the centre card's warm glow: the clip cut it into a hard-edged box */
 .gsap-live .ctr-track {
   display: flex; width: max-content; margin-top: 0; gap: var(--gap-m);
   padding-inline: calc(50vw - var(--card-w) / 2); padding-block: 24px;
@@ -875,10 +875,16 @@ html.skin-dark {
   background: #111214; color-scheme: dark;
 }
 html.skin-dark body { background: transparent; }
-html.skin-dark body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 220px 220px, radial-gradient(120% 70% at 85% -10%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);
-  opacity: .9; mix-blend-mode: normal; }
+/* the grain is part of the page: it scrolls with the content, so it holds still under the eye
+   (28.9, Liav: a fixed layer under scrolling content shimmered). A little stronger than the first test. */
+html.skin-dark { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 220px 220px, radial-gradient(90% 1400px at 85% 0, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%), #111214; }
 html.skin-dark :is(.dark, .muted-band, .footer, .process, #contact, .logos) { background: transparent; }
+/* seams (28.9, Liav): on one ground nothing may end in a hard edge. The hero's video dissolves into the ground instead of
+   stopping at solid charcoal, and the testimonials' P is not cut by its stage (the band clips itself in .ctr-view). */
+html.skin-dark .hero-media { -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%); mask-image: linear-gradient(to bottom, #000 58%, transparent 100%); }
+html.skin-dark .hero-media::after { background: linear-gradient(to left, rgba(17, 18, 20, .92) 0%, rgba(17, 18, 20, .78) 45%, rgba(17, 18, 20, .35) 100%); }
+@media (max-width: 767px) { html.skin-dark .hero-media::after { background: linear-gradient(to top, rgba(17, 18, 20, .82) 0%, rgba(17, 18, 20, .6) 100%); } }
+html.skin-dark .testimonials .ctr-stage, html.skin-dark .testimonials { overflow: visible; }
 /* header: dark glass once it fills, the light logo everywhere */
 html.skin-dark .header::before, html.skin-dark .header.is-scrolled::before { background: color-mix(in srgb, #16171a 88%, transparent); box-shadow: 0 16px 40px rgba(0, 0, 0, .45), inset 0 0 0 1px rgba(244, 242, 238, .08); }
 html.skin-dark .header .logo-on-dark { opacity: 1 !important; }
