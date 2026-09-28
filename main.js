@@ -175,18 +175,21 @@
     var originals = Array.prototype.slice.call(track.children);
     var copyOf = function (el) { var c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); var im = c.querySelector('img'); if (im) im.alt = ''; return c; };
     if (track2) originals.slice().reverse().forEach(function (el) { track2.appendChild(copyOf(el)); });
-    var fill = function (tr, set) {
+    var fillRow = function (tr, set) {
       var guard = 0;
       while (tr.scrollWidth < window.innerWidth * 1.9 && guard++ < 16) set.forEach(function (el) { tr.appendChild(copyOf(el)); });
     };
     var fillBand = function () {
-      fill(track, originals);
-      if (track2) fill(track2, Array.prototype.slice.call(track2.children));
+      fillRow(track, originals);
+      if (track2) fillRow(track2, Array.prototype.slice.call(track2.children));
       if (window.ScrollTrigger) ScrollTrigger.refresh();
     };
     // measure only after the logos have a width: an image that has not loaded is 0px wide and would be cloned dozens of times
     var imgs = Array.prototype.slice.call(track.querySelectorAll('img'));
-    Promise.all(imgs.map(function (im) { return im.decode ? im.decode().catch(function () {}) : Promise.resolve(); })).then(fillBand);
+    // (load events, not decode(): decode() of an SVG can stay pending forever, and then the band never filled)
+    var loaded = function (im) { return im.complete ? Promise.resolve() : new Promise(function (ok) { im.addEventListener('load', ok, { once: true }); im.addEventListener('error', ok, { once: true }); }); };
+    var timeout = new Promise(function (ok) { setTimeout(ok, 4000); });
+    Promise.race([Promise.all(imgs.map(loaded)), timeout]).then(fillBand);
   }
 
   /* ---------- services: each row opens in place, one at a time, and closes once it has scrolled out of view (Oz, 28.9) ---------- */
