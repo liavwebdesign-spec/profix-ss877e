@@ -26,6 +26,20 @@
   header.addEventListener('focusin', hdUpdate);
   hdUpdate();
 
+  /* a hash can do more than scroll: #for-biz / #for-home filter the services, #svc-* opens that service (menu, doors, other pages) */
+  function routeHash(hash) {
+    var m = /^#for-(biz|home)$/.exec(hash);
+    if (m) { if (window.profixSvc) window.profixSvc.filter(m[1]); return document.getElementById('services'); }
+    var el = document.getElementById(decodeURIComponent(hash.slice(1)));
+    if (el && el.classList.contains('svc-row') && window.profixSvc) window.profixSvc.open(el);
+    return el;
+  }
+  window.addEventListener('load', function () {
+    if (!/^#(for-|svc-)/.test(location.hash)) return;
+    var el = routeHash(location.hash);
+    if (el) setTimeout(function () { window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - innerHeight * .2, behavior: 'instant' }); }, 60);
+  });
+
   /* in-page anchors glide here and not through CSS scroll-behavior, which breaks every ScrollTrigger refresh made mid-page */
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href*="#"]');
@@ -33,9 +47,10 @@
     var u = new URL(a.href, location.href);
     var page = function (p) { return p.replace(/index\.html$/, ''); };
     if (page(u.pathname) !== page(location.pathname) || !u.hash || u.hash === '#') return;
-    var t = document.getElementById(decodeURIComponent(u.hash.slice(1)));
-    if (!t) return;
+    var go = routeHash(u.hash);
+    if (!go) return;
     e.preventDefault();
+    var t = go;
     var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY, behavior: still ? 'auto' : 'smooth' });
     history.pushState(null, '', u.hash);
@@ -193,6 +208,20 @@
     var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (!e.isIntersecting && e.target.classList.contains('is-open')) { keepPlace(function () { setRow(e.target, false); }); refreshSoon(); } });
     }) : null;
+    var svcList = document.querySelector('.svc-list');
+    var filterBtns = Array.prototype.slice.call(document.querySelectorAll('.svc-filter button'));
+    var setFilter = function (v) {
+      if (!svcList) return;
+      svcList.dataset.show = v;
+      filterBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.for === v)); });
+      svcRowsAll.forEach(function (r) { if (v === 'home' && r.dataset.for === 'biz') setRow(r, false); });
+      refreshSoon();
+    };
+    filterBtns.forEach(function (b) { b.addEventListener('click', function () { setFilter(b.dataset.for); }); });
+    window.profixSvc = {
+      filter: setFilter,
+      open: function (row) { if (svcList && svcList.dataset.show === 'home' && row.dataset.for === 'biz') setFilter('all'); svcRowsAll.forEach(function (r) { setRow(r, r === row); }); refreshSoon(); }
+    };
     svcRowsAll.forEach(function (row) {
       if (io) io.observe(row);
       row.addEventListener('click', function (e) {
@@ -201,6 +230,51 @@
         keepPlace(function () { svcRowsAll.forEach(function (r) { if (r !== row) setRow(r, false); }); setRow(row, open); });
         refreshSoon();
       });
+    });
+  }
+
+  /* ---------- quote questionnaire: area, then only its systems, then details (sketch: no backend, lands on thanks.html) ---------- */
+  var qf = document.getElementById('quote-form');
+  if (qf) {
+    var qSteps = Array.prototype.slice.call(qf.querySelectorAll('.q-step'));
+    var qNow = qf.querySelector('.q-now');
+    var show = function (n) {
+      qSteps.forEach(function (s) { s.hidden = +s.dataset.step !== n; });
+      if (qNow) qNow.textContent = 'שלב ' + n;
+      var legend = qSteps[n - 1].querySelector('legend'); if (legend) { legend.tabIndex = -1; legend.focus({ preventScroll: true }); }
+      window.scrollTo({ top: qf.getBoundingClientRect().top + window.scrollY - 140, behavior: 'instant' });
+    };
+    var area = function () { var r = qf.querySelector('input[name="area"]:checked'); return r ? r.value : ''; };
+    var fitSystems = function () {
+      var a = area();
+      qf.querySelectorAll('.q-step[data-step="2"] .q-opt').forEach(function (o) {
+        var fits = (o.dataset.for || '').split(' ').indexOf(a) > -1;
+        o.hidden = !fits; if (!fits) o.querySelector('input').checked = false;
+      });
+    };
+    qf.addEventListener('click', function (e) {
+      var step = e.target.closest('.q-step'); if (!step) return;
+      var n = +step.dataset.step;
+      if (e.target.closest('[data-back]')) { show(n - 1); return; }
+      if (!e.target.closest('[data-next]')) return;
+      if (n === 1) {
+        var err = step.querySelector('.q-err');
+        if (!area()) { err.hidden = false; return; }
+        err.hidden = true; fitSystems();
+      }
+      show(n + 1);
+    });
+    qf.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var ok = true;
+      qf.querySelectorAll('.q-step[data-step="3"] .field').forEach(function (f) {
+        var input = f.querySelector('input'); if (!input || !input.required) return;
+        var bad = !input.value.trim() || (input.type === 'tel' && !/^[0-9+\-\s()]{8,}$/.test(input.value));
+        f.classList.toggle('is-invalid', bad); if (bad) ok = false;
+      });
+      var consent = qf.querySelector('input[name="consent"]');
+      if (consent && !consent.checked) { ok = false; consent.focus(); }
+      if (ok) location.href = 'thanks.html';
     });
   }
 
@@ -330,7 +404,7 @@
 
     /* S2 word fade on the doors heading (first h2 in the page, the rest are created in place below) */
     function fadeHeading(h) {
-      gsap.fromTo(splitWords(h), { opacity: 0.22 }, { opacity: 1, stagger: 0.08, ease: 'none', scrollTrigger: { trigger: h, start: 'top 85%', end: 'top 45%', scrub: 0.8 } });
+      gsap.fromTo(splitWords(h), { opacity: 0.4 }, { opacity: 1, stagger: 0.06, ease: 'none', scrollTrigger: { trigger: h, start: 'top 90%', end: 'top 65%', scrub: 0.6 } });
     }
     var h2s = gsap.utils.toArray('h2[data-split]');
     if (h2s[0]) fadeHeading(h2s[0]);
@@ -419,7 +493,7 @@
       var cards = gsap.utils.toArray('.ctr .quote');
       html.style.setProperty('--header-h', headerH() + 'px');
       var dist = function () { return Math.max(0, ctrTrack.scrollWidth - ctrView.clientWidth); };
-      var fitHeight = function () { ctr.style.height = (innerHeight - headerH() + dist() * 1.1) + 'px'; };
+      var fitHeight = function () { ctr.style.height = (innerHeight - headerH() + dist() * 0.8) + 'px'; };
       fitHeight();
       ScrollTrigger.addEventListener('refreshInit', fitHeight);
       var ctrNow = ctr.querySelector('.ctr-now'), ctrBar = ctr.querySelector('.ctr-rail i'), lastIdx = -1;
