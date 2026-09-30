@@ -657,7 +657,7 @@ html:not(.gsap-live) .orbit-st .orbit-dot, .orbit-st.is-lit .orbit-dot { backgro
   position: sticky; top: var(--header-h, 72px); height: calc(100vh - var(--header-h, 72px));
   display: grid; align-content: center; gap: clamp(32px, 3vw, 64px); overflow: hidden;
 }
-.gsap-live .ctr-view { overflow: hidden; padding-block: 120px; margin-block: -120px; }   /* room for the centre card's warm glow: the clip cut it into a hard-edged box */
+.gsap-live .ctr-view { overflow-x: clip; overflow-y: visible; }   /* clip the band sideways only, so the centre card's glow spills up and down without a box grown over the heading */
 .gsap-live .ctr-track {
   display: flex; width: max-content; margin-top: 0; gap: var(--gap-m);
   padding-inline: calc(50vw - var(--card-w) / 2); padding-block: 24px;
@@ -674,7 +674,8 @@ html:not(.gsap-live) .orbit-st .orbit-dot, .orbit-st.is-lit .orbit-dot { backgro
 .contact-list svg { color: var(--accent); flex: none; }
 .contact-list .brand-wa { width: var(--icon-m); height: var(--icon-m); fill: currentColor; }
 .contact-list a, .contact-list span { transition: color .15s var(--ease); }
-.contact-list a { display: inline-block; padding: 8px 0; margin: -8px 0; }
+.contact-list a { display: inline-block; position: relative; }
+.contact-list a::after { content: ""; position: absolute; inset: -8px 0; }   /* taller hit area without growing the box over the label above */
 .about-copy .micro { max-width: 460px; }
 .contact-list .meta { display: block; margin-bottom: 2px; }
 .contact-list .big { font-size: var(--t-h3); font-weight: 600; letter-spacing: 0.01em; }
