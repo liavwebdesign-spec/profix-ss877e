@@ -89,8 +89,6 @@
   if (board) {
     var tiles = $$(".tile:not(.t-cta)", board), cta = $(".t-cta", board), segBtns = $$(".seg-f button"), count = $("[data-count]");
     var all = tiles.concat(cta ? [cta] : []);
-    var canFlip = function () { return !!window.Flip && !reduced; };
-    if (window.Flip) gsap.registerPlugin(Flip);
     // the board always closes: the CTA tile takes whatever the last row has left (bento-frame.md 1)
     var closeBoard = function () {
       if (!cta) return;
@@ -104,17 +102,32 @@
       var left = (c - units % c) % c;
       cta.style.gridColumn = "span " + (left || c);
     };
+    // the motion of the board (MV:g23, rebuilt 1.10.2026). The new layout is applied at once and is always the truth;
+    // the motion is a layer on top: each tile slides from where it was. The first build used GSAP Flip with absolute
+    // positioning, which lifted the tiles out of the grid, fought the entrance animation and left the board stuck mid-way,
+    // so the filter looked dead. Here nothing can stay stuck: an animation that never runs leaves the right layout.
     var busy = false;
     var flipped = function (change, done) {
       done = done || function () {};
-      if (!canFlip()) { change(); closeBoard(); refreshSoon(); done(); return; }
-      busy = true;
-      var state = Flip.getState(all), h0 = board.offsetHeight;
+      var before = new Map();
+      all.forEach(function (t) { if (!t.classList.contains("is-out")) before.set(t, t.getBoundingClientRect()); });
       change(); closeBoard();
-      var h1 = board.offsetHeight;
-      gsap.fromTo(board, { height: h0 }, { height: h1, duration: 0.55, ease: "power2.inOut", onComplete: function () { gsap.set(board, { clearProps: "height" }); busy = false; refreshSoon(); done(); } });
-      Flip.from(state, { duration: 0.55, ease: "power2.inOut", absolute: true,
-        onEnter: function (els) { return gsap.fromTo(els, { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" }); } });
+      if (reduced || !Element.prototype.animate) { refreshSoon(); done(); return; }
+      busy = true;
+      var anims = [], E = "cubic-bezier(.2,.6,.2,1)";
+      all.forEach(function (t) {
+        if (t.classList.contains("is-out")) return;
+        var b = before.get(t), a = t.getBoundingClientRect();
+        if (!b) { anims.push(t.animate([{ opacity: 0, transform: "scale(.96)" }, { opacity: 1, transform: "none" }], { duration: 420, easing: E })); return; }
+        var dx = b.left - a.left, dy = b.top - a.top, resized = Math.abs(b.width - a.width) > 2 || Math.abs(b.height - a.height) > 2;
+        // a tile that opened or closed changes size: it does not stretch, it rises into its new place
+        if (resized) { anims.push(t.animate([{ opacity: 0.35, transform: "translateY(18px)" }, { opacity: 1, transform: "none" }], { duration: 480, easing: E })); return; }
+        if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+        anims.push(t.animate([{ transform: "translate(" + dx + "px," + dy + "px)" }, { transform: "none" }], { duration: 520, easing: E }));
+      });
+      var finish = function () { if (!busy) return; busy = false; refreshSoon(); done(); };
+      Promise.all(anims.map(function (x) { return x.finished; })).then(finish, finish);
+      setTimeout(finish, 800); // a hidden tab never finishes its animations; the layout is already right
     };
     // closing a tile that is above the screen shrinks the page under the reader: keep what is on screen where it was
     var keepPlace = function (change) {
@@ -133,7 +146,7 @@
         segBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-show") === v)); });
         var n = 0;
         tiles.forEach(function (t) {
-          var out = v === "home" && t.getAttribute("data-for") === "biz";
+          var f = t.getAttribute("data-for"), out = (v === "home" && f === "biz") || (v === "biz" && f === "home");
           if (out && t.classList.contains("is-open")) setTile(t, false);
           t.classList.toggle("is-out", out); if (!out) n++;
         });
@@ -260,6 +273,19 @@
       .to(line, { opacity: 0, duration: 0.05 }, 0.95);
   }
   if (document.readyState === "complete") signature(); else addEventListener("load", signature);
+
+  /* ---------- process: the spine fills with the scroll and each step lights as the fill reaches it ---------- */
+  var axis = $(".axis");
+  if (axis) {
+    var steps = $$(".step", axis);
+    var fillAxis = function () {
+      var r = axis.getBoundingClientRect(), line = innerHeight * 0.6;
+      var p = reduced ? 1 : Math.max(0, Math.min(1, (line - r.top) / r.height));
+      axis.style.setProperty("--p", p.toFixed(3));
+      steps.forEach(function (s) { var n = $(".step-n", s).getBoundingClientRect(); s.classList.toggle("is-lit", reduced || n.top + n.height / 2 < line); });
+    };
+    addEventListener("scroll", function () { requestAnimationFrame(fillAxis); }, { passive: true }); addEventListener("resize", fillAxis); fillAxis();
+  }
 
   /* ---------- testimonials: the arrows move one card; at the ends they rest ---------- */
   var cor = $(".corridor");
