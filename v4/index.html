@@ -10,8 +10,8 @@
 <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/HammerPro-700c.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/GoogleSans-Hebrew.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="v4.css?v=63af12e1">
-<script>document.documentElement.classList.add("js");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("open-anim")</script>
+<link rel="stylesheet" href="v4.css?v=8cc93f4f">
+<script>document.documentElement.classList.add("js");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("open-anim");setTimeout(function(){document.documentElement.classList.add("hero-go")},2500)</script>
 </head>
 <body data-page="index">
 <a class="skip" href="#main">דילוג לתוכן</a>
@@ -50,18 +50,17 @@
     <div class="hero-win" aria-hidden="true">
       <video class="hero-video" muted loop playsinline preload="none" poster="../video/hero-poster.jpg" data-src-desk="../video/hero-1080.mp4" data-src-mob="../video/hero-720.mp4"></video>
     </div>
-    <span class="hero-fade" aria-hidden="true"></span>
     <span class="hero-slot" aria-hidden="true"></span>
     <div class="hero-copy" data-cta-origin>
-      <p class="kicker hero-k rv">פרופיקס | פתרונות מחשוב ותקשורת</p>
-      <h1 id="hero-h"><span class="ln"><span>מחשוב, תקשורת</span></span><span class="ln"><span>ומתח נמוך.</span></span><span class="h1-sub rv">הכל <em class="spice">במקום אחד</em>, מהתכנון ועד התמיכה.</span></h1>
-      <p class="lead rv">אנחנו מתכננים, מקימים ומתחזקים את מערכות המחשוב והתקשורת של העסק או הבית: רשתות, מצלמות, אינטרקום ובית חכם.<span class="lead-more"> המערכות מתוכננות יחד, ויש כתובת מקצועית אחת שמלווה אתכם לאורך הדרך.</span></p>
-      <div class="ctas rv">
+      <p class="kicker hero-k rv" style="--i:0">פרופיקס | פתרונות מחשוב ותקשורת</p>
+      <h1 id="hero-h"><span class="ln"><span style="--i:0">מחשוב, תקשורת</span></span><span class="ln"><span style="--i:1">ומתח נמוך.</span></span><span class="h1-sub rv" style="--i:1">הכל <em class="spice">במקום אחד</em>, מהתכנון ועד התמיכה.</span></h1>
+      <p class="lead rv" style="--i:2">אנחנו מתכננים, מקימים ומתחזקים את מערכות המחשוב והתקשורת של העסק או הבית: רשתות, מצלמות, אינטרקום ובית חכם.<span class="lead-more"> המערכות מתוכננות יחד, ויש כתובת מקצועית אחת שמלווה אתכם לאורך הדרך.</span></p>
+      <div class="ctas rv" style="--i:3">
         <a class="btn btn-primary btn-l" href="../quote.html" data-quote>לקבלת הצעת מחיר<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
         <a class="btn btn-ghost btn-l" href="#services">לצפייה בשירותים</a>
       </div>
     </div>
-    <nav class="hero-route rv" aria-label="פתרונות לפי סוג לקוח">
+    <nav class="hero-route rv" style="--i:4" aria-label="פתרונות לפי סוג לקוח">
       <span class="hr-k">מחפשים פתרון?</span>
       <a href="#services" data-route="biz"><span>לעסק</span><svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
       <a href="#services" data-route="home"><span>לבית</span><svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
@@ -367,7 +366,7 @@
 </div>
 <script src="../vendor/gsap.min.js" defer></script>
 <script src="../vendor/ScrollTrigger.min.js" defer></script>
-<script src="a11y.js?v=63af12e1" defer></script>
-<script src="v4.js?v=63af12e1" defer></script>
+<script src="a11y.js?v=8cc93f4f" defer></script>
+<script src="v4.js?v=8cc93f4f" defer></script>
 </body>
 </html>

@@ -23,9 +23,8 @@
   $$("[data-wa]").forEach(function (a) { a.href = "https://wa.me/972546393242?text=" + encodeURIComponent("היי, הגעתי מהאתר של פרופיקס ואשמח לשמוע פרטים"); });
 
   /* ---------- the opening: h1 lines rise out of their cut, then the rest; reveal for everything else ---------- */
-  $$(".hero .ln > span").forEach(function (el, i) { el.style.setProperty("--i", i); });
   // once an entrance has played it lets go, or its fill would override the opacity the signature writes on scroll
-  $$(".hero .rv").forEach(function (el, i) { el.style.setProperty("--i", i); el.addEventListener("animationend", function () { el.style.animation = "none"; }, { once: true }); });
+  $$(".hero .rv").forEach(function (el) { el.addEventListener("animationend", function () { el.style.animation = "none"; }, { once: true }); });
   var rvs = $$(".reveal");
   if (reduced || !("IntersectionObserver" in window)) rvs.forEach(function (el) { el.classList.add("is-in"); });
   else {
@@ -138,7 +137,8 @@
       var g = geo, e = smooth(p);
       var s = g.s0 * Math.pow(g.s1 / g.s0, p);
       win.style.clipPath = pathAt(g.f0x + (g.cx - g.f0x) * e, g.f0y + (g.cy - g.f0y) * e, s);
-      hero.style.setProperty("--fo", Math.max(0, (p - 0.55) / 0.45).toFixed(3));
+      var fv = (Math.round(Math.max(0, (p - 0.55) / 0.45) * 26)) + "%";
+      if (win._fv !== fv) { win._fv = fv; win.style.setProperty("--fade", fv); }
       if (!reduced) {
         var t = Math.min(1, p / (desk() ? 0.32 : 0.28));
         if (copy) { copy.style.opacity = String(1 - t); copy.style.transform = "translateY(" + (-60 * t) + "px)"; }
@@ -146,18 +146,19 @@
         if (vt) vt.style.opacity = String(1 - Math.min(1, p / 0.2));
       }
     };
-    var state = { p: 0 };
+    // "heroState", not "state": the form below declares var state in the same scope, and the P stopped growing (4.10)
+    var heroState = { p: 0 };
     var resetCopy = function () { [copy, route, vt].forEach(function (el) { if (el) { el.style.opacity = ""; el.style.transform = ""; } }); };
-    measure(); render(0); hero.classList.add("p-live");
+    measure(); render(0); hero.classList.add("p-live"); html.classList.add("hero-go");
     if (hasGsap() && !reduced) {
       gsap.matchMedia().add({ d: "(min-width: 1024px)", m: "(max-width: 1023px)" }, function (ctx) {
-        state.p = 0;
+        heroState.p = 0;
         // desktop: a short pin, one screen (the "no scene stops the scroll for more than a screen and a half" rule)
         // phone and tablet: no pin, the window grows while the hero scrolls away
         var st = ctx.conditions.d
-          ? { trigger: hero, start: "top top", end: "+=100%", pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: function () { measure(); render(state.p); } }
-          : { trigger: hero, start: "top top", end: "bottom top", scrub: 0.4, invalidateOnRefresh: true, onRefresh: function () { measure(); render(state.p); } };
-        gsap.to(state, { p: 1, ease: "none", scrollTrigger: st, onUpdate: function () { render(state.p); } });
+          ? { trigger: hero, start: "top top", end: "+=100%", pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: function () { measure(); render(heroState.p); } }
+          : { trigger: hero, start: "top top", end: "bottom top", scrub: 0.4, invalidateOnRefresh: true, onRefresh: function () { measure(); render(heroState.p); } };
+        gsap.to(heroState, { p: 1, ease: "none", scrollTrigger: st, onUpdate: function () { render(heroState.p); } });
         return function () { resetCopy(); };
       });
     } else {

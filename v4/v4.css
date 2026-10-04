@@ -200,10 +200,7 @@ main:focus { outline: 0; }
   padding: calc(var(--pill-top) + var(--pill-h) + clamp(12px, 3vh, 40px)) var(--gutter) clamp(18px, 3.4vh, 40px); }
 /* the window: the video fills the hero, and the P clips it (JS writes the path). Without JS the video simply fills the hero */
 .hero-win { position: absolute; inset: 0; overflow: hidden;
-}
-/* the video melts into the ground at the end of the signature: an overlay whose opacity changes (composited), not a
-   mask redrawn every frame */
-.hero-fade { position: absolute; inset: auto 0 0; height: 30%; background: linear-gradient(to bottom, rgba(9, 10, 12, 0), var(--bg)); opacity: var(--fo, 0); will-change: opacity; pointer-events: none; }
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fade, 0%)), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fade, 0%)), transparent); }
 .hero-video { width: 100%; height: 100%; object-fit: cover; filter: brightness(.86) saturate(.95); }
 .hero-win::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(17, 18, 20, .25), rgba(17, 18, 20, .82) 70%); transition: opacity .6s var(--ease); }
 .js .hero-win { opacity: 0; animation: win-failsafe 0s linear 3s forwards; }
@@ -231,8 +228,11 @@ main:focus { outline: 0; }
 @media (hover: hover) and (pointer: fine) { .video-toggle:hover { background: rgba(243, 241, 236, .2); } }
 @media (max-height: 820px) and (min-width: 1024px) { .lead-more { display: none; } }
 /* the opening: the h1 lines rise out of their cut, then the rest (motion.md 2) */
-.open-anim .hero .ln > span { animation: rise 1.1s var(--ease-out) both; animation-delay: calc(.2s + var(--i, 0) * .12s); }
-.open-anim .hero .rv { animation: fade-up .9s var(--ease-out) both; animation-delay: calc(.55s + var(--i, 0) * .09s); }
+/* paused until the script has measured the P window (hero-go), so the words and the window arrive together; a head
+   script lets it go after 2.5s whatever happens */
+.open-anim .hero .ln > span { animation: rise 1.1s var(--ease-out) both; animation-delay: calc(.2s + var(--i, 0) * .12s); animation-play-state: paused; }
+.open-anim .hero .rv { animation: fade-up .9s var(--ease-out) both; animation-delay: calc(.55s + var(--i, 0) * .09s); animation-play-state: paused; }
+.hero-go .hero .ln > span, .hero-go .hero .rv { animation-play-state: running; }
 @keyframes rise { from { transform: translateY(108%); } to { transform: none; } }
 @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 @media (max-width: 1023px) {
