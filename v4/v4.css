@@ -668,3 +668,13 @@ html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animati
   .marq[aria-hidden="true"] { display: none; }
 }
 @media (forced-colors: active) { .btn, .svc-panel, .svc-cta { border: 1px solid CanvasText; } }
+
+/* ---------- orange halos (Liav 4.10: "loved the soft gradient on quote.html, add more like it") ----------
+   The same 8% of the logo's orange as quote.html, as an ellipse that fades out inside its own box (closest-side), so it
+   never meets a section edge and never makes a seam. Two on the page, at the decision moments (dark-luxury: at most two) */
+.process::before, .contact::before { content: ""; position: absolute; z-index: -1; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(242, 122, 43, .08), rgba(242, 122, 43, .03) 55%, transparent); }
+.process::before { inset: 0 -10% 0 -10%; }
+.contact { position: relative; isolation: isolate; }
+.contact::before { inset: -20% -15% -10% 30%; }
+.process { isolation: isolate; }
