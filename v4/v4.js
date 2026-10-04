@@ -192,87 +192,39 @@
     Promise.race([Promise.all($$("img", t1).map(loaded)), new Promise(function (ok) { setTimeout(ok, 4000); })]).then(run);
   }
 
-  /* ---------- services (MV:c11 + MV:g150 without its pin) ----------
-     Desktop: the row that crosses the line at 45% of the screen lights up, and its photo and details open in the sticky
-     panel. Nothing in the list changes height while scrolling, so nothing jumps. A click brings the row to that line.
-     Phone and tablet: the row opens in place, one at a time (Oz, 28.9). */
+  /* ---------- services (MV:g150 as an accordion, Liav 4.10): a row opens in place on a click, one at a time.
+     Nothing opens by itself while scrolling (the sticky panel that did was turned down) ---------- */
   var split = $(".svc-split"), svc = null;
   if (split) {
     var rows = $$(".svc-row", split), groups = $$(".svc-group", split), seg = $$(".seg button"), count = $("[data-count]");
-    var panel = $(".svc-panel"), imgs = $$(".sp-img", panel), spCopy = $(".sp-copy", panel);
-    var spTag = $(".sp-tag", panel), spT = $(".sp-t", panel), spMore = $(".sp-more", panel), spLink = $(".sp-link", panel);
-    var active = null, mode = null;
-    var shown = function () { return rows.filter(function (r) { return r.offsetParent !== null; }); };
-    var setActive = function (row) {
-      if (!row || row === active) return;
-      if (active) active.classList.remove("on");
-      active = row; row.classList.add("on");
-      rows.forEach(function (r) { $(".svc-q", r).setAttribute("aria-pressed", String(r === row)); });
-      var id = row.id.replace("svc-", ""), img = imgs.filter(function (i) { return i.getAttribute("data-id") === id; })[0];
-      imgs.forEach(function (i) { i.classList.remove("was"); if (i.classList.contains("on")) { i.classList.remove("on"); i.classList.add("was"); } });
-      if (img) { if (img.loading === "lazy") img.loading = "eager"; img.classList.add("on"); }
-      var more = $(".svc-more", row);
-      spCopy.classList.add("swap");
-      setTimeout(function () {
-        spTag.textContent = $(".svc-tag", more).textContent;
-        spT.textContent = $(".svc-t", row).textContent;
-        spMore.textContent = $(".svc-more p:not(.svc-tag)", row).textContent;
-        spLink.href = $(".link-arrow", more).getAttribute("href");
-        spCopy.classList.remove("swap");
-        // the new text changes the height above the link: its arrow goes back on a whole pixel
-        if (window.__snapIcons) setTimeout(window.__snapIcons, 500);
-      }, reduced ? 0 : 130);
-    };
-    // the panel's photos load before they are needed: the next two after the active one
-    var lockUntil = 0;
-    var pick = function () {
-      if (mode !== "desk" || Date.now() < lockUntil) return;
-      var list = shown(); if (!list.length) return;
-      var line = innerHeight * 0.45, cur = list[0];
-      list.forEach(function (r) { if (r.getBoundingClientRect().top < line) cur = r; });
-      setActive(cur);
-    };
-    // a click brings the row to the line; the rows the scroll passes on the way do not light up
-    var focusRow = function (r) { setActive(r); lockUntil = Date.now() + (reduced ? 0 : 1100); goTo(r, innerHeight * 0.45 - 8); };
     var openRow = function (row, open) {
       var q = $(".svc-q", row), more = $(".svc-more", row);
-      row.classList.toggle("is-open", open); q.setAttribute("aria-expanded", String(open)); more.hidden = !open;
+      clearTimeout(row._t);
+      q.setAttribute("aria-expanded", String(open));
+      if (open) {
+        more.hidden = false; void more.offsetHeight; row.classList.add("is-open");
+        var im = $("img", more); if (im && im.loading === "lazy") im.loading = "eager";
+      } else {
+        row.classList.remove("is-open");
+        row._t = setTimeout(function () { if (!row.classList.contains("is-open")) more.hidden = true; }, reduced ? 0 : 520);
+      }
     };
-    var setMode = function () {
-      var m = desk() ? "desk" : "mob";
-      if (m === mode) return;
-      mode = m;
-      rows.forEach(function (r) {
-        r.classList.remove("on", "is-open"); $(".svc-more", r).hidden = true;
-        // desktop: a row is a toggle that shows its service in the panel (aria-pressed); phone: it expands in place
-        var q = $(".svc-q", r);
-        if (m === "desk") { q.removeAttribute("aria-expanded"); q.setAttribute("aria-pressed", "false"); q.setAttribute("aria-controls", "svc-panel"); }
-        else { q.removeAttribute("aria-pressed"); q.setAttribute("aria-expanded", "false"); q.setAttribute("aria-controls", r.id + "-more"); }
-      });
-      active = null;
-      if (m === "desk") pick();
+    var toggle = function (r, open, scroll) {
+      rows.forEach(function (o) { if (o !== r && o.classList.contains("is-open")) openRow(o, false); });
+      openRow(r, open);
+      // the rows above may have closed: once the motion settles, the opened row is brought into view when it is off it
+      if (open && scroll) setTimeout(function () { if (window.ScrollTrigger) ScrollTrigger.refresh(); var b = r.getBoundingClientRect(); if (b.top < 80 || b.top > innerHeight * 0.55) goTo(r, 96); }, reduced ? 0 : 540);
+      else setTimeout(refreshSoon, 560);
     };
-    rows.forEach(function (r) {
-      $(".svc-q", r).addEventListener("click", function () {
-        if (mode === "desk") { focusRow(r); return; }
-        var open = !r.classList.contains("is-open");
-        rows.forEach(function (o) { if (o !== r && o.classList.contains("is-open")) openRow(o, false); });
-        openRow(r, open);
-        if (window.ScrollTrigger) ScrollTrigger.refresh(); // before any scroll, never in the middle of one
-        if (open) setTimeout(function () { var b = r.getBoundingClientRect(); if (b.top < 70 || b.top > innerHeight * 0.6) goTo(r, 80); }, 60);
-      });
-    });
-    // now: the caller scrolls next, so the triggers are measured at once (a refresh in the middle of a smooth scroll
-    // stopped it on the way, and the hero's "for business" landed 400px down the page instead of on the services)
+    rows.forEach(function (r) { $(".svc-q", r).addEventListener("click", function () { toggle(r, !r.classList.contains("is-open"), true); }); });
     var setShow = function (v, now) {
       split.setAttribute("data-show", v);
       seg.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-show") === v)); });
       groups.forEach(function (g) { g.hidden = !$$(".svc-row", g).some(function (r) { var f = r.getAttribute("data-for"); return v === "all" || f === "both" || f === v; }); });
-      var n = shown().length;
+      var n = rows.filter(function (r) { return r.offsetParent !== null; }).length;
       if (count) count.textContent = "מוצגים " + n + " שירותים";
-      if (active && active.offsetParent === null) { active.classList.remove("on"); active = null; }
+      // now: the caller scrolls next, so the triggers are measured at once (a refresh in the middle of a smooth scroll stops it)
       if (now && window.ScrollTrigger) ScrollTrigger.refresh(); else refreshSoon();
-      pick();
     };
     seg.forEach(function (b) { b.addEventListener("click", function () { setShow(b.getAttribute("data-show")); }); });
     svc = {
@@ -280,19 +232,12 @@
       open: function (id) {
         var r = $("#svc-" + id); if (!r) return;
         if (r.offsetParent === null) setShow("all", true);
-        if (mode === "desk") focusRow(r);
-        else { rows.forEach(function (o) { if (o !== r) openRow(o, false); }); openRow(r, true); goTo(r, 80); }
+        rows.forEach(function (o) { if (o !== r) { o.classList.remove("is-open"); $(".svc-more", o).hidden = true; $(".svc-q", o).setAttribute("aria-expanded", "false"); } });
+        openRow(r, true);
+        if (window.ScrollTrigger) ScrollTrigger.refresh();
+        goTo(r, 96);
       }
     };
-    setMode();
-    var praf = 0;
-    addEventListener("scroll", function () { if (!praf) praf = requestAnimationFrame(function () { praf = 0; pick(); }); }, { passive: true });
-    addEventListener("resize", function () { setMode(); pick(); });
-    // the photos of the panel start loading once the section is near
-    if ("IntersectionObserver" in window) {
-      var pio = new IntersectionObserver(function (es) { if (es[0].isIntersecting && desk()) { imgs.forEach(function (i) { i.loading = "eager"; }); pio.disconnect(); } }, { rootMargin: "800px 0px" });
-      pio.observe(split);
-    }
   }
 
   /* ---------- routing: the hero line, the menu and the footer arrange the services, then go there ---------- */
@@ -346,21 +291,32 @@
     place(); setTimeout(place, 300);
   }
 
-  /* ---------- process (MV:g143): four bands in one sticky screen; the scroll hands the height from band to band.
-     Without GSAP, and with reduced motion, the bands are equal and every text is shown ---------- */
+  /* ---------- process (MV:g22): the ring fills with the scroll through a sticky stage; no GSAP needed, the scroll is
+     read directly. Reduced motion and no JS: the ring is full and every step is listed (CSS) ---------- */
   var proc = $(".process");
-  if (proc && hasGsap() && !reduced) {
-    var bands = $$(".band", proc);
-    gsap.matchMedia().add("(min-width: 0px)", function () {
-      proc.classList.add("gsap-live");
-      gsap.set(bands, { flexGrow: 1 }); gsap.set(bands[0], { flexGrow: 5 });
-      bands[0].classList.add("on");
-      var tl = gsap.timeline({ scrollTrigger: { trigger: proc, start: "top top", end: "bottom bottom", scrub: 0.6, invalidateOnRefresh: true,
-        onUpdate: function (st) { var k = Math.min(bands.length - 1, Math.floor(st.progress * bands.length * 0.999 + 0.12)); bands.forEach(function (b, i) { b.classList.toggle("on", i === k); }); } } });
-      for (var i = 1; i < bands.length; i++) tl.to(bands[i - 1], { flexGrow: 1, duration: 1, ease: "power2.inOut" }, i - 1 + 0.2).to(bands[i], { flexGrow: 5, duration: 1, ease: "power2.inOut" }, i - 1 + 0.2);
-      tl.to({}, { duration: 0.3 });
-      return function () { proc.classList.remove("gsap-live"); bands.forEach(function (b) { b.classList.remove("on"); }); };
-    });
+  if (proc && !reduced) {
+    var pSteps = $$(".pc-step", proc), dots = $$(".pc-dot", proc), nows = $$(".pc-now", proc), pcLine = $(".pc-line", proc), pcRing = $(".pc-ring", proc);
+    // names of their own: the form below declares "ring" and "line" in the same scope (var), and took this ring over
+    var N = pSteps.length, cur = -1;
+    proc.classList.add("is-live");
+    var paint = function () {
+      var r = proc.getBoundingClientRect(), run = proc.offsetHeight - innerHeight;
+      var p = run > 0 ? Math.min(1, Math.max(0, -r.top / run)) : 1;
+      // the ring closes a little before the end of the runway, so the last step is read whole
+      var f = Math.min(1, p / 0.88);
+      pcRing.style.setProperty("--p", f.toFixed(4));
+      dots.forEach(function (d, i) { d.classList.toggle("lit", f >= i / N - 0.001); });
+      var k = Math.min(N - 1, Math.floor(f * N + 0.0001));
+      if (k !== cur) {
+        cur = k;
+        pSteps.forEach(function (s, i) { s.classList.toggle("on", i === k); });
+        nows.forEach(function (s, i) { s.classList.toggle("on", i === k); });
+        if (pcLine) pcLine.textContent = $("p", pSteps[k]).textContent;
+      }
+    };
+    var praf2 = 0;
+    addEventListener("scroll", function () { if (!praf2) praf2 = requestAnimationFrame(function () { praf2 = 0; paint(); }); }, { passive: true });
+    addEventListener("resize", paint); paint();
   }
 
   /* ---------- why (MV:lm4): a card dims while the next one slides over it ---------- */
@@ -594,6 +550,8 @@
     });
   };
   window.__snapIcons = snapIcons;
+  // an entrance that ends moves the icons in it: they go back on the grid once it has
+  document.addEventListener("transitionend", function (e) { if (e.target.classList && e.target.classList.contains("reveal")) { clearTimeout(snapIcons.r); snapIcons.r = setTimeout(snapIcons, 120); } });
   var snapSoon = function () { clearTimeout(snapSoon.t); snapSoon.t = setTimeout(snapIcons, 200); };
   addEventListener("load", snapSoon); addEventListener("resize", snapSoon);
   addEventListener("scroll", function () { clearTimeout(snapSoon.s); snapSoon.s = setTimeout(snapIcons, 1000); }, { passive: true }); setTimeout(snapIcons, 2200); // after the opening entrances

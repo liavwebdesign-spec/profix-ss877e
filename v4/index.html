@@ -10,7 +10,7 @@
 <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/HammerPro-700c.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/GoogleSans-Hebrew.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="v4.css?v=4868d9eb">
+<link rel="stylesheet" href="v4.css?v=4c54dd12">
 <script>document.documentElement.classList.add("js");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("open-anim")</script>
 </head>
 <body data-page="index">
@@ -85,9 +85,8 @@
   <div class="marq" data-marq="-1" aria-hidden="true"><div class="marq-track"></div></div>
 </section>
 
-<!-- ============ 01 SERVICES (MV:c11): one big row per service and a sticky photo panel. The row at the middle of the
-     screen lights up and its details open in the panel (MV:g150, without the pin). On a phone a row opens in place. ============ -->
-<section class="section svc" id="services" data-comp="c11">
+<!-- ============ 01 SERVICES (MV:g150 as an accordion, Liav 4.10): one list in two groups; a row opens in place with a wide photo and the details ============ -->
+<section class="section svc" id="services" data-comp="c08">
   <header class="sec-head">
     <p class="kicker"><span class="idx">01</span>שירותים</p>
     <h2>מה אנחנו עושים</h2>
@@ -100,156 +99,99 @@
       <div class="svc-group">
         <h3 class="svc-gh">מחשוב ו-IT לעסקים</h3>
         <ol class="svc-list">
-        <li class="svc-row" id="svc-it" data-for="biz" data-img="svc-it-office">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-it-more"><span class="svc-n">01</span><span class="svc-t">תמיכת IT שוטפת</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">תמיכת מחשוב, ניהול ותחזוקה, כדי שסביבת העבודה תישאר יציבה.</p>
-          <div class="svc-more" id="svc-it-more" hidden><div>
+        <li class="svc-row" id="svc-it" data-for="biz">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-it-more"><span class="svc-n" aria-hidden="true">01</span><span class="svc-t">תמיכת IT שוטפת</span><span class="svc-s">תמיכת מחשוב, ניהול ותחזוקה, כדי שסביבת העבודה תישאר יציבה.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-it-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לעסק</p><p>טיפול בתקלות, התקנות ועדכונים, ניהול משתמשים והרשאות, ומעקב שוטף אחרי המחשבים והרשת. כשמשהו לא עובד, יש כתובת אחת שמכירה את הסביבה שלכם ויודעת מאיפה להתחיל.</p><a class="link-arrow" href="../quote.html?svc=it" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-it-office.webp" width="1400" height="934" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לעסק</p>
-            <p>טיפול בתקלות, התקנות ועדכונים, ניהול משתמשים והרשאות, ומעקב שוטף אחרי המחשבים והרשת. כשמשהו לא עובד, יש כתובת אחת שמכירה את הסביבה שלכם ויודעת מאיפה להתחיל.</p>
-            <a class="link-arrow" href="../quote.html?svc=it" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
-        <li class="svc-row" id="svc-security" data-for="biz" data-img="svc-security-backup">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-security-more"><span class="svc-n">02</span><span class="svc-t">אבטחת מידע, גיבוי ושחזור</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">הגנה על המחשבים והמידע, גיבוי מסודר, ויכולת לחזור לעבוד מהר אחרי תקלה.</p>
-          <div class="svc-more" id="svc-security-more" hidden><div>
+        <li class="svc-row" id="svc-security" data-for="biz">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-security-more"><span class="svc-n" aria-hidden="true">02</span><span class="svc-t">אבטחת מידע, גיבוי ושחזור</span><span class="svc-s">הגנה על המחשבים והמידע, גיבוי מסודר, ויכולת לחזור לעבוד מהר אחרי תקלה.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-security-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לעסק</p><p>שלושה דברים שעובדים יחד: הגנה על המחשבים והרשאות גישה נכונות, גיבוי קבוע של הנתונים, גם בענן, ובדיקה שאפשר באמת לשחזר מהגיבוי כשצריך.</p><a class="link-arrow" href="../quote.html?svc=security" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-security-backup.webp" width="1600" height="993" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לעסק</p>
-            <p>שלושה דברים שעובדים יחד: הגנה על המחשבים והרשאות גישה נכונות, גיבוי קבוע של הנתונים, גם בענן, ובדיקה שאפשר באמת לשחזר מהגיבוי כשצריך.</p>
-            <a class="link-arrow" href="../quote.html?svc=security" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
-        <li class="svc-row" id="svc-equipment" data-for="biz" data-img="svc-equipment">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-equipment-more"><span class="svc-n">03</span><span class="svc-t">אספקת ציוד מחשוב ותקשורת</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">מחשבים, מסכים, סוויצ'ים ונתבים, מותאמים לעבודה שלכם ומותקנים מוכנים לשימוש.</p>
-          <div class="svc-more" id="svc-equipment-more" hidden><div>
+        <li class="svc-row" id="svc-equipment" data-for="biz">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-equipment-more"><span class="svc-n" aria-hidden="true">03</span><span class="svc-t">אספקת ציוד מחשוב ותקשורת</span><span class="svc-s">מחשבים, מסכים, סוויצ'ים ונתבים, מותאמים לעבודה שלכם ומותקנים מוכנים לשימוש.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-equipment-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לעסק</p><p>הציוד נבחר לפי אופי העבודה, מספר המשתמשים והתקציב. הוא מגיע מוגדר ומחובר לרשת, כך שאפשר להתחיל לעבוד מיד.</p><a class="link-arrow" href="../quote.html?svc=equipment" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-equipment.webp" width="1600" height="1067" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לעסק</p>
-            <p>הציוד נבחר לפי אופי העבודה, מספר המשתמשים והתקציב. הוא מגיע מוגדר ומחובר לרשת, כך שאפשר להתחיל לעבוד מיד.</p>
-            <a class="link-arrow" href="../quote.html?svc=equipment" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
-        <li class="svc-row" id="svc-lab" data-for="biz" data-img="svc-it-support">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-lab-more"><span class="svc-n">04</span><span class="svc-t">מעבדה לתיקון מחשבים</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">תיקון מחשבים ניידים ונייחים במעבדה: אבחון, החלפת רכיבים ושדרוגים.</p>
-          <div class="svc-more" id="svc-lab-more" hidden><div>
+        <li class="svc-row" id="svc-lab" data-for="biz">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-lab-more"><span class="svc-n" aria-hidden="true">04</span><span class="svc-t">מעבדה לתיקון מחשבים</span><span class="svc-s">תיקון מחשבים ניידים ונייחים במעבדה: אבחון, החלפת רכיבים ושדרוגים.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-lab-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לעסק</p><p>מחשב שלא עולה, איטי או שצריך שדרוג: מאבחנים את הבעיה, מסבירים מה משתלם לתקן, ומחזירים אותו מוכן לעבודה.</p><a class="link-arrow" href="../quote.html?svc=lab" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-it-support.webp" width="1600" height="1067" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לעסק</p>
-            <p>מחשב שלא עולה, איטי או שצריך שדרוג: מאבחנים את הבעיה, מסבירים מה משתלם לתקן, ומחזירים אותו מוכן לעבודה.</p>
-            <a class="link-arrow" href="../quote.html?svc=lab" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
-        <li class="svc-row" id="svc-cloud" data-for="biz" data-img="svc-cloud">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-cloud-more"><span class="svc-n">05</span><span class="svc-t">ענן, Microsoft 365 ו-Google Workspace</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">מיילים, קבצים ושיתוף שעובדים מכל מקום, מסודרים נכון מהיום הראשון.</p>
-          <div class="svc-more" id="svc-cloud-more" hidden><div>
+        <li class="svc-row" id="svc-cloud" data-for="biz">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-cloud-more"><span class="svc-n" aria-hidden="true">05</span><span class="svc-t">ענן, Microsoft 365 ו-Google Workspace</span><span class="svc-s">מיילים, קבצים ושיתוף שעובדים מכל מקום, מסודרים נכון מהיום הראשון.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-cloud-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לעסק</p><p>הקמה או מעבר של מיילים, קבצים ויומנים, הגדרת משתמשים והרשאות, ושיתוף מסודר בין העובדים. וגם אם הכל כבר קיים, אפשר לעשות בו סדר.</p><a class="link-arrow" href="../quote.html?svc=cloud" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-cloud.webp" width="1600" height="1067" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לעסק</p>
-            <p>הקמה או מעבר של מיילים, קבצים ויומנים, הגדרת משתמשים והרשאות, ושיתוף מסודר בין העובדים. וגם אם הכל כבר קיים, אפשר לעשות בו סדר.</p>
-            <a class="link-arrow" href="../quote.html?svc=cloud" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
         </ol>
       </div>
       <div class="svc-group">
         <h3 class="svc-gh">תקשורת ומתח נמוך</h3>
         <ol class="svc-list">
-        <li class="svc-row" id="svc-network" data-for="both" data-img="svc-network-points">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-network-more"><span class="svc-n">06</span><span class="svc-t">נקודות רשת</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">חיבור קווי ישיר, יציב ומהיר, בדיוק במקומות שבהם הוא נחוץ.</p>
-          <div class="svc-more" id="svc-network-more" hidden><div>
+        <li class="svc-row" id="svc-network" data-for="both">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-network-more"><span class="svc-n" aria-hidden="true">06</span><span class="svc-t">נקודות רשת</span><span class="svc-s">חיבור קווי ישיר, יציב ומהיר, בדיוק במקומות שבהם הוא נחוץ.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-network-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לעסק ולבית</p><p>נקודת רשת נותנת חיבור יציב ומהיר יותר מ-Wi-Fi, ומתאימה למחשבים, לטלוויזיות, למצלמות ולנקודות גישה. המיקומים מתוכננים לפי השימוש, והחיווט מתרכז בארון התקשורת.</p><a class="link-arrow" href="../quote.html?svc=network" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-network-points.webp" width="1200" height="1600" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לעסק ולבית</p>
-            <p>נקודת רשת נותנת חיבור יציב ומהיר יותר מ-Wi-Fi, ומתאימה למחשבים, לטלוויזיות, למצלמות ולנקודות גישה. המיקומים מתוכננים לפי השימוש, והחיווט מתרכז בארון התקשורת.</p>
-            <a class="link-arrow" href="../quote.html?svc=network" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
-        <li class="svc-row" id="svc-wifi" data-for="both" data-img="svc-wifi">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-wifi-more"><span class="svc-n">07</span><span class="svc-t">פריסת Wi-Fi</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">כיסוי אלחוטי שמתוכנן לפי המבנה, תנאי השטח ומספר המשתמשים, בבית או בעסק.</p>
-          <div class="svc-more" id="svc-wifi-more" hidden><div>
+        <li class="svc-row" id="svc-wifi" data-for="both">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-wifi-more"><span class="svc-n" aria-hidden="true">07</span><span class="svc-t">פריסת Wi-Fi</span><span class="svc-s">כיסוי אלחוטי שמתוכנן לפי המבנה, תנאי השטח ומספר המשתמשים, בבית או בעסק.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-wifi-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לעסק ולבית</p><p>בודקים את המבנה ואת האזורים הבעייתיים, ומציבים נקודות גישה שעובדות יחד כרשת אחת. כך עוברים בין חדרים וקומות בלי לחפש רשת מחדש.</p><a class="link-arrow" href="../quote.html?svc=wifi" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-wifi.webp" width="1600" height="1067" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לעסק ולבית</p>
-            <p>בודקים את המבנה ואת האזורים הבעייתיים, ומציבים נקודות גישה שעובדות יחד כרשת אחת. כך עוברים בין חדרים וקומות בלי לחפש רשת מחדש.</p>
-            <a class="link-arrow" href="../quote.html?svc=wifi" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
-        <li class="svc-row" id="svc-cameras" data-for="both" data-img="svc-cameras">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-cameras-more"><span class="svc-n">08</span><span class="svc-t">מצלמות אבטחה ומערכות אזעקה</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">לראות מה קורה בעסק או בבית, גם כשאתם לא שם.</p>
-          <div class="svc-more" id="svc-cameras-more" hidden><div>
+        <li class="svc-row" id="svc-cameras" data-for="both">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-cameras-more"><span class="svc-n" aria-hidden="true">08</span><span class="svc-t">מצלמות אבטחה ומערכות אזעקה</span><span class="svc-s">לראות מה קורה בעסק או בבית, גם כשאתם לא שם.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-cameras-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לעסק ולבית</p><p>מיקומי המצלמות מתוכננים לפי מה שחשוב לראות, וצופים בהן גם מהטלפון. מערכת האזעקה משתלבת באותה תשתית.</p><a class="link-arrow" href="../quote.html?svc=cameras" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-cameras.webp" width="1600" height="1131" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לעסק ולבית</p>
-            <p>מיקומי המצלמות מתוכננים לפי מה שחשוב לראות, וצופים בהן גם מהטלפון. מערכת האזעקה משתלבת באותה תשתית.</p>
-            <a class="link-arrow" href="../quote.html?svc=cameras" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
-        <li class="svc-row" id="svc-intercom" data-for="both" data-img="svc-intercom">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-intercom-more"><span class="svc-n">09</span><span class="svc-t">אינטרקום ובקרת כניסה</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">לדעת מי נמצא בחוץ ומי מצלצל, ולהחליט מי נכנס ומתי.</p>
-          <div class="svc-more" id="svc-intercom-more" hidden><div>
+        <li class="svc-row" id="svc-intercom" data-for="both">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-intercom-more"><span class="svc-n" aria-hidden="true">09</span><span class="svc-t">אינטרקום ובקרת כניסה</span><span class="svc-s">לדעת מי נמצא בחוץ ומי מצלצל, ולהחליט מי נכנס ומתי.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-intercom-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לעסק ולבית</p><p>אינטרקום עם מסך, חיבור לטלפון לפי הצורך, ובקרת כניסה לפי משתמשים ושעות. לבית פרטי, לבניין ולמשרד.</p><a class="link-arrow" href="../quote.html?svc=intercom" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-intercom.webp" width="1067" height="1600" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לעסק ולבית</p>
-            <p>אינטרקום עם מסך, חיבור לטלפון לפי הצורך, ובקרת כניסה לפי משתמשים ושעות. לבית פרטי, לבניין ולמשרד.</p>
-            <a class="link-arrow" href="../quote.html?svc=intercom" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
-        <li class="svc-row" id="svc-smart" data-for="home" data-img="svc-smart-home">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-smart-more"><span class="svc-n">10</span><span class="svc-t">בית חכם</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">שליטה נוחה בבית ממקום אחד, בבנייה חדשה או בבית קיים.</p>
-          <div class="svc-more" id="svc-smart-more" hidden><div>
+        <li class="svc-row" id="svc-smart" data-for="home">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-smart-more"><span class="svc-n" aria-hidden="true">10</span><span class="svc-t">בית חכם</span><span class="svc-s">שליטה נוחה בבית ממקום אחד, בבנייה חדשה או בבית קיים.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-smart-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לבית</p><p>בבנייה חדשה מתכננים את התשתית מראש, ובבית קיים מתאימים פתרון למה שכבר יש. המטרה היא מערכת אחת שנוחה לשימוש יומיומי.</p><a class="link-arrow" href="../quote.html?svc=smart" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-smart-home.webp" width="1600" height="900" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לבית</p>
-            <p>בבנייה חדשה מתכננים את התשתית מראש, ובבית קיים מתאימים פתרון למה שכבר יש. המטרה היא מערכת אחת שנוחה לשימוש יומיומי.</p>
-            <a class="link-arrow" href="../quote.html?svc=smart" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
-        <li class="svc-row" id="svc-sound" data-for="home" data-img="svc-sound">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-sound-more"><span class="svc-n">11</span><span class="svc-t">סאונד ומולטימדיה</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">מוזיקה בבית, בחצר, במרפסת, בבריכה ואפילו במקלחת.</p>
-          <div class="svc-more" id="svc-sound-more" hidden><div>
+        <li class="svc-row" id="svc-sound" data-for="home">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-sound-more"><span class="svc-n" aria-hidden="true">11</span><span class="svc-t">סאונד ומולטימדיה</span><span class="svc-s">מוזיקה בבית, בחצר, במרפסת, בבריכה ואפילו במקלחת.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-sound-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לבית</p><p>מערכת שמע לחדרים ולאזורי החוץ, שמתוכננת יחד עם שאר התשתית ומותאמת לשימוש שלכם.</p><a class="link-arrow" href="../quote.html?svc=sound" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-sound.webp" width="1067" height="1600" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לבית</p>
-            <p>מערכת שמע לחדרים ולאזורי החוץ, שמתוכננת יחד עם שאר התשתית ומותאמת לשימוש שלכם.</p>
-            <a class="link-arrow" href="../quote.html?svc=sound" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
-        <li class="svc-row" id="svc-cabinets" data-for="both" data-img="svc-comm-cabinet">
-          <button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-cabinets-more"><span class="svc-n">12</span><span class="svc-t">ארונות תקשורת</span><svg class="icon svc-chev" data-icon="chevron-down" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/></svg></button>
-          <span class="svc-bar" aria-hidden="true"><i></i></span>
-          <p class="svc-s">הלב של כל המערכות, מתוכנן כך שהכל מרוכז במקום אחד.</p>
-          <div class="svc-more" id="svc-cabinets-more" hidden><div>
+        <li class="svc-row" id="svc-cabinets" data-for="both">
+          <h3 class="sr-h"><button class="svc-q" type="button" aria-expanded="false" aria-controls="svc-cabinets-more"><span class="svc-n" aria-hidden="true">12</span><span class="svc-t">ארונות תקשורת</span><span class="svc-s">הלב של כל המערכות, מתוכנן כך שהכל מרוכז במקום אחד.</span><span class="svc-plus" aria-hidden="true"></span></button></h3>
+          <div class="svc-more" id="svc-cabinets-more" hidden><div><div class="svc-more-in">
+            <div class="svc-copy"><p class="svc-tag">לעסק ולבית</p><p>ארון מסודר עם חיווט מסומן, שבו מרוכזים הנתב, המתגים וחיבורי המערכות. כך קל לאתר תקלה, להוסיף ציוד ולתחזק לאורך זמן.</p><a class="link-arrow" href="../quote.html?svc=cabinets" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
             <figure class="svc-thumb"><img src="../images/stock/svc-comm-cabinet.webp" width="1068" height="1600" alt="" loading="lazy" decoding="async"></figure>
-            <p class="svc-tag">לעסק ולבית</p>
-            <p>ארון מסודר עם חיווט מסומן, שבו מרוכזים הנתב, המתגים וחיבורי המערכות. כך קל לאתר תקלה, להוסיף ציוד ולתחזק לאורך זמן.</p>
-            <a class="link-arrow" href="../quote.html?svc=cabinets" data-quote-svc>לקבלת הצעה לשירות הזה<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-          </div></div>
+          </div></div></div>
         </li>
         </ol>
       </div>
       <a class="svc-cta" href="../quote.html" data-quote><span>לא בטוחים מה אתם צריכים?</span><strong>ענו על שאלון קצר<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></strong></a>
     </div>
-    <aside class="svc-panel" id="svc-panel" aria-label="פרטי השירות">
-      <div class="sp-media" aria-hidden="true"><img class="sp-img" data-id="it" src="../images/stock/svc-it-office.webp" width="1400" height="934" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="security" src="../images/stock/svc-security-backup.webp" width="1600" height="993" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="equipment" src="../images/stock/svc-equipment.webp" width="1600" height="1067" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="lab" src="../images/stock/svc-it-support.webp" width="1600" height="1067" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="cloud" src="../images/stock/svc-cloud.webp" width="1600" height="1067" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="network" src="../images/stock/svc-network-points.webp" width="1200" height="1600" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="wifi" src="../images/stock/svc-wifi.webp" width="1600" height="1067" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="cameras" src="../images/stock/svc-cameras.webp" width="1600" height="1131" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="intercom" src="../images/stock/svc-intercom.webp" width="1067" height="1600" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="smart" src="../images/stock/svc-smart-home.webp" width="1600" height="900" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="sound" src="../images/stock/svc-sound.webp" width="1067" height="1600" alt="" loading="lazy" decoding="async"><img class="sp-img" data-id="cabinets" src="../images/stock/svc-comm-cabinet.webp" width="1068" height="1600" alt="" loading="lazy" decoding="async"></div>
-      <div class="sp-copy">
-        <p class="sp-tag"></p>
-        <p class="sp-t"></p>
-        <p class="sp-more"></p>
-        <a class="link-arrow sp-link" href="../quote.html"><span>לקבלת הצעה לשירות הזה</span><svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a>
-      </div>
-    </aside>
   </div>
 </section>
 
@@ -270,20 +212,26 @@
   </ol>
 </section>
 
-<!-- ============ 03 PROCESS (MV:c03 as bands, MV:g143): four photo bands in one sticky screen; the scroll opens them in turn ============ -->
-<section class="process" id="process" data-comp="c03">
-  <div class="pr-stage">
-    <header class="sec-head pr-head">
+<!-- ============ 03 PROCESS (MV:g22, Liav 4.10: "a process circle that fills"): the ring fills with the scroll, the stations light, the step in the middle changes ============ -->
+<section class="process" id="process" data-comp="c06">
+  <div class="pc-stage">
+    <header class="sec-head">
       <p class="kicker"><span class="idx">03</span>תהליך</p>
       <h2>מהפנייה הראשונה ועד שהכל עובד</h2>
     </header>
-    <ol class="bands">
-      <li class="band"><span class="band-ph" style="--ph: url(../images/stock/door-business.webp)" aria-hidden="true"></span><div class="band-c"><span class="band-n" aria-hidden="true">01</span><div><h3>מספרים לנו מה צריך</h3><p>שאלון קצר באתר, או הודעה בוואטסאפ. מסמנים אם זה לעסק או לבית ומה המערכות שמעניינות אתכם.</p></div></div></li>
-      <li class="band"><span class="band-ph" style="--ph: url(../images/stock/door-biz-bright.webp)" aria-hidden="true"></span><div class="band-c"><span class="band-n" aria-hidden="true">02</span><div><h3>אפיון והצעת מחיר</h3><p>שיחה קצרה כדי לדייק, ואם יש תוכניות, עוברים עליהן. ואז מגיעה הצעת מחיר מסודרת.</p></div></div></li>
-      <li class="band"><span class="band-ph" style="--ph: url(../images/stock/about-office.webp)" aria-hidden="true"></span><div class="band-c"><span class="band-n" aria-hidden="true">03</span><div><h3>התקנה והטמעה</h3><p>מתקינים, מגדירים, ומראים לכם איך הכל עובד.</p></div></div></li>
-      <li class="band"><span class="band-ph" style="--ph: url(../images/stock/svc-cloud.webp)" aria-hidden="true"></span><div class="band-c"><span class="band-n" aria-hidden="true">04</span><div><h3>תמיכה ותחזוקה</h3><p>נשארים זמינים לשאלות, לתקלות ולשדרוגים. עם הזמן המערכת גדלה איתכם.</p></div></div></li>
+    <ol class="pc-steps">
+      <li class="pc-step"><span class="pc-n" aria-hidden="true">01</span><h3>מספרים לנו מה צריך</h3><p>שאלון קצר באתר, או הודעה בוואטסאפ. מסמנים אם זה לעסק או לבית ומה המערכות שמעניינות אתכם.</p></li>
+      <li class="pc-step"><span class="pc-n" aria-hidden="true">02</span><h3>אפיון והצעת מחיר</h3><p>שיחה קצרה כדי לדייק, ואם יש תוכניות, עוברים עליהן. ואז מגיעה הצעת מחיר מסודרת.</p></li>
+      <li class="pc-step"><span class="pc-n" aria-hidden="true">03</span><h3>התקנה והטמעה</h3><p>מתקינים, מגדירים, ומראים לכם איך הכל עובד.</p></li>
+      <li class="pc-step"><span class="pc-n" aria-hidden="true">04</span><h3>תמיכה ותחזוקה</h3><p>נשארים זמינים לשאלות, לתקלות ולשדרוגים. עם הזמן המערכת גדלה איתכם.</p></li>
     </ol>
-    <div class="pr-cta"><a class="btn btn-primary" href="../quote.html" data-quote>להתחיל בשלב 1: שאלון קצר<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
+    <div class="pc-ring" aria-hidden="true">
+      <svg class="pc-svg" viewBox="0 0 600 600"><circle class="pc-track" cx="300" cy="300" r="290"/><circle class="pc-draw" cx="300" cy="300" r="290" pathLength="100"/></svg>
+      <span class="pc-dot">1</span><span class="pc-dot">2</span><span class="pc-dot">3</span><span class="pc-dot">4</span>
+      <div class="pc-mid"><div class="pc-now"><b>01</b><span>מספרים לנו מה צריך</span></div><div class="pc-now"><b>02</b><span>אפיון והצעת מחיר</span></div><div class="pc-now"><b>03</b><span>התקנה והטמעה</span></div><div class="pc-now"><b>04</b><span>תמיכה ותחזוקה</span></div></div>
+    </div>
+    <p class="pc-line" aria-hidden="true"></p>
+    <div class="pc-cta"><a class="btn btn-primary" href="../quote.html" data-quote>להתחיל בשלב 1: שאלון קצר<svg class="icon i-arr" data-icon="arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z"/></svg></a></div>
   </div>
 </section>
 
@@ -418,7 +366,7 @@
 </div>
 <script src="../vendor/gsap.min.js" defer></script>
 <script src="../vendor/ScrollTrigger.min.js" defer></script>
-<script src="a11y.js?v=4868d9eb" defer></script>
-<script src="v4.js?v=4868d9eb" defer></script>
+<script src="a11y.js?v=4c54dd12" defer></script>
+<script src="v4.js?v=4c54dd12" defer></script>
 </body>
 </html>
