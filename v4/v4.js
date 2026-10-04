@@ -149,7 +149,7 @@
     // "heroState", not "state": the form below declares var state in the same scope, and the P stopped growing (4.10)
     var heroState = { p: 0 };
     var resetCopy = function () { [copy, route, vt].forEach(function (el) { if (el) { el.style.opacity = ""; el.style.transform = ""; } }); };
-    measure(); render(0); hero.classList.add("p-live"); html.classList.add("hero-go");
+    measure(); render(0); hero.classList.add("p-live");
     if (hasGsap() && !reduced) {
       gsap.matchMedia().add({ d: "(min-width: 1024px)", m: "(max-width: 1023px)" }, function (ctx) {
         heroState.p = 0;
