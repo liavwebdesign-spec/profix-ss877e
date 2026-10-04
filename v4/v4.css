@@ -31,7 +31,9 @@
   --surface: #141518;
   --surface-2: #070809;
   --state-bg: #1E1F23;
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2.6' intercept='-.8'/%3E%3CfeFuncG type='linear' slope='2.6' intercept='-.8'/%3E%3CfeFuncB type='linear' slope='2.6' intercept='-.8'/%3E%3CfeFuncA type='linear' slope='0' intercept='.055'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* a bitmap tile, decoded once: the first grain was an SVG filter (feTurbulence) that Chrome re-rendered for every
+     piece of the page while scrolling, and the scroll stuck (Liav, 4.10: "the scroll is broken") */
+  --grain: url("grain.png");
   --ink: #F3F1EC;
   --ink-soft: rgba(243, 241, 236, .82);
   --muted: #9A9CA3;
@@ -143,7 +145,7 @@ main:focus { outline: 0; }
   transition: transform .45s var(--ease); }
 .hd > * { pointer-events: auto; }
 .hd.is-hidden { transform: translateY(calc(-100% - var(--pill-top) - 8px)); }
-.hd-chip, .hd-menu { min-height: var(--pill-h); border-radius: 999px; background: rgba(11, 12, 14, .62); -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2);
+.hd-chip, .hd-menu { min-height: var(--pill-h); border-radius: 999px; background: rgba(11, 12, 14, .62); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   box-shadow: inset 0 0 0 1px var(--line); }
 .hd-chip { display: inline-flex; align-items: center; padding: 0 24px; }
 .hd-chip img { height: 30px; width: auto; }
@@ -198,7 +200,10 @@ main:focus { outline: 0; }
   padding: calc(var(--pill-top) + var(--pill-h) + clamp(12px, 3vh, 40px)) var(--gutter) clamp(18px, 3.4vh, 40px); }
 /* the window: the video fills the hero, and the P clips it (JS writes the path). Without JS the video simply fills the hero */
 .hero-win { position: absolute; inset: 0; overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fade, 0%)), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fade, 0%)), transparent); }
+}
+/* the video melts into the ground at the end of the signature: an overlay whose opacity changes (composited), not a
+   mask redrawn every frame */
+.hero-fade { position: absolute; inset: auto 0 0; height: 30%; background: linear-gradient(to bottom, rgba(9, 10, 12, 0), var(--bg)); opacity: var(--fo, 0); will-change: opacity; pointer-events: none; }
 .hero-video { width: 100%; height: 100%; object-fit: cover; filter: brightness(.86) saturate(.95); }
 .hero-win::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(17, 18, 20, .25), rgba(17, 18, 20, .82) 70%); transition: opacity .6s var(--ease); }
 .js .hero-win { opacity: 0; animation: win-failsafe 0s linear 3s forwards; }
@@ -261,8 +266,12 @@ main:focus { outline: 0; }
 .logos-k { justify-content: center; margin-bottom: clamp(24px, 2.4vw, 48px); }
 .marq { overflow: hidden; direction: ltr; padding-block: 10px; }
 .marq-track { display: flex; align-items: center; gap: clamp(48px, 5vw, 128px); width: max-content; padding-inline-end: clamp(48px, 5vw, 128px); will-change: transform; }
+.marq-track.run { animation: marq var(--dur, 40s) linear infinite; }
+.marq-track.rev { animation-direction: reverse; }
+@keyframes marq { from { transform: translateX(calc(var(--w) * -1)); } to { transform: none; } }
+.marq:hover .marq-track, .marq:focus-within .marq-track, html.a11y-still .marq-track { animation-play-state: paused; }
 .mark { --h: clamp(40px, 3.4vw, 72px); flex: none; display: grid; place-items: center; height: var(--h); }
-.mark img { width: auto; max-width: none; height: var(--h); filter: grayscale(1) invert(1); mix-blend-mode: screen; opacity: .5; transition: opacity .3s var(--ease); }
+.mark img { width: auto; max-width: none; height: var(--h); filter: grayscale(1) invert(1); opacity: .5; transition: opacity .3s var(--ease); }
 .mark.wide img { height: calc(var(--h) * .56); }
 /* CLAY and Rechasim are white in the original: they stay white, no inversion */
 .mark.mono img { filter: grayscale(1); }
@@ -341,8 +350,8 @@ main:focus { outline: 0; }
 .scard > div { display: contents; }
 .scard h3 { padding-top: .2em; }
 .scard p { max-width: 56ch; padding-top: .35em; color: var(--ink-soft); }
-.scard > * { opacity: calc(1 - var(--cover, 0)); }
-.scard { background: color-mix(in srgb, var(--surface), var(--bg) calc(var(--cover, 0) * 60%)); }
+/* only opacity changes on scroll, on layers of their own: a background that changed every frame repainted six cards */
+.scard > * { opacity: calc(1 - var(--cover, 0)); will-change: opacity; }
 @media (max-width: 1023px) { .scard { grid-template-columns: auto minmax(0, 1fr); } .scard > div { display: block; grid-column: 2; } .scard h3 { margin-bottom: 8px; } }
 @media (max-width: 767px) { .scard { top: calc(72px + var(--i, 0) * 14px); grid-template-columns: 1fr; gap: 8px; } .scard > div { grid-column: 1; } .snum { font-size: 48px; } .stack { padding-bottom: 6vh; } }
 

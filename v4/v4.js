@@ -94,7 +94,7 @@
     var setPaused = function (p) { userPaused = p; if (vt) { vt.setAttribute("aria-pressed", String(p)); vt.setAttribute("aria-label", p ? "הפעלת הסרטון" : "עצירת הסרטון"); } if (p) vid.pause(); else play(); };
     if (vt) vt.addEventListener("click", function () { setPaused(!userPaused); });
     document.addEventListener("a11y:still", function (e) { if (e.detail) vid.pause(); else play(); });
-    var onScreen = function () { if (visible(vid.parentElement)) play(); else vid.pause(); };
+    var onScreen = function () { var v = visible(vid.parentElement); if (v && vid.paused) play(); else if (!v && !vid.paused) vid.pause(); };
     addEventListener("scroll", onScreen, { passive: true }); play();
   }
 
@@ -138,7 +138,7 @@
       var g = geo, e = smooth(p);
       var s = g.s0 * Math.pow(g.s1 / g.s0, p);
       win.style.clipPath = pathAt(g.f0x + (g.cx - g.f0x) * e, g.f0y + (g.cy - g.f0y) * e, s);
-      win.style.setProperty("--fade", (Math.max(0, (p - 0.55) / 0.45) * 26).toFixed(1) + "%");
+      hero.style.setProperty("--fo", Math.max(0, (p - 0.55) / 0.45).toFixed(3));
       if (!reduced) {
         var t = Math.min(1, p / (desk() ? 0.32 : 0.28));
         if (copy) { copy.style.opacity = String(1 - t); copy.style.transform = "translateY(" + (-60 * t) + "px)"; }
@@ -173,20 +173,17 @@
     var copyOf = function (el) { var c = el.cloneNode(true); c.setAttribute("aria-hidden", "true"); var im = $("img", c); if (im) im.alt = ""; return c; };
     if (t2) originals.slice().reverse().forEach(function (el) { t2.appendChild(copyOf(el)); });
     var loaded = function (im) { return im.complete ? Promise.resolve() : new Promise(function (ok) { im.addEventListener("load", ok, { once: true }); im.addEventListener("error", ok, { once: true }); }); };
+    // a CSS animation on the compositor: GSAP wrote the track's transform into the page sixty times a second, forever,
+    // and every extension watching the page woke up for it (Liav 4.10: "the scroll is broken" in his Chrome only)
     var run = function () {
-      if (reduced || !window.gsap) return;
+      if (reduced) return;
       [[t1, 1], [t2, -1]].forEach(function (p) {
         var tr = p[0]; if (!tr) return;
         var set = $$(".mark", tr), setW = tr.scrollWidth, guard = 0;
         if (setW < 50) return;
         while (tr.scrollWidth < innerWidth * 2 + setW && guard++ < 20) set.forEach(function (el) { tr.appendChild(copyOf(el)); });
-        var dur = setW / 90; // 90px a second at least (QA 13ב)
-        var tw = p[1] > 0 ? gsap.fromTo(tr, { x: -setW }, { x: 0, duration: dur, ease: "none", repeat: -1 }) : gsap.fromTo(tr, { x: 0 }, { x: -setW, duration: dur, ease: "none", repeat: -1 });
-        var host = tr.parentElement, over = false, focus = false;
-        var sync = function () { if (over || focus || !visible(host) || html.classList.contains("a11y-still")) tw.pause(); else tw.play(); };
-        if (matchMedia("(hover: hover) and (pointer: fine)").matches) { host.addEventListener("pointerenter", function () { over = true; sync(); }); host.addEventListener("pointerleave", function () { over = false; sync(); }); }
-        host.addEventListener("focusin", function () { focus = true; sync(); }); host.addEventListener("focusout", function () { focus = false; sync(); });
-        addEventListener("scroll", sync, { passive: true }); document.addEventListener("a11y:still", sync); sync();
+        tr.style.setProperty("--w", setW + "px"); tr.style.setProperty("--dur", (setW / 90).toFixed(1) + "s"); // 90px a second at least (QA 13ב)
+        tr.classList.add("run"); if (p[1] < 0) tr.classList.add("rev");
       });
     };
     Promise.race([Promise.all($$("img", t1).map(loaded)), new Promise(function (ok) { setTimeout(ok, 4000); })]).then(run);
@@ -301,11 +298,12 @@
     proc.classList.add("is-live");
     var paint = function () {
       var r = proc.getBoundingClientRect(), run = proc.offsetHeight - innerHeight;
+      if (r.bottom < -50 || r.top > innerHeight + 50) return;
       var p = run > 0 ? Math.min(1, Math.max(0, -r.top / run)) : 1;
       // the ring closes a little before the end of the runway, so the last step is read whole
       var f = Math.min(1, p / 0.88);
-      pcRing.style.setProperty("--p", f.toFixed(4));
-      dots.forEach(function (d, i) { d.classList.toggle("lit", f >= i / N - 0.001); });
+      var pv = f.toFixed(3); if (pcRing._p !== pv) { pcRing._p = pv; pcRing.style.setProperty("--p", pv); }
+      dots.forEach(function (d, i) { var on = f >= i / N - 0.001; if (d.classList.contains("lit") !== on) d.classList.toggle("lit", on); });
       var k = Math.min(N - 1, Math.floor(f * N + 0.0001));
       if (k !== cur) {
         cur = k;
@@ -323,11 +321,13 @@
   var scards = $$(".scard");
   if (scards.length > 1) {
     var cover = function () {
+      var rs = scards.map(function (c) { return c.getBoundingClientRect(); });
       scards.forEach(function (c, i) {
-        var n = scards[i + 1]; if (!n) return;
-        var a = c.getBoundingClientRect(), b = n.getBoundingClientRect();
+        if (!rs[i + 1]) return;
+        var a = rs[i], b = rs[i + 1];
         var f = Math.max(0, Math.min(1, (a.bottom - b.top) / Math.max(1, a.height - (b.top - a.top < 40 ? b.top - a.top : 40))));
-        c.style.setProperty("--cover", f.toFixed(3));
+        var v = (Math.round(f * 50) / 50).toFixed(2);
+        if (c._cv !== v) { c._cv = v; c.style.setProperty("--cover", v); }
       });
     };
     var craf = 0;
@@ -539,15 +539,20 @@
      lines at fractional offsets, so each visible icon is nudged by the fraction, once the layout has settled ---------- */
   var snapIcons = function () {
     var dpr = devicePixelRatio || 1;
+    var todo = [];
     $$("svg.icon").forEach(function (e) {
-      e.style.translate = "";
       var r = e.getBoundingClientRect(); if (!r.width) return;
+      var cur = e._snap || [0, 0];
       // a fixed control is drawn in screen coordinates; everything else on the page grid
       var fixed = e.closest(".fab-a11y, .fab-wa, .mbar, .hd, .fs, .a11y-panel");
       var x = r.left + (fixed ? 0 : scrollX), y = r.top + (fixed ? 0 : scrollY);
-      var dx = Math.round(x * dpr) / dpr - x, dy = Math.round(y * dpr) / dpr - y;
-      if (Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01) e.style.translate = dx.toFixed(3) + "px " + dy.toFixed(3) + "px";
+      // the box already carries cur: the unnudged position is x - cur, and the new nudge rounds that
+      var bx = x - cur[0], by = y - cur[1];
+      var dx = Math.round(bx * dpr) / dpr - bx, dy = Math.round(by * dpr) / dpr - by;
+      if (Math.abs(dx - cur[0]) > 0.01 || Math.abs(dy - cur[1]) > 0.01) todo.push([e, dx, dy]);
     });
+    // all reads first, then the writes: one layout, not one per icon
+    todo.forEach(function (t) { t[0]._snap = [t[1], t[2]]; t[0].style.translate = (Math.abs(t[1]) < .005 && Math.abs(t[2]) < .005) ? "" : t[1].toFixed(3) + "px " + t[2].toFixed(3) + "px"; });
   };
   window.__snapIcons = snapIcons;
   // an entrance that ends moves the icons in it: they go back on the grid once it has
