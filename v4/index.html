@@ -10,7 +10,7 @@
 <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/HammerPro-700c.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/GoogleSans-Hebrew.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="v4.css?v=703d6a49">
+<link rel="stylesheet" href="v4.css?v=148fe6a4">
 <script>document.documentElement.classList.add("js");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("open-anim")</script>
 </head>
 <body data-page="index">
@@ -45,6 +45,8 @@
 <main id="main" tabindex="-1">
 <!-- ============ HERO (MV:h3) with the signature (MV:g03): the cables video seen only through the P of the logo.
      Scrolling grows the window until the infrastructure fills the screen. Without JS the video fills the hero. ============ -->
+<!-- the pin spacer is in the HTML: when ScrollTrigger made its own, it moved the hero into it and restarted the entrance (the load glitch, 4.10) -->
+<div class="hero-pin">
 <section class="hero" id="top" aria-labelledby="hero-h">
   <div class="hero-stage">
     <div class="hero-win" aria-hidden="true">
@@ -69,6 +71,7 @@
     <button class="video-toggle" type="button" aria-pressed="false" aria-label="עצירת הסרטון"><svg class="icon i-pause" data-icon="pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M6.5,0A3.5,3.5,0,0,0,3,3.5v17a3.5,3.5,0,0,0,7,0V3.5A3.5,3.5,0,0,0,6.5,0ZM8,20.5a1.5,1.5,0,0,1-3,0V3.5a1.5,1.5,0,0,1,3,0Z"/><path d="M17.5,0A3.5,3.5,0,0,0,14,3.5v17a3.5,3.5,0,0,0,7,0V3.5A3.5,3.5,0,0,0,17.5,0ZM19,20.5a1.5,1.5,0,0,1-3,0V3.5a1.5,1.5,0,0,1,3,0Z"/></svg><svg class="icon i-play" data-icon="play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.494,7.968l-9.54-7A5,5,0,0,0,3,5V19a5,5,0,0,0,7.957,4.031l9.54-7a5,5,0,0,0,0-8.064Zm-1.184,6.45-9.54,7A3,3,0,0,1,5,19V5A2.948,2.948,0,0,1,6.641,2.328,3.018,3.018,0,0,1,8.006,2a2.97,2.97,0,0,1,1.764.589l9.54,7a3,3,0,0,1,0,4.836Z"/></svg></button>
   </div>
 </section>
+</div>
 
 <!-- ============ CLIENTS (MV:c10): two rows in opposite directions, light silhouettes on the charcoal ============ -->
 <section class="logos" aria-labelledby="logos-k" data-comp="c10">
@@ -366,7 +369,7 @@
 </div>
 <script src="../vendor/gsap.min.js" defer></script>
 <script src="../vendor/ScrollTrigger.min.js" defer></script>
-<script src="a11y.js?v=703d6a49" defer></script>
-<script src="v4.js?v=703d6a49" defer></script>
+<script src="a11y.js?v=148fe6a4" defer></script>
+<script src="v4.js?v=148fe6a4" defer></script>
 </body>
 </html>

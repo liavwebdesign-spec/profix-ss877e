@@ -156,7 +156,7 @@
         // desktop: a short pin, one screen (the "no scene stops the scroll for more than a screen and a half" rule)
         // phone and tablet: no pin, the window grows while the hero scrolls away
         var st = ctx.conditions.d
-          ? { trigger: hero, start: "top top", end: "+=100%", pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: function () { measure(); render(heroState.p); } }
+          ? { trigger: hero, start: "top top", end: "+=100%", pin: true, pinSpacer: hero.parentElement, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: function () { measure(); render(heroState.p); } }
           : { trigger: hero, start: "top top", end: "bottom top", scrub: 0.4, invalidateOnRefresh: true, onRefresh: function () { measure(); render(heroState.p); } };
         gsap.to(heroState, { p: 1, ease: "none", scrollTrigger: st, onUpdate: function () { render(heroState.p); } });
         return function () { resetCopy(); };
