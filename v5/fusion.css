@@ -1,0 +1,417 @@
+/* ======================================================================================================
+   Version E: the fusion (Oz and Liav, 7.10.2026). The main sketch in its dark skin (base.css is a copy of styles.css
+   with its paths moved up one folder), dressed in the Liquid Glass language (MV:s08): smoked glass with a bright edge,
+   a light that follows the pointer, an underline that runs through the brand's oranges, numbers with depth.
+   The accent stays the logo's orange; s08's amber and its demo green do not come in.
+   Glass (blur) only where something rich is behind it: the header, the doors, the open service, the form, the quotes.
+   Everything else is a tinted surface with the same edge and light, without blur (s08: no more than three blurs at once).
+   ====================================================================================================== */
+:root.fusion {
+  --glass: rgba(26, 27, 31, .5);
+  --glass-hv: rgba(16, 17, 20, .66);
+  --tint: rgba(30, 31, 36, .58);
+  --tint-hv: rgba(22, 23, 27, .74);
+  --r-glass: 24px;
+  --rim: linear-gradient(150deg, rgba(255, 255, 255, .36), rgba(255, 255, 255, .06) 34%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, .14));
+  --flash: radial-gradient(280px circle at var(--mx, 70%) var(--my, 0%), rgba(255, 236, 214, .13), rgba(242, 122, 43, .05) 42%, transparent 66%);
+  --num-ink: linear-gradient(180deg, #FFE7CF 0%, #FBB06A 42%, #F27A2B 74%, #C95418 100%);
+}
+
+/* ---------- the glass and the tinted surface ---------- */
+.fusion :is(.door, .form-card, .quote, .svc-row.is-open, .why-card, .sys-t, .sq, .arch-list li, .t5-arr, .seg-glass) {
+  position: relative; isolation: isolate; border-radius: var(--r-glass);
+  background-color: var(--tint);
+  background-image: linear-gradient(160deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .012) 46%);
+  box-shadow: none;
+}
+.fusion :is(.door, .form-card, .quote, .svc-row.is-open) {
+  background-color: var(--glass);
+  -webkit-backdrop-filter: blur(20px) saturate(1.35); backdrop-filter: blur(20px) saturate(1.35);
+}
+/* the edge is the material, not a border: a one-pixel ring of light in a mask (s08) */
+.fusion :is(.door, .form-card, .quote, .svc-row.is-open, .why-card, .sys-t, .sq, .t5-arr)::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: var(--rim);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+/* the light under the pointer ("כמו פנס", Oz 7.10) */
+.fusion [data-light]::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  background: var(--flash); opacity: 0; transition: opacity .3s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .fusion [data-light]:hover::after { opacity: 1; }
+  .fusion :is(.door, .why-card, .sys-t, .quote):hover { background-color: var(--glass-hv); }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .fusion :is(.door, .form-card, .quote, .svc-row.is-open) { background-color: rgba(24, 25, 29, .94); }
+}
+
+/* ---------- the underline that runs through the oranges (Oz 7.10: "קו שמשנה צבע מתחת לכיתוב") ----------
+   It draws once on screen, the gradient travels from the deep orange to the light one and rests; a soft glow under it
+   gives the depth he liked. Not a loop: the page already has one continuous motion, the hero video. */
+.uline {
+  display: block; width: clamp(72px, 6vw, 128px); height: 3px; margin-top: clamp(16px, 1.2vw, 24px); border-radius: 3px;
+  background: linear-gradient(90deg, #C95418, #F27A2B 30%, #FFB26B 55%, #FFE2C4 70%, #F27A2B 85%, #C95418);
+  background-size: 300% 100%; background-position: 100% 0;
+  box-shadow: 0 6px 18px rgba(242, 122, 43, .38);
+  transform-origin: right center;
+}
+.section-head.centered .uline, .centered > .uline { margin-inline: auto; transform-origin: center; }
+.js .uline { transform: scaleX(0); }
+.js .uline.is-in { animation: uline-draw .9s var(--ease) both, uline-run 2.4s var(--ease) .5s both; }
+@keyframes uline-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes uline-run { from { background-position: 100% 0; } to { background-position: 0 0; } }
+.section-head .uline + .lead { margin-top: 20px; }
+
+/* ---------- numbers with depth and a colour run ---------- */
+.fusion :is(.svc-row .num, .why-card .num, .svc-tab-n, .t5-now) {
+  background: var(--num-ink); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 6px 14px rgba(242, 122, 43, .28));
+  background-size: 100% 220%; background-position: 0 0; transition: background-position .5s var(--ease);
+}
+.fusion :is(.svc-row.is-open .num, .why-card:hover .num, .svc-tab[aria-selected="true"] .svc-tab-n) { background-position: 0 100%; }
+.fusion .step-dot { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 10px 24px rgba(0, 0, 0, .35); }
+.fusion .step.is-lit .step-dot { background: linear-gradient(160deg, #FFB26B, #F27A2B 55%, #D35F1D); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 10px 26px rgba(242, 122, 43, .38); }
+
+/* ---------- buttons: a flash of light crosses the primary one on hover (s08) ---------- */
+.fusion .btn-primary { position: relative; overflow: hidden; isolation: isolate; }
+.fusion .btn-primary::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(105deg, transparent 36%, rgba(255, 255, 255, .55) 50%, transparent 64%);
+  transform: translateX(130%); transition: transform .7s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) { .fusion .btn-primary:hover::before { transform: translateX(-130%); } }
+.fusion .btn-ghost { background: rgba(255, 255, 255, .04); border-color: rgba(244, 242, 238, .22); color: var(--ink-dark); }
+
+/* ---------- header: a second, quieter action for designers (Oz 7.10: "עוד עיגול קטן... לתיאום פרויקט") ---------- */
+.fusion .header-actions { gap: 10px; }
+.fusion .hd-arch { white-space: nowrap; }
+.fusion .nav { gap: clamp(18px, 1.5vw, 40px); }
+.fusion .mega-card { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, .9fr); }
+@media (max-width: 1279px) { .fusion .hd-arch { display: none; } }
+.fusion .md-cta { display: grid; gap: 10px; }
+
+/* ---------- halos: the soft orange of quote.html, down the page, alternating sides ---------- */
+.fusion :is(#doors, #services, #process, #architects, #projects, #contact, .logos) { position: relative; isolation: isolate; }
+.fusion :is(#doors, #services, #process, #architects, #projects, #contact, .logos)::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none; width: min(70vw, 1100px); aspect-ratio: 1.3;
+  background: radial-gradient(closest-side, rgba(242, 122, 43, .14), rgba(242, 122, 43, .05) 52%, transparent);
+}
+.fusion #doors::before { top: 4%; inset-inline-start: -18%; }
+.fusion #services::before { top: 22%; inset-inline-end: -22%; }
+.fusion #process::before { top: 2%; inset-inline-start: -20%; width: min(56vw, 860px); } /* ends inside its own section: the architects block below cut it into a hard edge */
+.fusion #architects::before { top: -10%; inset-inline-end: -16%; }
+.fusion #projects::before { top: 18%; inset-inline-start: -24%; }
+.fusion #contact::before { bottom: 0; inset-inline-end: -14%; }
+.fusion .logos::before { top: 50%; left: 50%; translate: -50% -50%; width: min(90vw, 1400px); aspect-ratio: 3.2;
+  background: radial-gradient(closest-side, rgba(242, 122, 43, .2), rgba(196, 160, 120, .07) 55%, transparent); }
+
+/* ---------- atmosphere photos with a fade (Oz 7.10: "הייטקיות, נקיות, לשבור מונוטוניות") ---------- */
+.atmo {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none; background-size: cover; background-position: center;
+  opacity: .34; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 70%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 70%, transparent);
+}
+.atmo::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 60% at 50% 45%, rgba(17, 18, 20, .55), rgba(17, 18, 20, .15)); }
+.fusion :is(#why, #testimonials, #contact) { position: relative; isolation: isolate; }
+.atmo-why { background-image: url("../images/r5/atm-fiber-amber.webp"); background-position: 50% 30%; opacity: .3; }
+.atmo-quotes { background-image: url("../images/r5/atm-wave.webp"); background-position: 50% 55%; opacity: .5; }
+.atmo-contact { background-image: url("../images/r5/atm-fiber-tips.webp"); background-position: 50% 80%; opacity: .32;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40%, #000 80%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 40%, #000 80%, transparent); }
+
+/* ---------- doors: two glass cards ---------- */
+.fusion .doors-grid { gap: var(--gap-m); }
+.fusion .door { padding: clamp(28px, 2.4vw, 56px); }
+.fusion .door-photo { border-radius: 16px; border-start-start-radius: var(--r-bowl); }
+.fusion .door-tags li { background: rgba(255, 255, 255, .06); }
+@media (max-width: 767px) { .fusion .door { padding: 24px 20px; } }
+
+/* ---------- logos: one row, full colour, light chips over a warm halo (Oz 7.10) ---------- */
+.fusion .logos { padding-block: clamp(56px, 5vw, 112px); }
+.logos-h { text-align: center; font-size: calc(clamp(30px, 2.2vw + 0.3rem, 56px) * var(--hd, 1)); line-height: 1.1; margin-bottom: clamp(28px, 2.6vw, 56px); }
+.fusion .marquee { mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.fusion .marquee-track { gap: clamp(14px, 1.2vw, 24px); padding-block: 16px; }
+.chip {
+  flex: none; position: relative; isolation: isolate; display: flex; align-items: center; justify-content: center;
+  width: clamp(168px, 12vw, 230px); height: clamp(88px, 6.2vw, 116px); padding: 14px 24px; border-radius: 20px;
+  background: linear-gradient(160deg, #F7F5F1, #E6E2DB);
+  box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 rgba(0, 0, 0, .06), 0 14px 34px rgba(0, 0, 0, .38), 0 0 0 1px rgba(255, 255, 255, .06);
+  transition: transform .3s var(--ease);
+}
+.chip img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.chip-sq img { max-width: 72%; }
+.chip-ink img { filter: brightness(0); opacity: .85; mix-blend-mode: normal; }
+.fusion .chip[data-light]::after { background: radial-gradient(160px circle at var(--mx, 50%) var(--my, 0%), rgba(255, 255, 255, .7), transparent 70%); mix-blend-mode: soft-light; }
+@media (hover: hover) and (pointer: fine) { .chip:hover { transform: translateY(-3px); } }
+
+/* ---------- services, sketch A: three fields as a list; the open row is glass with an ordinary photo (Oz 7.10:
+   the big image was "מאיים", one normal picture instead) ---------- */
+.fusion .svc-a { max-width: clamp(720px, 62vw, 1280px); margin-inline: auto; }
+.fusion .svc-split, .fusion .svc-stage { display: none; }
+.fusion .svc-row { margin-inline: 0; padding-inline: clamp(16px, 1.4vw, 28px); border-radius: var(--r-glass); }
+.fusion .svc-row:not(.is-open) { background: none; }
+@media (hover: hover) and (pointer: fine) { .fusion .svc-row:not(.is-open):hover { background: rgba(255, 255, 255, .035); } }
+.fusion .svc-row .num { color: var(--muted); }
+.svc-more-in { display: grid; grid-template-columns: minmax(0, 1fr) clamp(200px, 22vw, 340px); gap: var(--gap-m); align-items: start; }
+.svc-pic { margin: 0; aspect-ratio: 4 / 3; border-radius: 16px; border-start-start-radius: clamp(28px, 2.4vw, 48px); overflow: hidden; background: #0c0d0f; }
+.svc-pic img { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 767px) { .svc-more-in { grid-template-columns: 1fr; } .svc-pic { max-width: 420px; } }
+.svc-list[data-show="it"] [data-cat]:not([data-cat="it"]),
+.svc-list[data-show="net"] [data-cat]:not([data-cat="net"]),
+.svc-list[data-show="sec"] [data-cat]:not([data-cat="sec"]) { display: none; }
+.svc-list:not([data-show="all"]) .svc-group-head { margin-top: 0; }
+.fusion .svc-filter { background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07); flex-wrap: wrap; justify-content: center; }
+.fusion .svc-filter button[aria-pressed="true"] { background: rgba(255, 255, 255, .12); color: var(--ink); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14); }
+.fusion .svc-group-head .meta { color: var(--muted); }
+.svc-lead-b, .svc-b { display: none; }
+.svc-tabs .svc-lead-a, .svc-tabs .svc-a, .svc-tabs .svc-filter { display: none; }
+.svc-tabs .svc-lead-b { display: block; }
+.svc-tabs .svc-b { display: block; }
+
+/* ---------- services, sketch B (?svc=tabs): three tabs, small squares that open in place (Oz 7.10) ---------- */
+.svc-b .svc-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.svc-tab {
+  display: inline-flex; align-items: baseline; gap: 10px; min-height: 52px; padding: 12px 24px; border-radius: 999px;
+  font-weight: 500; font-size: var(--t-body); color: var(--muted-strong);
+  background: rgba(255, 255, 255, .04); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+  transition: background .25s var(--ease), color .25s var(--ease);
+}
+.svc-tab[aria-selected="true"] { color: var(--ink); background: rgba(255, 255, 255, .11); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16), inset 0 0 0 1px rgba(255, 255, 255, .1); }
+.svc-tab-n { font-weight: 600; font-size: .9em; }
+.svc-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.svc-panel-line { text-align: center; color: var(--muted-strong); margin: clamp(20px, 1.6vw, 32px) auto 0; max-width: var(--measure); }
+.sq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(220px, 17vw, 300px), 1fr)); gap: var(--gap-s); margin-top: clamp(28px, 2.4vw, 48px); max-width: clamp(720px, 76vw, 1600px); margin-inline: auto; }
+.sq { aspect-ratio: 1; overflow: hidden; }
+.sq-bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; opacity: .5; transition: opacity .4s var(--ease), transform .6s var(--ease); }
+.sq::after { z-index: -1; }
+.sq-face {
+  position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: clamp(18px, 1.4vw, 28px);
+  text-align: start; background: linear-gradient(to top, rgba(14, 15, 18, .92), rgba(14, 15, 18, .2) 62%, transparent); border-radius: inherit;
+}
+.sq-face h3 { font-size: calc(clamp(20px, 1.1vw + 0.3rem, 30px) * var(--hd, 1)); line-height: 1.2; }
+.sq-plus { flex: none; position: relative; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, .12); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16); transition: transform .35s var(--ease), background .25s var(--ease); }
+.sq-plus::before, .sq-plus::after { content: ""; position: absolute; inset: 0; margin: auto; width: 14px; height: 2px; border-radius: 2px; background: currentColor; }
+.sq-plus::after { transform: rotate(90deg); }
+.sq-more {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: clamp(20px, 1.6vw, 32px);
+  padding-bottom: 72px; background: rgba(14, 15, 18, .9); opacity: 0; visibility: hidden; transition: opacity .3s var(--ease), visibility 0s .3s;
+  font-size: var(--t-meta); line-height: 1.65; color: var(--ink-dark-soft);
+}
+.sq.is-open .sq-more { opacity: 1; visibility: visible; transition-delay: 0s; }
+.sq.is-open .sq-face { background: none; align-items: flex-start; z-index: 1; height: auto; bottom: auto; }
+.sq.is-open .sq-face h3 { display: none; }
+.sq.is-open .sq-plus { transform: rotate(45deg); margin-inline-start: auto; }
+.sq-more .link-arrow { font-size: var(--t-meta); }
+@media (hover: hover) and (pointer: fine) { .sq:hover .sq-bg { opacity: .64; transform: scale(1.04); } .sq:hover .sq-plus { background: rgba(255, 255, 255, .22); } }
+.sq-face:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+@media (max-width: 767px) { .sq-grid { grid-template-columns: 1fr 1fr; gap: 10px; } .sq-face h3 { font-size: 17px; } .sq-plus { width: 30px; height: 30px; } .sq.is-open { grid-column: 1 / -1; aspect-ratio: auto; min-height: 260px; } }
+
+/* ---------- why: drawn system icons, one statement, five reasons (Oz 7.10: a different animation altogether, icons with
+   no labels, item 6 removed, "פתרון אחד. כתובת אחת." in the centre) ---------- */
+.why5 .section-head { max-width: var(--head-w); }
+.sys { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--gap-s); max-width: clamp(720px, 70vw, 1440px); margin-inline: auto; }
+.sys-t { aspect-ratio: 1; display: grid; place-items: center; color: var(--ink-dark); }
+.sys-svg { width: 58%; height: auto; overflow: visible; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.sys-svg .dot, .sys-svg .rec, .sys-svg .btn-dot, .sys-svg .knob { fill: var(--accent); stroke: none; }
+.sys-svg .ln, .sys-svg .wv, .sys-svg .rg { stroke: var(--accent); }
+.js .sys .d { stroke-dasharray: 200; stroke-dashoffset: 200; }
+.js .sys .ln, .js .sys .wv, .js .sys .rg { opacity: 0; }
+.js .sys .dot, .js .sys .rec, .js .sys .btn-dot, .js .sys .knob { opacity: 0; }
+.sys.is-in .d { animation: sys-draw 1.1s var(--ease) both; animation-delay: calc(var(--i) * 120ms); }
+.sys.is-in :is(.dot, .rec, .btn-dot, .knob) { animation: sys-pop .4s var(--ease) both; animation-delay: calc(var(--i) * 120ms + 700ms); }
+@keyframes sys-draw { from { stroke-dashoffset: 200; } to { stroke-dashoffset: 0; } }
+@keyframes sys-pop { from { opacity: 0; scale: .2; } to { opacity: 1; scale: 1; } }
+.sys-svg * { transform-box: fill-box; transform-origin: center; }
+/* each system acts itself out once, after it is drawn, and again under the pointer (.again) */
+.sys.is-in .sys-computer .ln, .sys-computer.again .ln { animation: sys-type .5s steps(8, end) both; }
+.sys.is-in .sys-computer .l1 { animation-delay: calc(var(--i) * 120ms + 900ms); }
+.sys.is-in .sys-computer .l2 { animation-delay: calc(var(--i) * 120ms + 1150ms); }
+.sys.is-in .sys-computer .l3 { animation-delay: calc(var(--i) * 120ms + 1400ms); }
+.sys-computer.again .l2 { animation-delay: .25s; } .sys-computer.again .l3 { animation-delay: .5s; }
+@keyframes sys-type { from { opacity: 1; clip-path: inset(0 0 0 100%); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+.sys.is-in .sys-wifi .wv, .sys-wifi.again .wv { animation: sys-wave 1.6s var(--ease) both; }
+.sys.is-in .sys-wifi .w1 { animation-delay: calc(var(--i) * 120ms + 900ms); } .sys.is-in .sys-wifi .w2 { animation-delay: calc(var(--i) * 120ms + 1050ms); } .sys.is-in .sys-wifi .w3 { animation-delay: calc(var(--i) * 120ms + 1200ms); }
+.sys-wifi.again .w2 { animation-delay: .15s; } .sys-wifi.again .w3 { animation-delay: .3s; }
+@keyframes sys-wave { 0% { opacity: 0; } 30% { opacity: 1; } 60% { opacity: .35; } 100% { opacity: 1; } }
+.sys.is-in .sys-camera .cam, .sys-camera.again .cam { animation: sys-pan 2.2s var(--ease-inout) both; transform-origin: 30% 100%; }
+.sys.is-in .sys-camera .cam { animation-delay: calc(var(--i) * 120ms + 900ms); }
+@keyframes sys-pan { 0%, 100% { rotate: 0deg; } 30% { rotate: -10deg; } 65% { rotate: 7deg; } }
+.sys.is-in .sys-camera .rec, .sys-camera.again .rec { animation: sys-pop .4s var(--ease) both, sys-blink 1s steps(2, jump-none) 3 both; animation-delay: calc(var(--i) * 120ms + 700ms), calc(var(--i) * 120ms + 1100ms); }
+.sys-camera.again .rec { animation-delay: 0s, .2s; }
+@keyframes sys-blink { 50% { opacity: .15; } }
+.sys.is-in .sys-intercom .rg, .sys-intercom.again .rg { animation: sys-ring 1.4s var(--ease) both; }
+.sys.is-in .sys-intercom .rg { animation-delay: calc(var(--i) * 120ms + 1000ms); }
+.sys.is-in .sys-intercom .r2 { animation-delay: calc(var(--i) * 120ms + 1150ms); }
+.sys-intercom.again .r2 { animation-delay: .15s; }
+@keyframes sys-ring { 0% { opacity: 0; scale: .7; } 40% { opacity: 1; scale: 1.06; } 100% { opacity: 1; scale: 1; } }
+.sys.is-in .sys-smart .knob, .sys-smart.again .knob { animation: sys-pop .4s var(--ease) both, sys-switch .5s var(--ease-inout) both; animation-delay: calc(var(--i) * 120ms + 700ms), calc(var(--i) * 120ms + 1300ms); }
+.sys-smart.again .knob { animation-delay: 0s, .1s; }
+@keyframes sys-switch { to { translate: 10px 0; } }
+.sys-smart.is-on .knob { translate: 10px 0; }
+.sys.is-in .sys-sound .wv, .sys-sound.again .wv { animation: sys-wave 1.6s var(--ease) both; }
+.sys.is-in .sys-sound .s1 { animation-delay: calc(var(--i) * 120ms + 900ms); } .sys.is-in .sys-sound .s2 { animation-delay: calc(var(--i) * 120ms + 1050ms); } .sys.is-in .sys-sound .s3 { animation-delay: calc(var(--i) * 120ms + 1200ms); }
+.sys-sound.again .s2 { animation-delay: .15s; } .sys-sound.again .s3 { animation-delay: .3s; }
+@media (hover: hover) and (pointer: fine) { .sys-t:hover { color: #fff; } }
+@media (max-width: 1023px) { .sys { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 640px; } }
+@media (max-width: 479px) { .sys { gap: 10px; } }
+
+.one-line {
+  position: relative; isolation: isolate; text-align: center; margin: clamp(48px, 4.4vw, 112px) auto 0;
+  font-family: var(--f-display); font-weight: 600; line-height: 1.05; font-size: calc(clamp(40px, 4.4vw + 0.2rem, 120px) * var(--hd, 1));
+}
+.one-line .hl { font-style: normal; }
+/* the cinema sketch's warm tone behind the sentence (Oz 7.10) */
+.one-line::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 50%; translate: -50% -50%; width: min(96vw, 1200px); aspect-ratio: 2.6; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(242, 122, 43, .26), rgba(242, 122, 43, .08) 55%, transparent); }
+.js .one-line span, .js .one-line em { display: inline-block; opacity: 0; translate: 0 18px; }
+.one-line.is-in span, .one-line.is-in em { animation: line-in .8s var(--ease) both; }
+.one-line.is-in em { animation-delay: .25s; }
+@keyframes line-in { to { opacity: 1; translate: 0 0; } }
+
+.why-cards { list-style: none; margin: clamp(48px, 4.4vw, 112px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--gap-s); }
+.why-card { grid-column: span 2; padding: var(--pad-card); display: flex; flex-direction: column; gap: 10px; transition: background-color .3s var(--ease); }
+.why-cards .why-card:nth-child(4) { grid-column: 2 / span 2; }
+.ap-cards .why-card { grid-column: auto; }
+.why-card .num { font-weight: 600; font-size: clamp(36px, 2.6vw, 60px); line-height: 1; margin-bottom: 8px; }
+.why-card h3 { margin: 0; }
+.why-card p { font-size: var(--t-meta); line-height: 1.75; color: var(--muted-dark); }
+@media (max-width: 1023px) { .why-cards { grid-template-columns: 1fr 1fr; } .why-cards .why-card, .why-cards .why-card:nth-child(4) { grid-column: auto; } .why-cards .why-card:last-child { grid-column: 1 / -1; } }
+@media (max-width: 767px) { .why-cards { grid-template-columns: 1fr; } .why-cards .why-card:last-child { grid-column: auto; } .why-card { padding: 24px; } }
+
+/* ---------- architects on the home page: the pointer to the new page ---------- */
+.fusion .arch-list { margin-top: 28px; gap: 10px; }
+.fusion .arch-list li { background-color: rgba(255, 255, 255, .045); border-radius: 14px; padding: 14px 18px; }
+.fusion .arch-list li::before { background: var(--accent); box-shadow: 0 0 10px rgba(242, 122, 43, .6); }
+.arch-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 32px; }
+.arch-pic { position: relative; margin: 0; aspect-ratio: 4 / 5; border-radius: var(--r-glass); border-start-start-radius: var(--r-bowl); overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+.arch-pic img { width: 100%; height: 100%; object-fit: cover; object-position: 40% 50%; }
+.arch-pic::before { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; pointer-events: none; padding: 1px; background: var(--rim);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.fusion .arch-pic[data-light]::after { z-index: 1; }
+@media (max-width: 1023px) { .fusion .arch-grid { grid-template-columns: 1fr; } .arch-pic { aspect-ratio: 16 / 10; max-width: 720px; } }
+
+/* ---------- testimonials: the glass carousel (Oz 7.10) ---------- */
+.t5 { padding-block: var(--sec); }
+.t5-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--gap-m); flex-wrap: wrap; }
+.t5-nav { display: flex; align-items: center; gap: 10px; }
+.t5-count { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; color: var(--muted-dark); font-size: var(--t-meta); margin-inline-end: 12px; }
+.t5-now { font-weight: 600; font-size: clamp(26px, 1.8vw, 36px); }
+.t5-arr { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; color: var(--ink-dark); transition: background-color .25s var(--ease), opacity .25s var(--ease); }
+.t5-arr[data-dir="prev"] svg { transform: scaleX(-1); }
+.t5-arr:disabled { opacity: .35; cursor: default; }
+@media (hover: hover) and (pointer: fine) { .t5-arr:not(:disabled):hover { background-color: rgba(255, 255, 255, .14); color: #fff; } }
+.t5-arr:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.t5-view {
+  display: block; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain;
+  margin-top: clamp(32px, 3vw, 64px); padding-block: 24px 40px; scroll-padding-inline: var(--gutter);
+}
+.t5-view::-webkit-scrollbar { display: none; }
+.t5-view:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.t5-track { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 2 * var(--gutter) - 2 * var(--gap-m)) / 3); gap: var(--gap-m); padding-inline: var(--gutter); width: 100%; }
+.t5 .quote { scroll-snap-align: start; min-height: 300px; }
+.t5 .quote p { font-size: var(--t-body); line-height: 1.7; }
+.t5 .quote .qmark { background: var(--num-ink); -webkit-background-clip: text; background-clip: text; color: transparent; }
+@media (max-width: 1023px) { .t5-track { grid-auto-columns: calc((100% - 2 * var(--gutter) - var(--gap-m)) / 2); } }
+@media (max-width: 767px) { .t5-track { grid-auto-columns: 84%; } .t5-nav .t5-arr { width: 44px; height: 44px; } }
+@media (prefers-reduced-motion: reduce) { .t5-view { scroll-behavior: auto; } }
+
+/* ---------- projects and contact on the glass ---------- */
+.fusion .tile { border-radius: var(--r-glass); }
+.fusion .form-card { max-width: clamp(560px, 38vw, 820px); }
+.fusion .form-card :is(input, textarea) { background: rgba(8, 9, 11, .45); }
+
+/* ---------- reduced motion: every state shown, nothing drawn ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .js .uline { transform: none; } .js .uline.is-in { animation: none; }
+  .js .sys :is(.d, .ln, .wv, .rg, .dot, .rec, .btn-dot, .knob) { stroke-dashoffset: 0; opacity: 1; animation: none !important; }
+  .sys-smart .knob { translate: 10px 0; }
+  .js .one-line span, .js .one-line em { opacity: 1; translate: none; animation: none !important; }
+  .fusion .btn-primary::before { display: none; }
+}
+html.a11y-still .uline, html.a11y-still .sys *, html.a11y-still .one-line * { animation-duration: 0s !important; animation-delay: 0s !important; }
+
+/* ======================= architects.html ======================= */
+.arch-page .ah { position: relative; isolation: isolate; padding-top: calc(var(--pill-top) + var(--pill-h) + clamp(40px, 5vw, 112px)); padding-bottom: var(--sec); }
+.arch-page .ah::before { content: ""; position: absolute; z-index: -1; pointer-events: none; top: 0; inset-inline-end: -10%; width: min(80vw, 1200px); aspect-ratio: 1.2;
+  background: radial-gradient(closest-side, rgba(242, 122, 43, .16), rgba(242, 122, 43, .05) 55%, transparent); }
+.ah-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: var(--gap-l); align-items: center; }
+.ah h1 { font-size: calc(clamp(40px, 3.6vw + 0.4rem, 104px) * var(--hd, 1)); line-height: 1.02; }
+.ah .lead { margin-top: 24px; color: var(--muted-strong); }
+.ah-pic, .ap-pic { position: relative; margin: 0; overflow: hidden; border-radius: var(--r-glass); border-start-start-radius: var(--r-bowl); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+.ah-pic { aspect-ratio: 4 / 5; }
+.ah-pic img, .ap-pic img { width: 100%; height: 100%; object-fit: cover; }
+:is(.ah-pic, .ap-pic)::before { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; pointer-events: none; padding: 1px; background: var(--rim);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.fusion :is(.ah-pic, .ap-pic)[data-light]::after { z-index: 1; }
+.ap-why, .ap-sys { position: relative; isolation: isolate; }
+.ap-cards { list-style: none; margin: clamp(40px, 3.6vw, 88px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap-s); }
+.ap-band { position: relative; isolation: isolate; }
+.ap-split { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: var(--gap-l); align-items: center; }
+.ap-split .ap-pic { aspect-ratio: 4 / 5; }
+.ap-steps { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 10px; }
+.ap-steps li { display: grid; grid-template-columns: clamp(44px, 3vw, 64px) 1fr; gap: 16px; align-items: baseline; padding: 18px 20px; border-radius: 18px; background: rgba(255, 255, 255, .04); }
+.ap-steps .num { font-weight: 600; font-size: clamp(24px, 1.6vw, 34px); line-height: 1; background: var(--num-ink); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 6px 14px rgba(242, 122, 43, .28)); }
+.ap-steps h3 { font-size: calc(clamp(20px, 1vw + 0.4rem, 28px) * var(--hd, 1)); }
+.ap-steps p { margin-top: 4px; font-size: var(--t-meta); color: var(--muted-dark); }
+.ap-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 980px; margin: clamp(32px, 3vw, 64px) auto 0; }
+.ap-tags li { padding: 12px 24px; border-radius: 999px; font-weight: 500; background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .09); }
+.ap-duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-m); margin-top: clamp(40px, 3.6vw, 88px); }
+.ap-duo .ap-pic { aspect-ratio: 3 / 2; }
+.ap-duo .ap-pic:nth-child(2) { border-start-start-radius: var(--r-glass); border-start-end-radius: var(--r-bowl); }
+.ap-contact { position: relative; isolation: isolate; }
+@media (max-width: 1023px) {
+  .ah-grid, .ap-split { grid-template-columns: 1fr; }
+  .ah-pic { aspect-ratio: 16 / 11; max-width: 760px; }
+  .ap-split .ap-pic { aspect-ratio: 16 / 11; }
+  .ap-cards { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 767px) { .ap-cards, .ap-duo { grid-template-columns: 1fr; } .ah h1 { font-size: calc(36px * var(--hd, 1)); } }
+
+/* the menu grew by one item (architects): below 1200 it no longer fits on one line, so the drawer takes over earlier */
+.fusion .nav > li > :is(a, button) { white-space: nowrap; }
+@media (max-width: 1199px) {
+  .fusion .nav, .fusion .header .btn { display: none; }
+  .fusion .header .container { grid-template-columns: auto 1fr auto; padding-inline: 20px 8px; }
+  .fusion .burger { display: grid; justify-self: end; border-radius: 999px; }
+}
+
+/* ---------- gate fixes (8.10) ---------- */
+/* the orange is for what you press (חוק ה-accent): the big P behind the contact turns to the ground's own light */
+.fusion #contact .p-bg { color: var(--ink-dark); opacity: .035; }
+/* h3 in the text face (tokens: h3Font = body); the display face stays on h1 and h2 */
+.fusion h3 { font-family: var(--f-text); font-weight: 600; --hd: .9; letter-spacing: -.005em; }
+/* the skip link shows itself when it has focus */
+.fusion a.sr-only:focus, .fusion a.sr-only:focus-visible { position: fixed; top: 16px; inset-inline-start: 16px; z-index: 100; width: auto; height: auto; clip: auto; white-space: nowrap;
+  padding: 12px 20px; border-radius: 12px; background: #F4F2EE; color: #111214; font-weight: 600; }
+/* the projects' converging tiles start outside the grid: they never widen the page */
+.fusion #projects { overflow-x: clip; }
+.fusion #architects::before { top: 12%; }
+/* the filter on a phone: two by two, its corners concentric with its buttons */
+@media (max-width: 767px) {
+  .fusion .svc-filter { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; border-radius: 24px; }
+  .fusion .svc-filter button { border-radius: 20px; padding-inline: 12px; }
+}
+/* the accessibility button is a tab inside the gutter up to 1199 (at 768 and 1024 a 48px circle sat on text) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .fusion .a11y-btn { bottom: 120px; inset-inline-start: auto; inset-inline-end: 0; width: var(--gutter); height: 52px; padding: 0;
+    border-radius: 0; border-start-start-radius: 12px; border-end-start-radius: 12px; }
+  .fusion .a11y-panel { bottom: 180px; inset-inline-start: auto; inset-inline-end: 16px; }
+}
+@media (forced-colors: active) { .fusion :focus-visible { outline: 2px solid CanvasText; } }
+.msg-page { min-height: 100svh; display: grid; align-items: center; }
+.msg-in { max-width: var(--head-w); margin-inline: auto; text-align: center; }
+.msg-in .uline { margin-inline: auto; }
+.msg-in .lead { margin-inline: auto; }
+.msg-in .arch-ctas { justify-content: center; }
+/* tablets take the phone's bottom bar: a floating WhatsApp circle at 768 and 1024 sat on text (the gutter is narrower than it) */
+@media (min-width: 768px) and (max-width: 1199px) { .fusion .sticky-bar { display: grid; } .fusion .wa-float { display: none; } .fusion .footer { padding-bottom: calc(var(--sec) * 2 + 24px); } }
+.msg-in .msg-p { margin: 20px auto 0; max-width: var(--measure); color: var(--muted-strong); }
+/* the 4-column menu is narrower than the main site's: long service names squeezed the arrows to 19px */
+.fusion .mega-col a .icon { flex: none; }
+.ap-steps p { max-width: 38em; } /* at 1920 the step lines ran past 80 characters */
+/* at 2560 the door lines and the service summaries ran past 80 characters */
+.fusion .door p, .fusion .svc-body p { max-width: 38em; }
+/* the scrolled capsule keeps its size: the .97 shrink drew every icon in it at 19.4px, off the pixel grid */
+.fusion .header.is-scrolled { --hs: 1; }
