@@ -500,7 +500,6 @@ body:not(:has(.hero)) .footer::after { display: none; }   /* the inner pages' fo
 .svc-filter button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .svc-list[data-show="home"] [data-for="biz"] { display: none; }
 html.skin-dark .svc-filter button[aria-pressed="true"] { background: #2a2b30; }
-@media (prefers-reduced-motion: reduce) { .svc-more { animation: none; } }
 .svc-row .link-arrow { font-size: var(--t-meta); padding-block: 8px; }
 .svc-row .link-arrow svg { transition: transform .18s var(--ease); }
 .svc-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px 24px; margin-top: clamp(56px, 4vw, 96px); }
@@ -550,7 +549,6 @@ html:not(.gsap-live) .orbit-st .orbit-dot, .orbit-st.is-lit .orbit-dot { backgro
   .orbit-dot { width: 48px; } .orbit-dot .icon-m { width: 20px; height: 20px; }
   .orbit-lbl { top: 34px; font-size: 13px; }
 }
-@media (prefers-reduced-motion: reduce) { .why-orbit.is-live .orbit-spoke { animation: none; stroke-dasharray: 1; } }
 
 /* ---------- process (C6, horizontal with drawn line) ---------- */
 .process-track { position: relative; margin-top: clamp(56px, 4vw, 96px); }
@@ -797,6 +795,7 @@ html.a11y-big body { font-size: calc(var(--t-body) * 1.18); }
 html.a11y-contrast :is(body > :not(main), main > :not(.pin-spacer), .pin-spacer > *) { filter: contrast(1.25); }   /* a GSAP pin is fixed inside main: the pinned section carries the filter itself */
 html.a11y-links a { text-decoration: underline; }
 html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animation: none !important; transition: none !important; }
+html.a11y-still .reveal { opacity: 1; }   /* the toolbar's stop: every entrance in its final state, nothing left transparent */
 
 /* ---------- reveal (engine) ---------- */
 .js .reveal { opacity: 0; }
@@ -808,8 +807,6 @@ html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animati
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js .reveal { opacity: 1; animation: none; }
-  .js.gsap-live .split-word { opacity: 1; }
   .md, .md *, .mega, .mega *, .sticky-bar, .svc-art { transition: none !important; }
 }
 [dir="ltr"] .tile { clip-path: inset(0 round var(--r-bowl) var(--r-shot) var(--r-shot) var(--r-shot)); }

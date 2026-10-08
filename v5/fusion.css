@@ -18,7 +18,7 @@
 }
 
 /* ---------- the glass and the tinted surface ---------- */
-.fusion :is(.door, .form-card, .quote, .svc-row.is-open, .why-card, .sys-t, .sq, .arch-list li, .t5-arr, .seg-glass) {
+.fusion :is(.door, .form-card, .quote, .svc-row.is-open, .svc-card, .why-card, .sys-t, .sq, .arch-list li, .t5-arr, .seg-glass) {
   position: relative; isolation: isolate; border-radius: var(--r-glass);
   background-color: var(--tint);
   background-image: linear-gradient(160deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .012) 46%);
@@ -29,7 +29,7 @@
   -webkit-backdrop-filter: blur(20px) saturate(1.35); backdrop-filter: blur(20px) saturate(1.35);
 }
 /* the edge is the material, not a border: a one-pixel ring of light in a mask (s08) */
-.fusion :is(.door, .form-card, .quote, .svc-row.is-open, .why-card, .sys-t, .sq, .t5-arr)::before {
+.fusion :is(.door, .form-card, .quote, .svc-row.is-open, .svc-card, .why-card, .sys-t, .sq, .t5-arr)::before {
   content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; padding: 1px; pointer-events: none;
   background: var(--rim);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
@@ -42,7 +42,7 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .fusion [data-light]:hover::after { opacity: 1; }
-  .fusion :is(.door, .why-card, .sys-t, .quote):hover { background-color: var(--glass-hv); }
+  .fusion :is(.door, .why-card, .sys-t, .quote, .svc-card):hover { background-color: var(--glass-hv); }
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .fusion :is(.door, .form-card, .quote, .svc-row.is-open) { background-color: rgba(24, 25, 29, .94); }
@@ -169,6 +169,39 @@
 .svc-tabs .svc-lead-a, .svc-tabs .svc-a, .svc-tabs .svc-filter { display: none; }
 .svc-tabs .svc-lead-b { display: block; }
 .svc-tabs .svc-b { display: block; }
+
+/* the process runs gutter to gutter; on laptops (1280 to 1440) its first and last step ran under the WhatsApp and accessibility floats */
+@media (min-width: 1024px) { .fusion .process-track { padding-inline: max(0px, calc(104px - var(--gutter))); } }
+
+/* ---------- services as cards (Oz 8.10, his video): photo always in view, title and a line, a tap opens the rest below ---------- */
+.fusion .svc-a:has(.svc-grid) { max-width: clamp(720px, 80vw, 1600px); }
+/* flex and centred, so a filter with 5 or 13 cards ends on a centred last row instead of one orphan at the edge */
+.svc-grid { --cols: 4; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap-s); align-items: flex-start; margin-top: clamp(32px, 3vw, 64px); }
+.svc-grid > .svc-card { flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap-s)) / var(--cols)); }
+@media (max-width: 1180px) { .svc-grid { --cols: 3; } }
+@media (max-width: 960px) { .svc-grid { --cols: 2; } }
+.svc-anchor { display: none; }
+.svc-card { overflow: hidden; cursor: pointer; display: flex; flex-direction: column; }
+.svc-card-pic { margin: 0; aspect-ratio: 4 / 3; overflow: hidden; background: #0c0d0f; border-start-start-radius: var(--r-bowl); }
+.svc-card-pic img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease); }
+.svc-card-body { padding: clamp(18px, 1.4vw, 28px); }
+.svc-card-cat { display: block; font-size: var(--t-meta); color: var(--muted); margin-bottom: 6px; }
+.svc-card h3 { font-size: calc(clamp(20px, 1vw + 0.4rem, 28px) * var(--hd, 1)); line-height: 1.3; }
+.svc-card .svc-body p, .svc-card-body > p { margin-top: 8px; color: var(--muted-strong); font-size: var(--t-meta); line-height: 1.7; }
+.svc-card .svc-more { margin-top: 16px; }
+.svc-card .svc-more p { color: var(--ink); font-size: var(--t-meta); line-height: 1.75; }
+.svc-card.is-open .svc-chev { transform: rotate(180deg); color: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .svc-card:hover .svc-card-pic img { transform: scale(1.04); } }
+@media (max-width: 767px) {
+  .svc-grid { --cols: 1; gap: 10px; }
+  .svc-grid > .svc-card { flex-basis: 100%; }
+  .svc-card { display: grid; grid-template-columns: clamp(96px, 28vw, 124px) minmax(0, 1fr); }
+  .svc-card-pic { aspect-ratio: 1; align-self: start; border-radius: 0; border-start-start-radius: 24px; }
+  .svc-card-body { padding: 14px 16px; }
+  .svc-card-cat { display: none; }
+  .svc-card h3 { font-size: calc(18px * var(--hd, 1)); }
+  .svc-card .svc-more { grid-column: 1 / -1; }
+}
 
 /* ---------- services, sketch B (?svc=tabs): three tabs, small squares that open in place (Oz 7.10) ---------- */
 .svc-b .svc-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
@@ -322,15 +355,17 @@
 .fusion .form-card { max-width: clamp(560px, 38vw, 820px); }
 .fusion .form-card :is(input, textarea) { background: rgba(8, 9, 11, .45); }
 
-/* ---------- reduced motion: every state shown, nothing drawn ---------- */
+/* ---------- reduced motion (the phone's setting): lines still draw and things still fade in; no scale-ups, no swings ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .js .uline { transform: none; } .js .uline.is-in { animation: none; }
-  .js .sys :is(.d, .ln, .wv, .rg, .dot, .rec, .btn-dot, .knob) { stroke-dashoffset: 0; opacity: 1; animation: none !important; }
-  .sys-smart .knob { translate: 10px 0; }
-  .js .one-line span, .js .one-line em { opacity: 1; translate: none; animation: none !important; }
-  .fusion .btn-primary::before { display: none; }
+  .sys.is-in .sys-camera .cam, .sys-camera.again .cam { animation: none; }
+  @keyframes sys-pop { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sys-ring { from { opacity: 0; } to { opacity: 1; } }
 }
-html.a11y-still .uline, html.a11y-still .sys *, html.a11y-still .one-line * { animation-duration: 0s !important; animation-delay: 0s !important; }
+/* the toolbar's "stop animations": every state shown, nothing drawn */
+html.a11y-still .uline { transform: none; }
+html.a11y-still .sys :is(.d, .ln, .wv, .rg, .dot, .rec, .btn-dot, .knob) { stroke-dashoffset: 0; opacity: 1; }
+html.a11y-still .sys-smart .knob { translate: 10px 0; }
+html.a11y-still .one-line :is(span, em) { opacity: 1; translate: none; }
 
 /* ======================= architects.html ======================= */
 .arch-page .ah { position: relative; isolation: isolate; padding-top: calc(var(--pill-top) + var(--pill-h) + clamp(40px, 5vw, 112px)); padding-bottom: var(--sec); }

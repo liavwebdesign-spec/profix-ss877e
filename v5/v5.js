@@ -5,6 +5,7 @@
   var html = document.documentElement;
   var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+  var rebuildMotion = null;   // set by the GSAP layer; the toolbar's "stop animations" rebuilds it in the still state
 
   /* ---------- header ---------- */
   /* floating pill (MV:hd3) with headroom: leaves on scroll down, returns on the first scroll up, always visible
@@ -148,7 +149,9 @@
 
   /* ---------- reveal (engine) ---------- */
   var reveals = document.querySelectorAll('.reveal');
-  if (!rm && 'IntersectionObserver' in window) {
+  /* motion levels (accessibility agent, 8.10.2026): the phone's reduce-motion setting keeps fades, small moves (24px at most),
+     drawn lines and word colouring, and drops parallax, long travel, big scale and rotation; only the toolbar stops everything */
+  if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
     }, { threshold: 0.12 });
@@ -204,7 +207,7 @@
   }
 
   /* ---------- services: each row opens in place, one at a time, and closes once it has scrolled out of view (Oz, 28.9) ---------- */
-  var svcRowsAll = Array.prototype.slice.call(document.querySelectorAll('.svc-row'));
+  var svcRowsAll = Array.prototype.slice.call(document.querySelectorAll('.svc-row, .svc-card'));   // version E 8.10: cards
   if (svcRowsAll.length) {
     var refreshSoon = function () { if (window.ScrollTrigger) { clearTimeout(window.__refreshT); window.__refreshT = setTimeout(function () { ScrollTrigger.refresh(); }, 120); } };
     // closing a row that is above the screen shrinks the page under the reader: keep whatever is on screen where it was
@@ -317,22 +320,27 @@
       if (!e.target.closest('[data-next]')) return;
       if (n === 1) {
         var err = step.querySelector('.q-err');
-        if (!area()) { err.hidden = false; return; }
+        if (!area()) { err.hidden = false; var first = step.querySelector('input'); if (first) first.focus(); return; }
         err.hidden = true; fitSystems();
       }
       show(n + 1);
     });
     qf.addEventListener('submit', function (e) {
       e.preventDefault();
-      var ok = true;
+      /* version E: Enter on an earlier step (a radio, a checkbox) moves on like "next", instead of checking fields that are still hidden */
+      var cur = qSteps.filter(function (s) { return !s.hidden; })[0];
+      if (cur && +cur.dataset.step < qSteps.length) { var nx = cur.querySelector('[data-next]'); if (nx) nx.click(); return; }
+      var firstBad = null;
       qf.querySelectorAll('.q-step[data-step="3"] .field').forEach(function (f) {
         var input = f.querySelector('input'); if (!input || !input.required) return;
         var bad = !input.value.trim() || (input.type === 'tel' && !/^[0-9+\-\s()]{8,}$/.test(input.value));
-        f.classList.toggle('is-invalid', bad); if (bad) ok = false;
+        f.classList.toggle('is-invalid', bad); input.setAttribute('aria-invalid', String(bad));
+        if (bad && !firstBad) firstBad = input;
       });
       var consent = qf.querySelector('input[name="consent"]');
-      if (consent && !consent.checked) { ok = false; consent.focus(); }
-      if (ok) location.href = 'thanks.html';
+      if (consent && !consent.checked && !firstBad) firstBad = consent;
+      if (firstBad) { firstBad.focus(); return; }
+      location.href = 'thanks.html';
     });
   }
 
@@ -368,7 +376,7 @@
         var k = b.dataset.a11y;
         if (k === 'reset') ['a11y-big', 'a11y-contrast', 'a11y-links', 'a11y-still'].forEach(function (c) { html.classList.remove(c); });
         else html.classList.toggle('a11y-' + k);
-        if ((k === 'still' || k === 'reset') && hasGsap) { html.classList.contains('a11y-still') ? gsap.globalTimeline.pause() : gsap.globalTimeline.play(); }
+        if ((k === 'still' || k === 'reset') && rebuildMotion) rebuildMotion();   // every scene reverts to its final state, not frozen mid-way
         if (k === 'still' || k === 'reset') document.dispatchEvent(new CustomEvent('a11y:still', { detail: html.classList.contains('a11y-still') }));
       });
     });
@@ -389,13 +397,13 @@
   /* the heading underline draws and runs through the brand's oranges once it is on screen; the system icons act out their
      system once as they arrive, and again under the pointer */
   var onceIn = Array.prototype.slice.call(document.querySelectorAll('.uline, .sys, .one-line'));
-  if (!rm && 'IntersectionObserver' in window) {
+  if ('IntersectionObserver' in window) {
     var inIo = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); inIo.unobserve(e.target); } });
     }, { threshold: 0.35 });
     onceIn.forEach(function (el) { inIo.observe(el); });
   } else onceIn.forEach(function (el) { el.classList.add('is-in'); });
-  if (!rm && fineHover) {
+  if (fineHover) {
     document.querySelectorAll('.sys-t').forEach(function (t) {
       t.addEventListener('pointerenter', function () { t.classList.remove('again'); void t.offsetWidth; t.classList.add('again'); });
     });
@@ -516,16 +524,21 @@
     });
   }
 
-  var mm = gsap.matchMedia();
+  var mm;
+  rebuildMotion = function () { if (mm) mm.revert(); buildMotion(); ScrollTrigger.refresh(); };
+  buildMotion();
+  function buildMotion() {
+  mm = gsap.matchMedia();
   mm.add({
     desk: '(min-width: 1024px)',
     mob: '(max-width: 1023px)',
-    move: '(prefers-reduced-motion: no-preference)'
+    full: '(prefers-reduced-motion: no-preference)'
   }, function (ctx) {
     var c = ctx.conditions;
+    var soft = !c.full;   // the phone's reduce-motion setting: the gentle set only
     var cleanups = [];
 
-    if (!c.move) {
+    if (html.classList.contains('a11y-still')) {
       /* S4 runs on desktop in both motion modes (it is a content swap, not an animation); no pins here, so order is free */
       steps.forEach(function (s) { s.classList.add('is-lit'); });
       if (fill) gsap.set(fill, { scaleX: 1 });
@@ -546,7 +559,7 @@
     if (h2s[0]) fadeHeading(h2s[0]);
 
     /* S3 logo conveyor: position is a function of the band's progress through the viewport */
-    if (mq) {
+    if (mq && !soft) {   // long sideways travel tied to the scroll: not under reduce-motion
       var D = function () { return innerWidth * (c.mob ? 0.4 : 0.3); };
       gsap.fromTo('#marquee-track', { x: function () { return -D(); } }, { x: function () { return D(); }, ease: 'none',
         scrollTrigger: { trigger: '.logos', start: 'top bottom', end: 'bottom top', scrub: 0.4, invalidateOnRefresh: true } });
@@ -568,7 +581,7 @@
       spokes.forEach(function (s, i) { s.style.setProperty('--n', i); });
       gsap.set(ring, { strokeDashoffset: 1 });
       gsap.set(spokes, { strokeDashoffset: 1 });
-      gsap.set(orbit.querySelectorAll('.orbit-p path'), { opacity: 0, scale: .6, transformOrigin: '50% 50%' });
+      gsap.set(orbit.querySelectorAll('.orbit-p path'), { opacity: 0, scale: soft ? .92 : .6, transformOrigin: '50% 50%' });
       var otl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
         trigger: '.why-layout', start: 'top 75%', end: c.desk ? 'bottom 70%' : 'bottom 85%', scrub: 0.6,
         onUpdate: function (self) { orbit.classList.toggle('is-live', self.progress > .98); } } });
@@ -617,8 +630,8 @@
       tiles.forEach(function (el) {
         var r = el.getBoundingClientRect();
         var dx = (r.left + r.width / 2 - cx) / g.width, dy = (r.top + r.height / 2 - cy) / g.height;
-        ttl.fromTo(el, { xPercent: dx * kx, yPercent: dy * 110, scale: 0.6, rotate: dx * 14, rotateY: dx * -20, opacity: 0 },
-          { xPercent: 0, yPercent: 0, scale: 1, rotate: 0, rotateY: 0, opacity: 1, duration: 1, ease: 'power2.out' }, 0);
+        ttl.fromTo(el, soft ? { xPercent: 0, yPercent: 0, y: 24, scale: 0.94, rotate: 0, rotateY: 0, opacity: 0 } : { xPercent: dx * kx, yPercent: dy * 110, scale: 0.6, rotate: dx * 14, rotateY: dx * -20, opacity: 0 },
+          { xPercent: 0, yPercent: 0, y: 0, scale: 1, rotate: 0, rotateY: 0, opacity: 1, duration: 1, ease: 'power2.out' }, 0);
       });
     }
 
@@ -668,7 +681,7 @@
       var tl = gsap.timeline({ scrollTrigger: { trigger: mark, start: 'top 88%', toggleActions: 'play none none none', pinnedContainer: pinned || undefined } });
       mark.querySelectorAll('path').forEach(function (r) {
         var o = SCATTER[r.getAttribute('data-p')];
-        tl.fromTo(r, { x: o[0], y: o[1], rotate: o[2], opacity: 0 }, { x: 0, y: 0, rotate: 0, opacity: 1, ease: 'power2.out', duration: 1 }, 0);
+        tl.fromTo(r, soft ? { x: o[0] * .3, y: o[1] * .3, rotate: 0, opacity: 0 } : { x: o[0], y: o[1], rotate: o[2], opacity: 0 }, { x: 0, y: 0, rotate: 0, opacity: 1, ease: 'power2.out', duration: 1 }, 0);
       });
     });
 
@@ -677,4 +690,5 @@
       cleanups.forEach(function (t) { t.kill(); });
     };
   });
+  }
 })();
