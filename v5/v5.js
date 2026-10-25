@@ -500,7 +500,8 @@
      S6 process: pinned, line fills and stations light (G20 station logic) / mobile vertical rail (B35)
      S7 projects: scattered tiles converge (G54)
      S9 testimonials: sideways band in a sticky stage, centre card grows (G65) */
-  if (!hasGsap) return;
+  if (!hasGsap) { html.classList.remove('open-anim'); return; }
+  var introPlayed = false;
   gsap.registerPlugin(ScrollTrigger);
   history.scrollRestoration = 'manual';
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
@@ -548,6 +549,7 @@
     var cleanups = [];
 
     if (html.classList.contains('a11y-still')) {
+      html.classList.remove('open-anim');
       /* S4 runs on desktop in both motion modes (it is a content swap, not an animation); no pins here, so order is free */
       steps.forEach(function (s) { s.classList.add('is-lit'); });
       if (fill) gsap.set(fill, { scaleX: 1 });
@@ -556,9 +558,40 @@
     }
     html.classList.add('gsap-live');
 
-    /* S1 hero: the headline arrives word by word over the brand video */
+    /* S1 hero opening: the video settles, the pill drops, then the copy arrives in reading order
+       (eyebrow, headline word by word, "במקום אחד" takes the orange, lead, buttons, the route line). Once per load. */
     var h1 = document.querySelector('.hero h1[data-split]');
-    if (h1) { var hw = splitWords(h1); gsap.set(hw, { opacity: 1 }); gsap.from(hw, { opacity: 0, y: 14, duration: 0.6, stagger: 0.05, ease: 'power2.out', delay: 0.15 }); }
+    if (h1 && !introPlayed) {
+      introPlayed = true;
+      var hw = splitWords(h1); gsap.set(hw, { opacity: 1 });
+      var hc = function (q) { return gsap.utils.toArray('.hero-copy > ' + q); };
+      var hd = document.querySelector('.header'), hdIn = hd && hd.querySelector('.container');
+      var hl = h1.querySelector('.hl');
+      var intro = gsap.timeline({ defaults: { ease: 'power3.out' }, onComplete: function () { html.classList.remove('open-anim'); } });
+      var vid = document.querySelector('.hero-media');
+      if (soft) {   // the gentle set: fades only, nothing travels
+        if (vid) intro.from(vid, { opacity: 0, duration: 0.8, ease: 'power1.out' }, 0);
+        if (hd) intro.from(hd, { opacity: 0, duration: 0.5 }, 0.1);
+        intro.from(hc('.eyebrow'), { opacity: 0, duration: 0.5 }, 0.15)
+          .from(hw, { opacity: 0, duration: 0.5, stagger: 0.03 }, 0.25)
+          .from(hc(':not(.eyebrow):not(h1)'), { opacity: 0, duration: 0.5, stagger: 0.08 }, 0.55)
+          .from('.video-toggle', { opacity: 0, duration: 0.4 }, 0.9);
+      } else {
+        if (vid) intro.from(vid, { opacity: 0, duration: 1, ease: 'power1.out' }, 0)
+          .from('.hero-video', { scale: 1.08, duration: 1.8, ease: 'power2.out' }, 0);
+        if (hd) intro.from(hd, { opacity: 0, duration: 0.6, ease: 'power2.out' }, 0.1);
+        if (hdIn) intro.from(hdIn, { y: -14, duration: 0.7, clearProps: 'transform' }, 0.1);   // no transform left behind: the mega menu inside is fixed
+        intro.from(hc('.eyebrow'), { opacity: 0, y: 12, duration: 0.6 }, 0.2)
+          .from(hw, { opacity: 0, y: 26, duration: 0.7, stagger: 0.04 }, 0.28);
+        if (hl) intro.from(hl, { color: getComputedStyle(h1).color, duration: 0.6, ease: 'power1.inOut' }, '-=0.2');
+        intro.from(hc('.lead'), { opacity: 0, y: 18, duration: 0.7 }, 0.62)
+          .from(hc('.hero-ctas'), { opacity: 0, y: 18, duration: 0.6 }, 0.74)   // the row, not the buttons: their own CSS transform transition caught the tween at its start
+          .from(hc(':is(.hero-sub, .hero-route)'), { opacity: 0, y: 12, duration: 0.6, stagger: 0.08 }, 0.88)
+          .from('.video-toggle', { opacity: 0, duration: 0.5 }, 1.05);
+      }
+      cleanups.push(intro);
+    }
+    html.classList.remove('open-anim');   // the opening timeline above already holds every element at its start, so nothing flashes
 
     /* S2 word fade on the doors heading (first h2 in the page, the rest are created in place below) */
     function fadeHeading(h) {

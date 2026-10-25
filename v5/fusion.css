@@ -478,3 +478,7 @@ html.a11y-still .one-line :is(span, em) { opacity: 1; translate: none; }
 .svc-cta-q { margin: 0; color: var(--muted-strong); font-size: var(--t-body); }
 /* no paragraph ends on a single orphaned word ("הדרך." alone in the footer, "אחד." under the form) */
 .fusion :is(p, .link-arrow) { text-wrap: pretty; }
+
+/* ---------- hero opening (25.10): held until the opening timeline takes over; the failsafe shows everything if the script never runs ---------- */
+html.open-anim:has(.hero) :is(.header, .hero-media, .hero-copy > *, .video-toggle) { opacity: 0; animation: open-failsafe 0s 2.5s forwards; }
+@keyframes open-failsafe { to { opacity: 1; } }
