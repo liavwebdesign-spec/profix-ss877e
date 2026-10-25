@@ -52,10 +52,19 @@
     var go = routeHash(u.hash);
     if (!go) return;
     e.preventDefault();
-    if (window.ScrollTrigger) { clearTimeout(window.__refreshT); ScrollTrigger.refresh(); }
+    // only a refresh still waiting (a service card just closed) runs now: a full refresh on every click held the glide's first frames
+    if (window.ScrollTrigger && window.__refreshT) { clearTimeout(window.__refreshT); window.__refreshT = 0; ScrollTrigger.refresh(); }
     var t = go;
     var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY, behavior: still ? 'auto' : 'smooth' });
+    var aim = function () { window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY, behavior: still ? 'auto' : 'smooth' }); };
+    aim();
+    // a ScrollTrigger refresh mid-glide (images loading, a pin re-measured) restores the scroll and halts a smooth scroll
+    // after a few pixels: aim again at the target's new place, for as long as the glide lasts
+    if (window.ScrollTrigger && !still) {
+      var reaim = function () { aim(); };
+      ScrollTrigger.addEventListener('refresh', reaim);
+      setTimeout(function () { ScrollTrigger.removeEventListener('refresh', reaim); }, 2500);
+    }
     history.pushState(null, '', u.hash);
     if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
     t.focus({ preventScroll: true });
@@ -209,7 +218,7 @@
   /* ---------- services: each row opens in place, one at a time, and closes once it has scrolled out of view (Oz, 28.9) ---------- */
   var svcRowsAll = Array.prototype.slice.call(document.querySelectorAll('.svc-row, .svc-card'));   // version E 8.10: cards
   if (svcRowsAll.length) {
-    var refreshSoon = function () { if (window.ScrollTrigger) { clearTimeout(window.__refreshT); window.__refreshT = setTimeout(function () { ScrollTrigger.refresh(); }, 120); } };
+    var refreshSoon = function () { if (window.ScrollTrigger) { clearTimeout(window.__refreshT); window.__refreshT = setTimeout(function () { window.__refreshT = 0; ScrollTrigger.refresh(); }, 120); } };
     // closing a row that is above the screen shrinks the page under the reader: keep whatever is on screen where it was
     var keepPlace = function (change) {
       var ref = document.elementFromPoint(innerWidth / 2, innerHeight * .4);   // below the floating header, which never moves

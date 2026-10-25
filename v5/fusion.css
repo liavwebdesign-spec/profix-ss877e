@@ -450,3 +450,31 @@ html.a11y-still .one-line :is(span, em) { opacity: 1; translate: none; }
 .fusion .door p, .fusion .svc-body p { max-width: 38em; }
 /* the scrolled capsule keeps its size: the .97 shrink drew every icon in it at 19.4px, off the pixel grid */
 .fusion .header.is-scrolled { --hs: 1; }
+
+/* ---------- polish pass (25.10) ---------- */
+/* the two doors: their buttons sit on one line whatever the text length, and a heading never leaves one word alone */
+.fusion .door .btn { margin-top: auto; }
+.fusion :is(.door h3, .svc-card h3, .why-card h3, .section-head h2, .arch-head h2) { text-wrap: balance; }
+/* the architects' button and link share one centre line (the button carried a 32px top margin of its own) */
+.fusion .arch-ctas > * { margin-top: 0; }
+/* the consent line flows as one sentence (the link split it into three columns) */
+.consent { display: block; position: relative; padding-inline-start: 28px; }
+.consent input { position: absolute; inset-inline-start: 0; top: 0; margin: 3px 0 0; }
+/* closed service cards in a row are one height: the title keeps two lines, the summary three */
+@media (min-width: 768px) {
+  .svc-card h3 { min-height: 2.6em; display: flex; align-items: flex-end; }
+  .svc-card-body > p, .svc-card .svc-body > p:first-of-type { min-height: 5.1em; }
+}
+@media (max-width: 767px) {
+  /* the hero's two buttons on a phone: one line each, no arrow squeezing the label onto a second line */
+  .hero-ctas .btn { white-space: nowrap; }
+  /* the footer on a phone: brand and menu across, the menu in two columns, contact and legal side by side */
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
+  .footer-grid > div:nth-child(-n+2) { grid-column: 1 / -1; }
+  .footer-grid > div:nth-child(2) ul { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  .footer li a { padding: 8px 0; }
+}
+/* "not sure what you need?" is the question, the button only the action: the label no longer breaks onto two lines on a phone */
+.svc-cta-q { margin: 0; color: var(--muted-strong); font-size: var(--t-body); }
+/* no paragraph ends on a single orphaned word ("הדרך." alone in the footer, "אחד." under the form) */
+.fusion :is(p, .link-arrow) { text-wrap: pretty; }
