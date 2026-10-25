@@ -479,6 +479,29 @@ html.a11y-still .one-line :is(span, em) { opacity: 1; translate: none; }
 /* no paragraph ends on a single orphaned word ("הדרך." alone in the footer, "אחד." under the form) */
 .fusion :is(p, .link-arrow) { text-wrap: pretty; }
 
-/* ---------- hero opening (25.10): held until the opening timeline takes over; the failsafe shows everything if the script never runs ---------- */
-html.open-anim:has(.hero) :is(.header, .hero-media, .hero-copy > *, .video-toggle) { opacity: 0; animation: open-failsafe 0s 2.5s forwards; }
-@keyframes open-failsafe { to { opacity: 1; } }
+/* ---------- hero opening (25.10): CSS from the first paint, so it never waits on the scripts.
+   The video settles, the pill drops, then eyebrow, the headline word by word, "במקום אחד" takes the orange, lead, buttons, route line.
+   fill-mode backwards: the start state holds through the delay and nothing is pinned once it ends (GSAP and hover keep their transforms). ---------- */
+@keyframes op-fade { from { opacity: 0; } }
+@keyframes op-rise { from { opacity: 0; transform: translateY(var(--op-y, 18px)); } }
+@keyframes op-settle { from { transform: scale(1.08); } }
+@keyframes op-orange { from { color: var(--text-on-dark, #F6F6F7); } }
+.fusion .hero .hw { display: inline-block; }
+.fusion:has(.hero) .header { animation: op-fade .6s var(--ease) .1s backwards; }
+.fusion:has(.hero) .header > .container { --op-y: -14px; animation: op-rise .7s var(--ease) .1s backwards; }
+.fusion .hero-media { animation: op-fade 1s ease-out backwards; }
+.fusion .hero-video { animation: op-settle 1.8s var(--ease) backwards; }
+.fusion .hero-copy > .eyebrow { --op-y: 12px; animation: op-rise .6s var(--ease) .2s backwards; }
+.fusion .hero .hw { --op-y: 26px; animation: op-rise .7s var(--ease) calc(.28s + var(--i) * .04s) backwards; }
+.fusion .hero h1 .hl { animation: op-orange .6s ease-in-out 1.2s backwards; }
+.fusion .hero-copy > .lead { animation: op-rise .7s var(--ease) .62s backwards; }
+.fusion .hero-copy > .hero-ctas { animation: op-rise .6s var(--ease) .74s backwards; }
+.fusion .hero-copy > .hero-sub { --op-y: 12px; animation: op-rise .6s var(--ease) .88s backwards; }
+.fusion .hero-copy > .hero-route { --op-y: 12px; animation: op-rise .6s var(--ease) .96s backwards; }
+.fusion .hero .video-toggle { animation: op-fade .5s ease-out 1.05s backwards; }
+/* once played it stays played: a later class or media change (the toolbar's reset, the motion setting) must not restart it */
+:is(html.a11y-still, html.hero-opened) :is(.header, .header > .container, .hero-media, .hero-video, .hero .hw, .hero h1 .hl, .hero-copy > *, .video-toggle) { animation: none; }
+@media (prefers-reduced-motion: reduce) {   /* the gentle set: the same order, fades only */
+  .fusion .hero-video { animation: none; }
+  .fusion :is(.hero .hw, .hero-copy > *), .fusion:has(.hero) .header > .container { animation-name: op-fade; }
+}
